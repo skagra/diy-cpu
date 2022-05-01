@@ -3,10 +3,6 @@
   <version>1</version>
   <attributes>
     <entry>
-      <string>Width</string>
-      <int>12</int>
-    </entry>
-    <entry>
       <string>backgroundColor</string>
       <awt-color>
         <red>255</red>
@@ -14,6 +10,10 @@
         <blue>255</blue>
         <alpha>255</alpha>
       </awt-color>
+    </entry>
+    <entry>
+      <string>Width</string>
+      <int>12</int>
     </entry>
   </attributes>
   <visualElements>
@@ -39,6 +39,14 @@
         <entry>
           <string>Data</string>
           <data>6000000,18000000,6000000,30000000,c0000000</data>
+        </entry>
+        <entry>
+          <string>lastDataFile</string>
+          <file>E:\Development\diy-cpu\ucode\uROM.bin</file>
+        </entry>
+        <entry>
+          <string>autoReload</string>
+          <boolean>true</boolean>
         </entry>
       </elementAttributes>
       <pos x="-80" y="-80"/>
