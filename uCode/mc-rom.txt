@@ -29,16 +29,22 @@ A<-MBR          MBR/OUT/CDATA | A/LD/CDATA
 LDA_IMM         A9
 
 .code
+
+// Common microcode routines
+
+// Fetch instruction at PC into IR
 .label FETCH
 MAR<-PC 
 PC-INC | IR<-XDATA
 uJMPOP 
 
+// Immediate mode - fetch PC into MBR
 .label IMM
 MAR<-PC
 PC-INC | MBR<-XDATA
 uRTS
 
+// Op code implementations
 .opcode LDA_IMM
 uJSR IMM
 A<-MBR
