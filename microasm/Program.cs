@@ -1,5 +1,4 @@
-﻿using System.Runtime.InteropServices;
-using System.IO;
+﻿using System.IO;
 using System.Collections.Generic;
 using System;
 using System.Linq;
@@ -28,11 +27,14 @@ public class MS
     private const string SECTION_UCOPS = ".ucops";
     private const string SECTION_MCOPS = ".mcops";
     private const string SECTION_CODE = ".code";
+    private const string OPCODE = ".opcode";
+    private const string LABEL = ".label";
 
     private static byte[] BytePowers = { 128, 64, 32, 16, 8, 4, 2, 1 };
 
     private static Dictionary<string, byte[]> symbols = new Dictionary<string, byte[]>();
     private static Dictionary<string, int> OpAddrs = new Dictionary<string, int>();
+    private static List<string> OutputLog = new List<string>();
 
     // TODO - Assumes 8 bit string without checking
     private static byte ParseFlagValue(string valueString)
@@ -58,6 +60,9 @@ public class MS
     // Converts from little-endian to natural order
     private static void DumpSymbols()
     {
+        Console.WriteLine("Symbol Table");
+        Console.WriteLine("------------\n");
+
         symbols.Keys.OrderBy(k => k).ToList().ForEach(k =>
         {
             Console.Write($"{k,-30}");
@@ -71,6 +76,29 @@ public class MS
                 }
             }
             Console.WriteLine();
+        });
+    }
+
+    private static void DumpOpsAddrs()
+    {
+        Console.WriteLine("uAddress of Operations");
+        Console.WriteLine("----------------------\n");
+
+        OpAddrs.Keys.OrderBy(k => k).ToList().ForEach(k =>
+        {
+            Console.Write($"{k,-30}");
+            Console.WriteLine($"{OpAddrs[k]:X}");
+        });
+    }
+
+    private static void DumpOutputLog()
+    {
+        Console.WriteLine("Resolved Source");
+        Console.WriteLine("---------------\n");
+
+        OutputLog.ForEach(l =>
+        {
+            Console.WriteLine(l);
         });
     }
 
@@ -128,7 +156,7 @@ public class MS
         OpAddrs.Add(symbol, mappedAddress);
 
         // Check symbol not already seen
-        Console.WriteLine(value);
+        // Console.WriteLine(value);
     }
 
     private static void ParseUCOpsLine(string line, int lineNumber)
@@ -172,15 +200,13 @@ public class MS
     {
         if (pass == 0)
         {
-            if (line.StartsWith(".label"))
+            if (line.StartsWith(LABEL))
             {
                 var labelParts = line.Split(new char[] { ' ', '\t' }, StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
                 //TODO check number and already seen
                 // TODO assumes world length
 
                 symbols.Add(labelParts[1], new byte[] { (byte)(uPC & 0xFF), (byte)((uPC >> 8) & 0xFF), 0, 0 });
-
-                Console.WriteLine("ADDING Label: " + uPC);
             }
             else
             {
@@ -191,13 +217,14 @@ public class MS
         {
             if (pass == 1)
             {
-                if (!line.StartsWith(".label"))
+                if (!line.StartsWith(LABEL))
                 {
-                    if (line.StartsWith(".origin"))
+                    if (line.StartsWith(OPCODE))
                     {
                         var originParts = line.Split(new char[] { ' ', '\t' }, StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
                         // Check there are two! // check it is found;
                         uPC = OpAddrs[originParts[1]];
+                        OutputLog.Add($"{OPCODE} {originParts[1]}");
                     }
                     else
                     {
@@ -208,14 +235,28 @@ public class MS
                             // catch missing symbol
                             Or(symbols[codePart], value);
                         }
+
                         for (var offset = 0; offset < 4; offset++)
                         {
-                            Console.WriteLine($"Setting ROM byte at {uPC} with value {ByteToBitString(value[offset])}");
                             ROM[uPC * 4 + offset] = value[offset];
                         }
-                        symbols.Add(uPC.ToString(), value);
+
+                        string opLine = $"{uPC:X4}\t{line,-30}";
+                        for (var offset = 3; offset >= 0; offset--)
+                        {
+                            opLine += (ByteToBitString(ROM[uPC * 4 + offset]));
+                            if (offset != 0)
+                            {
+                                opLine += "-";
+                            }
+                        }
+                        OutputLog.Add(opLine);
                         uPC++;
                     }
+                }
+                else
+                {
+                    OutputLog.Add(line);
                 }
             }
         }
@@ -261,7 +302,6 @@ public class MS
         for (var index = 0; index < ROM.Length; index++)
         {
             binWriter.Write(ROM[index]);
-            //Console.WriteLine($"Writing byte at {index} with value {ByteToBitString(ROM[index])}");
         }
 
         binWriter.Close();
@@ -314,6 +354,16 @@ public class MS
                             break;
                     }
                 }
+                else
+                {
+                    if (pass == 1)
+                    {
+                        if (trimmedLine.Length > 0)
+                        {
+                            OutputLog.Add(trimmedLine);
+                        }
+                    }
+                }
 
                 lineNumber++;
             }
@@ -322,5 +372,9 @@ public class MS
         WriteFile(ROM);
 
         DumpSymbols();
+        Console.WriteLine();
+        DumpOpsAddrs();
+        Console.WriteLine();
+        DumpOutputLog();
     }
 }

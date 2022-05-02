@@ -39,16 +39,9 @@ MAR<-PC
 PC-INC | MBR<-XDATA
 uRTS
 
-.origin LDA_IMM
+.opcode LDA_IMM
 uJSR IMM
 A<-MBR
 uJMP FETCH
 
 
-//.label fetch
-//MAR<-PC 
-//PC-INC | IR<-XDATA
-//.label 2-words
-//MAR<-PC
-//PC-INC | MBR<-XDATA
-//A<-MBR
