@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "microasm": {
+      "commandName": "Project",
+      "workingDirectory": "$(ProjectDir)"
+    }
+  }
+}

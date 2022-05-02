@@ -1,5 +1,7 @@
+// Microcode
+
 .flags
-uJMP            ...............1    
+uJMP            ...............1  
 uJSR            ..............1.   
 uRTS            .............1..   
 uJMPOP          ............1...    
@@ -27,18 +29,26 @@ A<-MBR          MBR/OUT/CDATA | A/LD/CDATA
 LDA_IMM         A9
 
 .code
-
 .label FETCH
 MAR<-PC 
 PC-INC | IR<-XDATA
-uJMPOP
+uJMPOP 
 
 .label IMM
 MAR<-PC
 PC-INC | MBR<-XDATA
 uRTS
 
-.mop LDA_IMM
+.origin LDA_IMM
 uJSR IMM
 A<-MBR
 uJMP FETCH
+
+
+//.label fetch
+//MAR<-PC 
+//PC-INC | IR<-XDATA
+//.label 2-words
+//MAR<-PC
+//PC-INC | MBR<-XDATA
+//A<-MBR

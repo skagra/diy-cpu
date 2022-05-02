@@ -42,7 +42,7 @@
         </entry>
         <entry>
           <string>lastDataFile</string>
-          <file>E:\Development\diy-cpu\ucode\uROM.bin</file>
+          <file>E:\Development\diy-cpu\microasm\xxx.bin</file>
         </entry>
         <entry>
           <string>autoReload</string>
@@ -460,7 +460,7 @@
       <elementAttributes>
         <entry>
           <string>Input Splitting</string>
-          <string>8,8</string>
+          <string>4,8,4</string>
         </entry>
         <entry>
           <string>Output Splitting</string>
@@ -478,7 +478,7 @@
         </entry>
         <entry>
           <string>Bits</string>
-          <int>8</int>
+          <int>4</int>
         </entry>
       </elementAttributes>
       <pos x="440" y="60"/>
@@ -1588,6 +1588,10 @@
           <string>Label</string>
           <string>IR/LD/XDATA</string>
         </entry>
+        <entry>
+          <string>intFormat</string>
+          <intFormat>hex</intFormat>
+        </entry>
       </elementAttributes>
       <pos x="-740" y="-20"/>
     </visualElement>
@@ -1640,6 +1644,16 @@
         </entry>
       </elementAttributes>
       <pos x="-1140" y="-100"/>
+    </visualElement>
+    <visualElement>
+      <elementName>Const</elementName>
+      <elementAttributes>
+        <entry>
+          <string>Bits</string>
+          <int>4</int>
+        </entry>
+      </elementAttributes>
+      <pos x="440" y="100"/>
     </visualElement>
   </visualElements>
   <wires>
@@ -1838,6 +1852,10 @@
     <wire>
       <p1 x="-760" y="100"/>
       <p2 x="-740" y="100"/>
+    </wire>
+    <wire>
+      <p1 x="440" y="100"/>
+      <p2 x="480" y="100"/>
     </wire>
     <wire>
       <p1 x="-920" y="740"/>
