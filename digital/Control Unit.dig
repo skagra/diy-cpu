@@ -42,7 +42,7 @@
         </entry>
         <entry>
           <string>lastDataFile</string>
-          <file>C:\Users\pharvey\Documents\diy-cpu\uCode\uROM.bin</file>
+          <file>C:\Development\diy-cpu\uCode\uROM.bin</file>
         </entry>
         <entry>
           <string>autoReload</string>
@@ -1323,6 +1323,10 @@
         <entry>
           <string>Bits</string>
           <int>8</int>
+        </entry>
+        <entry>
+          <string>intFormat</string>
+          <intFormat>hex</intFormat>
         </entry>
       </elementAttributes>
       <pos x="-1140" y="140"/>

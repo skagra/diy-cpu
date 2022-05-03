@@ -35,19 +35,19 @@ LDA_IMM         A9
 // Fetch instruction at PC into IR
 .label FETCH
 MAR<-PC 
-PC-INC | IR<-XDATA
+PC-INC | IR<-XDATA 
 uJMPOP 
 
 // Immediate mode - fetch PC into MBR
 .label IMM
-MAR<-PC
+MAR<-PC 
 PC-INC | MBR<-XDATA
 uRTS
 
 // Op code implementations
 .opcode LDA_IMM
 uJSR IMM
-A<-MBR
+A<-MBR 
 uJMP FETCH
 
 

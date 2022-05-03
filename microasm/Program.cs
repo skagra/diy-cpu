@@ -1,55 +1,52 @@
-﻿using System;
-using System.IO;
-
-// All values are translated to Little Endian order in various symbol tables and written that way to the output binary file
+﻿// All values are translated to Little Endian order in various symbol tables and written that way to the output binary file
 // However display to the console is in natural numeric order
 namespace microasm
 {
-   public class MicroAsmRunner
-   {
-      public static void Main(string[] args)
-      {
-         Console.WriteLine("MicroAsm");
-         Console.WriteLine("--------");
-         Console.WriteLine();
-
-         if (args.Length!=2)
-         {
-            Console.WriteLine("Usage: microasm source-file rom-file");
-            return;
-         }
-
-         var inputFile = args[0];
-         var outputFile = args[1];
-
-         Console.WriteLine($"Input file: '{Path.GetFullPath(inputFile)}'");
-         Console.WriteLine($"Output file: '{Path.GetFullPath(outputFile)}'");
-         Console.WriteLine();
-
-         try
-         {
-            var ma = new MicroAsm(inputFile);
-
-            ma.DumpFlagSymbols();
+    public class MicroAsmRunner
+    {
+        public static void Main(string[] args)
+        {
+            Console.WriteLine("MicroAsm");
+            Console.WriteLine("--------");
             Console.WriteLine();
 
-            ma.DumpUCopsSymbols();
+            if (args.Length != 2)
+            {
+                Console.WriteLine("Usage: microasm source-file rom-file");
+                return;
+            }
+
+            var inputFile = args[0];
+            var outputFile = args[1];
+
+            Console.WriteLine($"Input file: '{Path.GetFullPath(inputFile)}'");
+            Console.WriteLine($"Output file: '{Path.GetFullPath(outputFile)}'");
             Console.WriteLine();
 
-            ma.DumpLabelSymbols();
-            Console.WriteLine();
+            try
+            {
+                var ma = new MicroAsm(inputFile);
 
-            ma.DumpOpsAddrs();
-            Console.WriteLine();
+                ma.DumpFlagSymbols();
+                Console.WriteLine();
 
-            ma.DumpOutputLog();
+                ma.DumpUCopsSymbols();
+                Console.WriteLine();
 
-            ma.WriteROMFile(outputFile);
-         }
-         catch (Exception e)
-         {
-            Console.WriteLine(e.Message);
-         }
-      }
-   }
+                ma.DumpLabelSymbols();
+                Console.WriteLine();
+
+                ma.DumpOpsAddrs();
+                Console.WriteLine();
+
+                ma.DumpOutputLog();
+
+                ma.WriteROMFile(outputFile);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+            }
+        }
+    }
 }

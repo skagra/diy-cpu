@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace microasm
+﻿namespace microasm
 {
     public class MicroAsmException : Exception
     {
