@@ -163,22 +163,19 @@ namespace microasm
          Console.WriteLine("Resolved Source");
          Console.WriteLine("---------------\n");
 
-         _outputLog.ForEach(l =>
-         {
-            Console.WriteLine(l);
-         });
+         _outputLog.ForEach(l => Console.WriteLine(l));
       }
 
       private void ParseFlagsLine(string line, int lineNumber)
       {
          var flagsParts = line.Split(' ', '\t', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
-         if (flagsParts.Length != 2)
+         if (flagsParts.Length < 2)
          {
             throw new MicroAsmException($"Flag lines must consist of two white-space separated values", line, lineNumber);
          }
 
          var symbolString = flagsParts[0];
-         var valueString = flagsParts[1];
+         var valueString = string.Join(' ', flagsParts[1..]).Replace(" ", "");
 
          if (valueString.Length != FLAGS_SIZE_IN_BYTES * 8)
          {
@@ -240,8 +237,8 @@ namespace microasm
          }
 
          // 16 words for each instruction, starting a 4096 base
-         // Addesses 0001 oooo oooo iiii are OpCodes i
-         // Addreses 0000 xxxx xxxx xxxx are othe routines
+         // Addresses 0001 oooo oooo iiii are OpCodes i
+         // Addresses 0000 xxxx xxxx xxxx are othe routines
          UInt16 mappedAddress = (UInt16)(value << 4 | 0b1000000000000);
          try
          {
@@ -282,7 +279,7 @@ namespace microasm
          }
       }
 
-      private void ParseCodeLinePass0(string line, int lineNumber, byte[] ROM)
+      private void ParseCodeLinePass0(string line, int lineNumber)
       {
 
             if (line.StartsWith(LABEL))
@@ -309,7 +306,7 @@ namespace microasm
     
       }
 
-      private void ParseCodeLinePass1(string line, int lineNumber, byte[] ROM) { 
+      private void ParseCodeLinePass1(string line, int lineNumber) { 
     
          if (!line.StartsWith(LABEL))
          {
@@ -342,7 +339,7 @@ namespace microasm
 
                for (var offset = 0; offset < 4; offset++)
                {
-                  ROM[_romAddress * 4 + offset] = value[offset];
+                  _ROM[_romAddress * 4 + offset] = value[offset];
                }
 
                int byteRomAddress = _romAddress * 4;
@@ -356,7 +353,7 @@ namespace microasm
          }
       }
 
-      private void ParseLine(string line, Section section, int lineNumber, byte[] ROM, int pass)
+      private void ParseLine(string line, Section section, int lineNumber, int pass)
       {
          if (pass == 0)
          {
@@ -375,13 +372,13 @@ namespace microasm
                   break;
 
                case Section.Code:
-                  ParseCodeLinePass0(line, lineNumber, ROM);
+                  ParseCodeLinePass0(line, lineNumber);
                   break;
             }
          }
          else if (section==Section.Code)
          {
-            ParseCodeLinePass1(line, lineNumber, ROM);
+            ParseCodeLinePass1(line, lineNumber);
          }
 
       }
@@ -432,7 +429,7 @@ namespace microasm
                      default:
                         if (currentSection != Section.None)
                         {
-                           ParseLine(trimmedLine, currentSection, lineNumber, _ROM, pass);
+                           ParseLine(trimmedLine, currentSection, lineNumber, pass);
                         }
                         else
                         {

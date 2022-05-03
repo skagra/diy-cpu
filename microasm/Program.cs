@@ -1,7 +1,8 @@
 ﻿using System;
+using System.IO;
 
-// All values are translated to Little Endian order and written that way to the output binary file
-// Values are written to the console though in natural order
+// All values are translated to Little Endian order in various symbol tables and written that way to the output binary file
+// However display to the console is in natural numeric order
 namespace microasm
 {
    public class MicroAsmRunner
@@ -10,7 +11,7 @@ namespace microasm
       {
          Console.WriteLine("MicroAsm");
          Console.WriteLine("--------");
-         Console.WriteLine("");
+         Console.WriteLine();
 
          if (args.Length!=2)
          {
@@ -21,8 +22,8 @@ namespace microasm
          var inputFile = args[0];
          var outputFile = args[1];
 
-         Console.WriteLine($"Input file: '{inputFile}'");
-         Console.WriteLine($"Output file: '{outputFile}'");
+         Console.WriteLine($"Input file: '{Path.GetFullPath(inputFile)}'");
+         Console.WriteLine($"Output file: '{Path.GetFullPath(outputFile)}'");
          Console.WriteLine();
 
          try
