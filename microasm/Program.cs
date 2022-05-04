@@ -1,6 +1,4 @@
-﻿// All values are translated to Little Endian order in various symbol tables and written that way to the output binary file
-// However display to the console is in natural numeric order
-namespace microasm
+﻿namespace microasm
 {
     public class MicroAsmRunner
     {

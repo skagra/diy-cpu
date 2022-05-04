@@ -46,7 +46,7 @@ MEM<-MBR		MBR/OUT/XDATA | MEM/LD/XDATA
 .mcops
 LDA_IMM         A9
 STA_ABS			AA
-LDA_ABS			BB
+LDA_ABS			8D
 
 .code
 

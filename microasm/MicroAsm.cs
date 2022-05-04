@@ -4,27 +4,47 @@ namespace microasm
 {
     public class MicroAsm
     {
+        // Idenfies the section of the uCode file being parsed
         private enum Section { None, Flags, UCOps, MCOps, Code }
 
-        private const int WORD_SIZE_IN_BYTES = 6;
-
-        private const int WORD_COUNT = 0x10000; //32; // 0x10000;
+        // Number of bytes for control signals
         private const int FLAGS_SIZE_IN_BYTES = 4;
 
+        // Size of each uOpCode - FLAGS_SIZE_IN_BYTES+2 for 16 bit uROM address
+        private const int WORD_SIZE_IN_BYTES = FLAGS_SIZE_IN_BYTES + 2;  
+
+        // Size of the output ROM in words
+        private const int WORD_COUNT = 0x10000;
+        
+        // Size of the output ROM in bytes
         private const int ROM_SIZE_BYTES = WORD_SIZE_IN_BYTES * WORD_COUNT;
 
+        // Characters which introduce a comment in the uCode file
         private const string COMMENT_CHARS = "//";
 
+        // Control flags section
         private const string SECTION_FLAGS = ".flags";
+
+        // uInstructions as combinations of control flags
         private const string SECTION_UCOPS = ".ucops";
+
+        // mOpcodes
         private const string SECTION_MCOPS = ".mcops";
+
+        // Definition of actual uCode
         private const string SECTION_CODE = ".code";
 
+        // Identifies uCode as representing a mOpcode causing it to be placed in the appropriate location in the ROM
         private const string OPCODE = ".opcode";
+
+        // Label a location so it may be referred to later
         private const string LABEL = ".label";
 
+        // For efficient conversion of bit strings to byte values
         private static readonly byte[] BytePowers = { 128, 64, 32, 16, 8, 4, 2, 1 };
 
+        // Symbols tables filled in as the uCode file is parsed then used to generate ROM output
+        // Each symbol value is in output (little endian) order and is the full size of uCode word
         private readonly Dictionary<string, byte[]> _flagSymbols = new();
         private readonly Dictionary<string, byte[]> _ucopsSymbols = new();
         private readonly Dictionary<string, byte[]> _labelSymbols = new();
@@ -101,13 +121,19 @@ namespace microasm
             for (var byteIndex = value.Length - 1; byteIndex >= 0; byteIndex--)
             {
                 result.Append(ByteToBitString(value[byteIndex]).Replace("0", "."));
+                
+            }
+
+            result.Append("\t");
+
+            for (var byteIndex = value.Length - 1; byteIndex >= 0; byteIndex--)
+            {
+                result.Append($"{value[byteIndex]:X2}");
                 if (byteIndex != 0)
                 {
                     result.Append(" ");
                 }
             }
-
-            result.Append($" {value[5]:X2} {value[4]:X2} {value[3]:X2} {value[2]:X2} {value[1]:X2} {value[0]:X2}");
 
             return result.ToString();
         }
@@ -234,7 +260,7 @@ namespace microasm
 
             // 16 words for each instruction, starting a 4096 base
             // Addresses 0001 oooo oooo iiii are OpCodes i
-            // Addresses 0000 xxxx xxxx xxxx are othe routines
+            // Addresses 0000 xxxx xxxx xxxx are other routines
             UInt16 mappedAddress = (UInt16)(value << 4 | 0b1000000000000);
             try
             {
@@ -284,8 +310,14 @@ namespace microasm
                 var symbol = labelParts[1];
                 try
                 {
-                    // !! Assumes word length
-                    _labelSymbols.Add(symbol, new byte[] { (byte)(_romAddress & 0xFF), (byte)((_romAddress >> 8) & 0xFF), 0, 0, 0, 0 });
+                    var addressWord=new byte[WORD_SIZE_IN_BYTES];
+                    addressWord[0]=(byte)(_romAddress & 0xFF);
+                    addressWord[1]=(byte)((_romAddress >> 8) & 0xFF);
+                    for (var offset=2; offset<WORD_SIZE_IN_BYTES; offset++)
+                    {
+                        addressWord[offset]=0;
+                    }
+                    _labelSymbols.Add(symbol, addressWord);
                 }
                 catch
                 {
@@ -334,16 +366,15 @@ namespace microasm
                         Or(ResolveSymbol(codePart, line, lineNumber), value);
                     }
 
-                    // !! Assumes word size
-                    for (var offset = 0; offset < 6; offset++)
+                    int byteRomAddress = _romAddress * WORD_SIZE_IN_BYTES;
+                    var outputLogByteArray = new byte[WORD_SIZE_IN_BYTES];
+                    for (var offset = 0; offset < WORD_SIZE_IN_BYTES; offset++)
                     {
-                        _ROM[_romAddress * 6 + offset] = value[offset];
+                        _ROM[byteRomAddress + offset] = value[offset];
+                        outputLogByteArray[offset] = value[offset];
                     }
 
-                    // !! Assumes
-                    int byteRomAddress = _romAddress * 6;
-                    // !!Assumes
-                    _outputLog.Add($"{_romAddress:X4}\t{line,-30} {CreateByteArrayString(new byte[] { _ROM[byteRomAddress], _ROM[byteRomAddress + 1], _ROM[byteRomAddress + 2], _ROM[byteRomAddress + 3], _ROM[byteRomAddress + 4], _ROM[byteRomAddress + 5] })}");
+                    _outputLog.Add($"{_romAddress:X4}\t{line,-30} {CreateByteArrayString(_ROM[byteRomAddress..(byteRomAddress+WORD_SIZE_IN_BYTES)])}");
                     _romAddress++;
                 }
             }

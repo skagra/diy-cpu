@@ -137,4 +137,4 @@ _NCrunch*
 # Arduino
 [Bb]uild/
 
-uROM.bin.tags
+*.bin.tags
