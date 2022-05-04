@@ -6,10 +6,10 @@ namespace microasm
     {
         private enum Section { None, Flags, UCOps, MCOps, Code }
 
-        private const int WORD_SIZE_IN_BYTES = 4;
+        private const int WORD_SIZE_IN_BYTES = 6;
 
         private const int WORD_COUNT = 0x10000; //32; // 0x10000;
-        private const int FLAGS_SIZE_IN_BYTES = 2;
+        private const int FLAGS_SIZE_IN_BYTES = 4;
 
         private const int ROM_SIZE_BYTES = WORD_SIZE_IN_BYTES * WORD_COUNT;
 
@@ -107,7 +107,7 @@ namespace microasm
                 }
             }
 
-            result.Append($" {value[3]:X2} {value[2]:X2} {value[1]:X2} {value[0]:X2}");
+            result.Append($" {value[5]:X2} {value[4]:X2} {value[3]:X2} {value[2]:X2} {value[1]:X2} {value[0]:X2}");
 
             return result.ToString();
         }
@@ -285,7 +285,7 @@ namespace microasm
                 try
                 {
                     // !! Assumes word length
-                    _labelSymbols.Add(symbol, new byte[] { (byte)(_romAddress & 0xFF), (byte)((_romAddress >> 8) & 0xFF), 0, 0 });
+                    _labelSymbols.Add(symbol, new byte[] { (byte)(_romAddress & 0xFF), (byte)((_romAddress >> 8) & 0xFF), 0, 0, 0, 0 });
                 }
                 catch
                 {
@@ -334,13 +334,16 @@ namespace microasm
                         Or(ResolveSymbol(codePart, line, lineNumber), value);
                     }
 
-                    for (var offset = 0; offset < 4; offset++)
+                    // !! Assumes word size
+                    for (var offset = 0; offset < 6; offset++)
                     {
-                        _ROM[_romAddress * 4 + offset] = value[offset];
+                        _ROM[_romAddress * 6 + offset] = value[offset];
                     }
 
-                    int byteRomAddress = _romAddress * 4;
-                    _outputLog.Add($"{_romAddress:X4}\t{line,-30} {CreateByteArrayString(new byte[] { _ROM[byteRomAddress], _ROM[byteRomAddress + 1], _ROM[byteRomAddress + 2], _ROM[byteRomAddress + 3] })}");
+                    // !! Assumes
+                    int byteRomAddress = _romAddress * 6;
+                    // !!Assumes
+                    _outputLog.Add($"{_romAddress:X4}\t{line,-30} {CreateByteArrayString(new byte[] { _ROM[byteRomAddress], _ROM[byteRomAddress + 1], _ROM[byteRomAddress + 2], _ROM[byteRomAddress + 3], _ROM[byteRomAddress + 4], _ROM[byteRomAddress + 5] })}");
                     _romAddress++;
                 }
             }
