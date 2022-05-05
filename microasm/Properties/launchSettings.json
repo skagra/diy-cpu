@@ -1,9 +1,9 @@
 {
-  "profiles": {
-    "microasm": {
-      "commandName": "Project",
-      "commandLineArgs": "..\\ucode\\mc-rom.txt ..\\ucode\\uROM.bin",
-      "workingDirectory": "$(ProjectDir)"
-    }
-  }
+   "profiles": {
+      "microasm": {
+         "commandName": "Project",
+         "commandLineArgs": "..\\ucode\\mc-rom.txt ..\\ucode\\bin\\uROM.bin",
+         "workingDirectory": "$(ProjectDir)"
+      }
+   }
 }
