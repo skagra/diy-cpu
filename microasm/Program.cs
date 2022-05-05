@@ -23,6 +23,11 @@
 
          try
          {
+            var outputDir=Path.GetDirectoryName(outputFile);
+            if (!Directory.Exists(outputDir)) {
+               Directory.CreateDirectory(outputDir);
+            }
+
             var ma = new MicroAsm(inputFile);
 
             ma.DumpFlagSymbols();

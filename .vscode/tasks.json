@@ -16,6 +16,15 @@
          "problemMatcher": "$msCompile"
       },
       {
+         "label": "mkdir-machine-code",
+         "type": "shell",
+         "options": {
+            "cwd": "${workspaceFolder}/mCode"
+         },
+         "command": "[System.IO.Directory]::CreateDirectory('bin')",
+         "problemMatcher": []
+      },
+      {
          "label": "generate-machine-code",
          "command": "dasm",
          "type": "process",
@@ -26,7 +35,11 @@
             "RAM.asm",
             "-f3",
             "-obin/RAM.bin"
-         ]
+         ],
+         "dependsOn": [
+            "mkdir-machine-code"
+         ],
+         "problemMatcher": []
       },
       {
          "label": "publish",
