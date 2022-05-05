@@ -27,6 +27,8 @@ CDATA/TO/CADDRH  ........ .1...... ........ ........
 CDATA/TO/CADDRL  ........ 1....... ........ ........
 STASH/LD/CDATA   .......1 ........ ........ ........
 STASH/OUT/CDATA  ......1. ........ ........ ........
+PCL/LD/CADDRL    .....1.. ........ ........ ........
+PCH/LD/CADDRH    ....1... ........ ........ ........
 
 .ucops
 MAR<-PC         PC/OUT/CADDR | MARH/LD/CADDRH | MARL/LD/CADDRL
@@ -45,8 +47,9 @@ MEM<-MBR        MBR/OUT/XDATA | MEM/LD/XDATA
 
 .mcops
 LDA_IMM        A9
-STA_ABS			8D
-LDA_ABS			AD
+STA_ABS	       8D
+LDA_ABS        AD
+JMP_ABS        4C
 
 .code
 
@@ -93,4 +96,8 @@ MBR<-XDATA
 A<-MBR 
 uJMP FETCH
 
-
+.opcode JMP_ABS
+uJSR ABS
+STASH/OUT/CDATA | CDATA/TO/CADDRL | PCL/LD/CADDRL
+MBR/OUT/CDATA | CDATA/TO/CADDRH | PCH/LD/CADDRH
+uJMP FETCH

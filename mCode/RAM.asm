@@ -7,9 +7,10 @@
 ; Main routine
 main:       LDA #$77
             STA p1
-            LDA #$66
+here:       LDA #$66
             LDA p1
-
+            JMP here
+            
 ; Zero page variables
             SEG.U variables
             ORG $100
