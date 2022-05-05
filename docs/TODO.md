@@ -8,7 +8,7 @@
 * ~~Sort out an machine code assembler to more easily create test code (dasm?)~~ DONE
 * Consider moving memory decoding logic into a sub-circuit
 * Split PC out to hi and lo and modify signal lines appropriately
-* Add jump operations
+* ~~Add jump operation~~ DONE
 * Add ALU
 * Work out how to handle ALU flags
 * Investigate using multiple phases of clocks to reduce execution cycles
