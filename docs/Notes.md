@@ -12,12 +12,12 @@ Microinstructions are converted to little-endian order when written to the outpu
 
 # TO DO
 
-* Remove hardcoded length dependencies from microasm.  *Done but needs testing*
+* ~~Remove hardcoded length dependencies from microasm.~~ DONE
 * Reorder control lines into more logical groupings
 * Add HALT switch
 * Add Reset switch - and initialize via vector
 * Consider using consistent addressing mode bit patterns together with phased uCode execution to automatically have correct addressing code executed and avoid the use subroutines.   This would reduce both execution cycles and code complexity.
-* Sort out an machine code assembler to more easily create test code (dasm?)
+* ~~Sort out an machine code assembler to more easily create test code (dasm?)~~ DONE
 * Consider moving memory decoding logic into a sub-circuit
 * Split PC out to hi and lo and modify signal lines appropriately
 * Add jump operations
@@ -33,3 +33,5 @@ https://link.springer.com/content/pdf/bbm%3A978-1-349-07360-3%2F1.pdf
 
 * Nice indexed list of opcodes:
 http://www.6502.org/tutorials/6502opcodes.html
+
+* Assembler - DASM https://dasm-assembler.github.io/
