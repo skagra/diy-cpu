@@ -40,3 +40,4 @@ http://www.6502.org/tutorials/6502opcodes.html
 * Nice summary table of Op Codes https://masswerk.at/6502/6502_instruction_set.html
 * 6502 programming manual - https://archive.org/details/mos_microcomputers_programming_manual
 * Very nice summary - https://xotmatrix.github.io/6502/6502-instruction-set.html
+* Instruction layout - https://www.masswerk.at/6502/6502_instruction_set.html#layout
