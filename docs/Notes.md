@@ -26,20 +26,17 @@ Microinstructions are converted to little-endian order when written to the outpu
 | Relative | `BPL $50` | The operand is an 8 bit signed offset from the PC. 
 | Zero page | `ADC $44` | The argument is the zero-page address of the operand 
 | Zero page, X | `ADC $44,X` | The zero page argument is added to X to give the zero page address of the operand.  Addition wrap to zero page. 
-| Zero page, Y | `STA $00,y` | The zero page argument is added to Y to give the zero page address of the operand.  Addition wrap to zero page. 
+| Zero page, Y | `STA $00,Y` | The zero page argument is added to Y to give the zero page address of the operand.  Addition wrap to zero page. 
 
 # References
 
 * 6502 Instruction set - good analysis of bit patterns for addressing modes:
 https://link.springer.com/content/pdf/bbm%3A978-1-349-07360-3%2F1.pdf
-
 * Nice indexed list of opcodes:
 http://www.6502.org/tutorials/6502opcodes.html
-
 * Table of opcodes with some grouping breakdown https://llx.com/Neil/a2/opcodes.html
-
 * Assembler - DASM https://dasm-assembler.github.io/
-
 * Someone else has done something similar: https://c74project.com/
-
+* Nice summary table of Op Codes https://masswerk.at/6502/6502_instruction_set.html
 * 6502 programming manual - https://archive.org/details/mos_microcomputers_programming_manual
+* Very nice summary - https://xotmatrix.github.io/6502/6502-instruction-set.html
