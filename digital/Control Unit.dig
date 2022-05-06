@@ -42,7 +42,7 @@
         </entry>
         <entry>
           <string>lastDataFile</string>
-          <file>E:\Development\diy-cpu\uCode\bin\uROM.bin</file>
+          <file>D:\Development\diy-cpu\uCode\bin\uROM.bin</file>
         </entry>
         <entry>
           <string>autoReload</string>
@@ -2119,6 +2119,82 @@
       </elementAttributes>
       <pos x="-740" y="620"/>
     </visualElement>
+    <visualElement>
+      <elementName>Tunnel</elementName>
+      <elementAttributes>
+        <entry>
+          <string>rotation</string>
+          <rotation rotation="2"/>
+        </entry>
+        <entry>
+          <string>NetName</string>
+          <string>ALUA/LD/CDATA</string>
+        </entry>
+      </elementAttributes>
+      <pos x="-220" y="480"/>
+    </visualElement>
+    <visualElement>
+      <elementName>Tunnel</elementName>
+      <elementAttributes>
+        <entry>
+          <string>rotation</string>
+          <rotation rotation="2"/>
+        </entry>
+        <entry>
+          <string>NetName</string>
+          <string>ALUR/OUT/CDATA</string>
+        </entry>
+      </elementAttributes>
+      <pos x="-220" y="500"/>
+    </visualElement>
+    <visualElement>
+      <elementName>Tunnel</elementName>
+      <elementAttributes>
+        <entry>
+          <string>rotation</string>
+          <rotation rotation="2"/>
+        </entry>
+        <entry>
+          <string>NetName</string>
+          <string>ALUA/LD/CDATA</string>
+        </entry>
+      </elementAttributes>
+      <pos x="-760" y="660"/>
+    </visualElement>
+    <visualElement>
+      <elementName>Tunnel</elementName>
+      <elementAttributes>
+        <entry>
+          <string>rotation</string>
+          <rotation rotation="2"/>
+        </entry>
+        <entry>
+          <string>NetName</string>
+          <string>ALUR/OUT/CDATA</string>
+        </entry>
+      </elementAttributes>
+      <pos x="-760" y="700"/>
+    </visualElement>
+    <visualElement>
+      <elementName>Out</elementName>
+      <elementAttributes>
+        <entry>
+          <string>Label</string>
+          <string>ALUA/LD/CDATA</string>
+        </entry>
+      </elementAttributes>
+      <pos x="-740" y="660"/>
+    </visualElement>
+    <visualElement>
+      <elementName>Out</elementName>
+      <elementAttributes>
+        <entry>
+          <string>Label</string>
+          <string>ALUR/OUT/CDATA</string>
+        </entry>
+      </elementAttributes>
+      <pos x="-740" y="700"/>
+    </visualElement>
   </visualElements>
   <wires>
     <wire>
@@ -2286,6 +2362,10 @@
       <p2 x="-200" y="340"/>
     </wire>
     <wire>
+      <p1 x="-760" y="660"/>
+      <p2 x="-740" y="660"/>
+    </wire>
+    <wire>
       <p1 x="-220" y="280"/>
       <p2 x="-200" y="280"/>
     </wire>
@@ -2328,6 +2408,10 @@
     <wire>
       <p1 x="-220" y="160"/>
       <p2 x="-200" y="160"/>
+    </wire>
+    <wire>
+      <p1 x="-220" y="480"/>
+      <p2 x="-200" y="480"/>
     </wire>
     <wire>
       <p1 x="-760" y="-100"/>
@@ -2462,6 +2546,10 @@
       <p2 x="620" y="500"/>
     </wire>
     <wire>
+      <p1 x="-220" y="500"/>
+      <p2 x="-200" y="500"/>
+    </wire>
+    <wire>
       <p1 x="-220" y="180"/>
       <p2 x="-200" y="180"/>
     </wire>
@@ -2524,6 +2612,10 @@
     <wire>
       <p1 x="-760" y="380"/>
       <p2 x="-740" y="380"/>
+    </wire>
+    <wire>
+      <p1 x="-760" y="700"/>
+      <p2 x="-740" y="700"/>
     </wire>
     <wire>
       <p1 x="0" y="0"/>

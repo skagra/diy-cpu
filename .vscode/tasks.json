@@ -19,6 +19,9 @@
          "label": "mkdir-machine-code",
          "type": "shell",
          "options": {
+            "shell": {
+               "executable": "powershell"
+            },
             "cwd": "${workspaceFolder}/mCode"
          },
          "command": "[System.IO.Directory]::CreateDirectory('bin')",

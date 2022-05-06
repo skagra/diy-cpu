@@ -7,9 +7,9 @@
 ; Main routine
 main:       LDA #$77
             STA p1
-here:       LDA #$66
-            LDA p1
-            JMP here
+            LDA #$66
+incer:      INX
+            JMP incer
             
 ; Zero page variables
             SEG.U variables

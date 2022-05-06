@@ -29,6 +29,8 @@ STASH/LD/CDATA   .......1 ........ ........ ........
 STASH/OUT/CDATA  ......1. ........ ........ ........
 PCL/LD/CADDRL    .....1.. ........ ........ ........
 PCH/LD/CADDRH    ....1... ........ ........ ........
+ALUA/LD/CDATA    ...1.... ........ ........ ........
+ALUR/OUT/CDATA   ..1..... ........ ........ ........
 
 .ucops
 MAR<-PC         PC/OUT/CADDR | MARH/LD/CADDRH | MARL/LD/CADDRL
@@ -46,12 +48,16 @@ MARH<-MBR       MBR/OUT/CDATA | CDATA/TO/CADDRH | MARH/LD/CADDRH
 MEM<-MBR        MBR/OUT/XDATA | MEM/LD/XDATA
 PCL<-STASH      STASH/OUT/CDATA | CDATA/TO/CADDRL | PCL/LD/CADDRL
 PCH<-MBR        MBR/OUT/CDATA | CDATA/TO/CADDRH | PCH/LD/CADDRH
+ALUA<-A         A/OUT/CDATA | ALUA/LD/CDATA
+A<-ALU          ALUR/OUT/CDATA | A/LD/CDATA
 
 .mcops
 LDA_IMM        A9
-STA_ABS	       8D
+STA_ABS        8D
 LDA_ABS        AD
 JMP_ABS        4C
+INCA           E8
+// There is not inca - this is really inc X
 
 .code
 
@@ -102,4 +108,9 @@ uJMP FETCH
 uJSR ABS
 PCL<-STASH     
 PCH<-MBR 
+uJMP FETCH
+
+.opcode INCA
+ALUA<-A
+A<-ALU 
 uJMP FETCH
