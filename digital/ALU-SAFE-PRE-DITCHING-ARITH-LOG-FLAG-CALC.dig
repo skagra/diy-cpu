@@ -2046,7 +2046,7 @@
         </entry>
         <entry>
           <string>NetName</string>
-          <string>Ccalc</string>
+          <string>Cout</string>
         </entry>
       </elementAttributes>
       <pos x="-10580" y="-2140"/>
@@ -2079,7 +2079,7 @@
         </entry>
         <entry>
           <string>NetName</string>
-          <string>Out7</string>
+          <string>Nout</string>
         </entry>
       </elementAttributes>
       <pos x="-10580" y="-2220"/>
@@ -2112,7 +2112,7 @@
         </entry>
         <entry>
           <string>NetName</string>
-          <string>Zcalc</string>
+          <string>Zout</string>
         </entry>
       </elementAttributes>
       <pos x="-10580" y="-2180"/>
@@ -2145,7 +2145,7 @@
         </entry>
         <entry>
           <string>NetName</string>
-          <string>Vcalc</string>
+          <string>Vout</string>
         </entry>
       </elementAttributes>
       <pos x="-10580" y="-2100"/>
@@ -2905,7 +2905,7 @@
       <elementAttributes>
         <entry>
           <string>NetName</string>
-          <string>Ccalc</string>
+          <string>Cout</string>
         </entry>
       </elementAttributes>
       <pos x="-11120" y="-1860"/>
@@ -2915,7 +2915,7 @@
       <elementAttributes>
         <entry>
           <string>NetName</string>
-          <string>Out7</string>
+          <string>Nout</string>
         </entry>
       </elementAttributes>
       <pos x="-11120" y="-1980"/>
@@ -2925,7 +2925,7 @@
       <elementAttributes>
         <entry>
           <string>NetName</string>
-          <string>Zcalc</string>
+          <string>Zout</string>
         </entry>
       </elementAttributes>
       <pos x="-11120" y="-1920"/>
@@ -2935,7 +2935,7 @@
       <elementAttributes>
         <entry>
           <string>NetName</string>
-          <string>Vcalc</string>
+          <string>Vout</string>
         </entry>
       </elementAttributes>
       <pos x="-11120" y="-1800"/>
@@ -5783,6 +5783,296 @@ Need to account for add(inc)sub(dec) - tried using bit 7 after 1&apos;s comp ...
       <pos x="-8620" y="-2740"/>
     </visualElement>
     <visualElement>
+      <elementName>74157.dig</elementName>
+      <elementAttributes>
+        <entry>
+          <string>Label</string>
+          <string>Flag Select (Mux)</string>
+        </entry>
+      </elementAttributes>
+      <pos x="-6860" y="-2600"/>
+    </visualElement>
+    <visualElement>
+      <elementName>VDD</elementName>
+      <elementAttributes>
+        <entry>
+          <string>rotation</string>
+          <rotation rotation="3"/>
+        </entry>
+      </elementAttributes>
+      <pos x="-6720" y="-2600"/>
+    </visualElement>
+    <visualElement>
+      <elementName>Ground</elementName>
+      <elementAttributes>
+        <entry>
+          <string>rotation</string>
+          <rotation rotation="3"/>
+        </entry>
+      </elementAttributes>
+      <pos x="-6880" y="-2320"/>
+    </visualElement>
+    <visualElement>
+      <elementName>7432.dig</elementName>
+      <elementAttributes>
+        <entry>
+          <string>Label</string>
+          <string>Is Arithmetic</string>
+        </entry>
+      </elementAttributes>
+      <pos x="-7200" y="-2600"/>
+    </visualElement>
+    <visualElement>
+      <elementName>VDD</elementName>
+      <elementAttributes>
+        <entry>
+          <string>rotation</string>
+          <rotation rotation="3"/>
+        </entry>
+      </elementAttributes>
+      <pos x="-7060" y="-2600"/>
+    </visualElement>
+    <visualElement>
+      <elementName>Ground</elementName>
+      <elementAttributes>
+        <entry>
+          <string>rotation</string>
+          <rotation rotation="3"/>
+        </entry>
+      </elementAttributes>
+      <pos x="-7220" y="-2360"/>
+    </visualElement>
+    <visualElement>
+      <elementName>Tunnel</elementName>
+      <elementAttributes>
+        <entry>
+          <string>rotation</string>
+          <rotation rotation="2"/>
+        </entry>
+        <entry>
+          <string>NetName</string>
+          <string>OPadd</string>
+        </entry>
+      </elementAttributes>
+      <pos x="-7240" y="-2600"/>
+    </visualElement>
+    <visualElement>
+      <elementName>Tunnel</elementName>
+      <elementAttributes>
+        <entry>
+          <string>rotation</string>
+          <rotation rotation="2"/>
+        </entry>
+        <entry>
+          <string>NetName</string>
+          <string>OPsub</string>
+        </entry>
+      </elementAttributes>
+      <pos x="-7240" y="-2560"/>
+    </visualElement>
+    <visualElement>
+      <elementName>Tunnel</elementName>
+      <elementAttributes>
+        <entry>
+          <string>rotation</string>
+          <rotation rotation="2"/>
+        </entry>
+        <entry>
+          <string>NetName</string>
+          <string>OPinc</string>
+        </entry>
+      </elementAttributes>
+      <pos x="-7240" y="-2480"/>
+    </visualElement>
+    <visualElement>
+      <elementName>Tunnel</elementName>
+      <elementAttributes>
+        <entry>
+          <string>rotation</string>
+          <rotation rotation="2"/>
+        </entry>
+        <entry>
+          <string>NetName</string>
+          <string>OPdec</string>
+        </entry>
+      </elementAttributes>
+      <pos x="-7240" y="-2440"/>
+    </visualElement>
+    <visualElement>
+      <elementName>Tunnel</elementName>
+      <elementAttributes>
+        <entry>
+          <string>rotation</string>
+          <rotation rotation="2"/>
+        </entry>
+        <entry>
+          <string>NetName</string>
+          <string>Out7</string>
+        </entry>
+      </elementAttributes>
+      <pos x="-6880" y="-2520"/>
+    </visualElement>
+    <visualElement>
+      <elementName>Tunnel</elementName>
+      <elementAttributes>
+        <entry>
+          <string>rotation</string>
+          <rotation rotation="2"/>
+        </entry>
+        <entry>
+          <string>NetName</string>
+          <string>Zcalc</string>
+        </entry>
+      </elementAttributes>
+      <pos x="-6880" y="-2400"/>
+    </visualElement>
+    <visualElement>
+      <elementName>Tunnel</elementName>
+      <elementAttributes>
+        <entry>
+          <string>NetName</string>
+          <string>Ccalc</string>
+        </entry>
+      </elementAttributes>
+      <pos x="-6720" y="-2360"/>
+    </visualElement>
+    <visualElement>
+      <elementName>Tunnel</elementName>
+      <elementAttributes>
+        <entry>
+          <string>NetName</string>
+          <string>Vcalc</string>
+        </entry>
+      </elementAttributes>
+      <pos x="-6720" y="-2480"/>
+    </visualElement>
+    <visualElement>
+      <elementName>Tunnel</elementName>
+      <elementAttributes>
+        <entry>
+          <string>rotation</string>
+          <rotation rotation="2"/>
+        </entry>
+        <entry>
+          <string>NetName</string>
+          <string>Nout</string>
+        </entry>
+      </elementAttributes>
+      <pos x="-6880" y="-2480"/>
+    </visualElement>
+    <visualElement>
+      <elementName>Tunnel</elementName>
+      <elementAttributes>
+        <entry>
+          <string>rotation</string>
+          <rotation rotation="2"/>
+        </entry>
+        <entry>
+          <string>NetName</string>
+          <string>Zout</string>
+        </entry>
+      </elementAttributes>
+      <pos x="-6880" y="-2360"/>
+    </visualElement>
+    <visualElement>
+      <elementName>Tunnel</elementName>
+      <elementAttributes>
+        <entry>
+          <string>NetName</string>
+          <string>Cout</string>
+        </entry>
+      </elementAttributes>
+      <pos x="-6720" y="-2320"/>
+    </visualElement>
+    <visualElement>
+      <elementName>Tunnel</elementName>
+      <elementAttributes>
+        <entry>
+          <string>NetName</string>
+          <string>Vout</string>
+        </entry>
+      </elementAttributes>
+      <pos x="-6720" y="-2440"/>
+    </visualElement>
+    <visualElement>
+      <elementName>Tunnel</elementName>
+      <elementAttributes>
+        <entry>
+          <string>NetName</string>
+          <string>Vin</string>
+        </entry>
+      </elementAttributes>
+      <pos x="-6720" y="-2520"/>
+    </visualElement>
+    <visualElement>
+      <elementName>Ground</elementName>
+      <elementAttributes>
+        <entry>
+          <string>rotation</string>
+          <rotation rotation="3"/>
+        </entry>
+      </elementAttributes>
+      <pos x="-7060" y="-2560"/>
+    </visualElement>
+    <visualElement>
+      <elementName>Ground</elementName>
+      <elementAttributes>
+        <entry>
+          <string>rotation</string>
+          <rotation rotation="3"/>
+        </entry>
+      </elementAttributes>
+      <pos x="-7060" y="-2520"/>
+    </visualElement>
+    <visualElement>
+      <elementName>Ground</elementName>
+      <elementAttributes>
+        <entry>
+          <string>rotation</string>
+          <rotation rotation="3"/>
+        </entry>
+      </elementAttributes>
+      <pos x="-6720" y="-2560"/>
+    </visualElement>
+    <visualElement>
+      <elementName>Tunnel</elementName>
+      <elementAttributes>
+        <entry>
+          <string>NetName</string>
+          <string>Cin</string>
+        </entry>
+      </elementAttributes>
+      <pos x="-6720" y="-2400"/>
+    </visualElement>
+    <visualElement>
+      <elementName>Tunnel</elementName>
+      <elementAttributes>
+        <entry>
+          <string>rotation</string>
+          <rotation rotation="2"/>
+        </entry>
+        <entry>
+          <string>NetName</string>
+          <string>Out7</string>
+        </entry>
+      </elementAttributes>
+      <pos x="-6880" y="-2560"/>
+    </visualElement>
+    <visualElement>
+      <elementName>Tunnel</elementName>
+      <elementAttributes>
+        <entry>
+          <string>rotation</string>
+          <rotation rotation="2"/>
+        </entry>
+        <entry>
+          <string>NetName</string>
+          <string>Zcalc</string>
+        </entry>
+      </elementAttributes>
+      <pos x="-6880" y="-2440"/>
+    </visualElement>
+    <visualElement>
       <elementName>Text</elementName>
       <elementAttributes>
         <entry>
@@ -5837,6 +6127,20 @@ Need to account for add(inc)sub(dec) - tried using bit 7 after 1&apos;s comp ...
         </entry>
       </elementAttributes>
       <pos x="-9380" y="-2860"/>
+    </visualElement>
+    <visualElement>
+      <elementName>Text</elementName>
+      <elementAttributes>
+        <entry>
+          <string>textFontSize</string>
+          <int>36</int>
+        </entry>
+        <entry>
+          <string>Description</string>
+          <string>Flag Output Selection</string>
+        </entry>
+      </elementAttributes>
+      <pos x="-7180" y="-2720"/>
     </visualElement>
     <visualElement>
       <elementName>Text</elementName>
@@ -6299,6 +6603,22 @@ Need to account for add(inc)sub(dec) - tried using bit 7 after 1&apos;s comp ...
       <p2 x="-9700" y="-2440"/>
     </wire>
     <wire>
+      <p1 x="-7240" y="-2440"/>
+      <p2 x="-7200" y="-2440"/>
+    </wire>
+    <wire>
+      <p1 x="-7080" y="-2440"/>
+      <p2 x="-7020" y="-2440"/>
+    </wire>
+    <wire>
+      <p1 x="-6740" y="-2440"/>
+      <p2 x="-6720" y="-2440"/>
+    </wire>
+    <wire>
+      <p1 x="-6880" y="-2440"/>
+      <p2 x="-6860" y="-2440"/>
+    </wire>
+    <wire>
       <p1 x="-8560" y="-1800"/>
       <p2 x="-7880" y="-1800"/>
     </wire>
@@ -6513,6 +6833,14 @@ Need to account for add(inc)sub(dec) - tried using bit 7 after 1&apos;s comp ...
     <wire>
       <p1 x="-10900" y="-2960"/>
       <p2 x="-10880" y="-2960"/>
+    </wire>
+    <wire>
+      <p1 x="-6880" y="-2320"/>
+      <p2 x="-6860" y="-2320"/>
+    </wire>
+    <wire>
+      <p1 x="-6740" y="-2320"/>
+      <p2 x="-6720" y="-2320"/>
     </wire>
     <wire>
       <p1 x="-9060" y="-2580"/>
@@ -6771,6 +7099,42 @@ Need to account for add(inc)sub(dec) - tried using bit 7 after 1&apos;s comp ...
       <p2 x="-9360" y="-1700"/>
     </wire>
     <wire>
+      <p1 x="-6740" y="-2600"/>
+      <p2 x="-6720" y="-2600"/>
+    </wire>
+    <wire>
+      <p1 x="-7080" y="-2600"/>
+      <p2 x="-7060" y="-2600"/>
+    </wire>
+    <wire>
+      <p1 x="-7240" y="-2600"/>
+      <p2 x="-7200" y="-2600"/>
+    </wire>
+    <wire>
+      <p1 x="-6980" y="-2600"/>
+      <p2 x="-6860" y="-2600"/>
+    </wire>
+    <wire>
+      <p1 x="-9480" y="-2600"/>
+      <p2 x="-9360" y="-2600"/>
+    </wire>
+    <wire>
+      <p1 x="-9580" y="-2600"/>
+      <p2 x="-9560" y="-2600"/>
+    </wire>
+    <wire>
+      <p1 x="-9720" y="-2600"/>
+      <p2 x="-9700" y="-2600"/>
+    </wire>
+    <wire>
+      <p1 x="-9240" y="-2600"/>
+      <p2 x="-9140" y="-2600"/>
+    </wire>
+    <wire>
+      <p1 x="-11140" y="-2600"/>
+      <p2 x="-11100" y="-2600"/>
+    </wire>
+    <wire>
       <p1 x="-8160" y="-1960"/>
       <p2 x="-8140" y="-1960"/>
     </wire>
@@ -6805,26 +7169,6 @@ Need to account for add(inc)sub(dec) - tried using bit 7 after 1&apos;s comp ...
     <wire>
       <p1 x="-8000" y="-1960"/>
       <p2 x="-7980" y="-1960"/>
-    </wire>
-    <wire>
-      <p1 x="-9480" y="-2600"/>
-      <p2 x="-9360" y="-2600"/>
-    </wire>
-    <wire>
-      <p1 x="-9580" y="-2600"/>
-      <p2 x="-9560" y="-2600"/>
-    </wire>
-    <wire>
-      <p1 x="-9720" y="-2600"/>
-      <p2 x="-9700" y="-2600"/>
-    </wire>
-    <wire>
-      <p1 x="-9240" y="-2600"/>
-      <p2 x="-9140" y="-2600"/>
-    </wire>
-    <wire>
-      <p1 x="-11140" y="-2600"/>
-      <p2 x="-11100" y="-2600"/>
     </wire>
     <wire>
       <p1 x="-9600" y="-3240"/>
@@ -6877,6 +7221,38 @@ Need to account for add(inc)sub(dec) - tried using bit 7 after 1&apos;s comp ...
     <wire>
       <p1 x="-9240" y="-1580"/>
       <p2 x="-9220" y="-1580"/>
+    </wire>
+    <wire>
+      <p1 x="-6740" y="-2480"/>
+      <p2 x="-6720" y="-2480"/>
+    </wire>
+    <wire>
+      <p1 x="-7240" y="-2480"/>
+      <p2 x="-7200" y="-2480"/>
+    </wire>
+    <wire>
+      <p1 x="-6880" y="-2480"/>
+      <p2 x="-6860" y="-2480"/>
+    </wire>
+    <wire>
+      <p1 x="-9720" y="-2480"/>
+      <p2 x="-9700" y="-2480"/>
+    </wire>
+    <wire>
+      <p1 x="-9580" y="-2480"/>
+      <p2 x="-9560" y="-2480"/>
+    </wire>
+    <wire>
+      <p1 x="-9380" y="-2480"/>
+      <p2 x="-9360" y="-2480"/>
+    </wire>
+    <wire>
+      <p1 x="-9240" y="-2480"/>
+      <p2 x="-9120" y="-2480"/>
+    </wire>
+    <wire>
+      <p1 x="-11140" y="-2480"/>
+      <p2 x="-11100" y="-2480"/>
     </wire>
     <wire>
       <p1 x="-9440" y="-1840"/>
@@ -6947,26 +7323,6 @@ Need to account for add(inc)sub(dec) - tried using bit 7 after 1&apos;s comp ...
       <p2 x="-8520" y="-3120"/>
     </wire>
     <wire>
-      <p1 x="-9720" y="-2480"/>
-      <p2 x="-9700" y="-2480"/>
-    </wire>
-    <wire>
-      <p1 x="-9580" y="-2480"/>
-      <p2 x="-9560" y="-2480"/>
-    </wire>
-    <wire>
-      <p1 x="-9380" y="-2480"/>
-      <p2 x="-9360" y="-2480"/>
-    </wire>
-    <wire>
-      <p1 x="-9240" y="-2480"/>
-      <p2 x="-9120" y="-2480"/>
-    </wire>
-    <wire>
-      <p1 x="-11140" y="-2480"/>
-      <p2 x="-11100" y="-2480"/>
-    </wire>
-    <wire>
       <p1 x="-10580" y="-2100"/>
       <p2 x="-10560" y="-2100"/>
     </wire>
@@ -6989,6 +7345,22 @@ Need to account for add(inc)sub(dec) - tried using bit 7 after 1&apos;s comp ...
     <wire>
       <p1 x="-10900" y="-3380"/>
       <p2 x="-10880" y="-3380"/>
+    </wire>
+    <wire>
+      <p1 x="-6740" y="-2360"/>
+      <p2 x="-6720" y="-2360"/>
+    </wire>
+    <wire>
+      <p1 x="-7220" y="-2360"/>
+      <p2 x="-7200" y="-2360"/>
+    </wire>
+    <wire>
+      <p1 x="-7080" y="-2360"/>
+      <p2 x="-6980" y="-2360"/>
+    </wire>
+    <wire>
+      <p1 x="-6880" y="-2360"/>
+      <p2 x="-6860" y="-2360"/>
     </wire>
     <wire>
       <p1 x="-11080" y="-2360"/>
@@ -7431,6 +7803,10 @@ Need to account for add(inc)sub(dec) - tried using bit 7 after 1&apos;s comp ...
       <p2 x="-9360" y="-1740"/>
     </wire>
     <wire>
+      <p1 x="-7340" y="-2640"/>
+      <p2 x="-7020" y="-2640"/>
+    </wire>
+    <wire>
       <p1 x="-9720" y="-2640"/>
       <p2 x="-9700" y="-2640"/>
     </wire>
@@ -7509,6 +7885,38 @@ Need to account for add(inc)sub(dec) - tried using bit 7 after 1&apos;s comp ...
     <wire>
       <p1 x="-9400" y="-1620"/>
       <p2 x="-9360" y="-1620"/>
+    </wire>
+    <wire>
+      <p1 x="-7340" y="-2520"/>
+      <p2 x="-7200" y="-2520"/>
+    </wire>
+    <wire>
+      <p1 x="-6880" y="-2520"/>
+      <p2 x="-6860" y="-2520"/>
+    </wire>
+    <wire>
+      <p1 x="-6740" y="-2520"/>
+      <p2 x="-6720" y="-2520"/>
+    </wire>
+    <wire>
+      <p1 x="-7080" y="-2520"/>
+      <p2 x="-7060" y="-2520"/>
+    </wire>
+    <wire>
+      <p1 x="-9720" y="-2520"/>
+      <p2 x="-9700" y="-2520"/>
+    </wire>
+    <wire>
+      <p1 x="-9580" y="-2520"/>
+      <p2 x="-9500" y="-2520"/>
+    </wire>
+    <wire>
+      <p1 x="-9400" y="-2520"/>
+      <p2 x="-9360" y="-2520"/>
+    </wire>
+    <wire>
+      <p1 x="-9240" y="-2520"/>
+      <p2 x="-9200" y="-2520"/>
     </wire>
     <wire>
       <p1 x="-6280" y="-3160"/>
@@ -7591,22 +7999,6 @@ Need to account for add(inc)sub(dec) - tried using bit 7 after 1&apos;s comp ...
       <p2 x="-9700" y="-1880"/>
     </wire>
     <wire>
-      <p1 x="-9720" y="-2520"/>
-      <p2 x="-9700" y="-2520"/>
-    </wire>
-    <wire>
-      <p1 x="-9580" y="-2520"/>
-      <p2 x="-9500" y="-2520"/>
-    </wire>
-    <wire>
-      <p1 x="-9400" y="-2520"/>
-      <p2 x="-9360" y="-2520"/>
-    </wire>
-    <wire>
-      <p1 x="-9240" y="-2520"/>
-      <p2 x="-9200" y="-2520"/>
-    </wire>
-    <wire>
       <p1 x="-10580" y="-2140"/>
       <p2 x="-10560" y="-2140"/>
     </wire>
@@ -7641,6 +8033,38 @@ Need to account for add(inc)sub(dec) - tried using bit 7 after 1&apos;s comp ...
     <wire>
       <p1 x="-9240" y="-1500"/>
       <p2 x="-9160" y="-1500"/>
+    </wire>
+    <wire>
+      <p1 x="-7240" y="-2400"/>
+      <p2 x="-7200" y="-2400"/>
+    </wire>
+    <wire>
+      <p1 x="-7080" y="-2400"/>
+      <p2 x="-7040" y="-2400"/>
+    </wire>
+    <wire>
+      <p1 x="-6880" y="-2400"/>
+      <p2 x="-6860" y="-2400"/>
+    </wire>
+    <wire>
+      <p1 x="-6740" y="-2400"/>
+      <p2 x="-6720" y="-2400"/>
+    </wire>
+    <wire>
+      <p1 x="-11140" y="-2400"/>
+      <p2 x="-11100" y="-2400"/>
+    </wire>
+    <wire>
+      <p1 x="-11080" y="-2400"/>
+      <p2 x="-11040" y="-2400"/>
+    </wire>
+    <wire>
+      <p1 x="-9580" y="-2400"/>
+      <p2 x="-9200" y="-2400"/>
+    </wire>
+    <wire>
+      <p1 x="-9720" y="-2400"/>
+      <p2 x="-9700" y="-2400"/>
     </wire>
     <wire>
       <p1 x="-11100" y="-3040"/>
@@ -7711,22 +8135,6 @@ Need to account for add(inc)sub(dec) - tried using bit 7 after 1&apos;s comp ...
       <p2 x="-8680" y="-3040"/>
     </wire>
     <wire>
-      <p1 x="-11140" y="-2400"/>
-      <p2 x="-11100" y="-2400"/>
-    </wire>
-    <wire>
-      <p1 x="-11080" y="-2400"/>
-      <p2 x="-11040" y="-2400"/>
-    </wire>
-    <wire>
-      <p1 x="-9580" y="-2400"/>
-      <p2 x="-9200" y="-2400"/>
-    </wire>
-    <wire>
-      <p1 x="-9720" y="-2400"/>
-      <p2 x="-9700" y="-2400"/>
-    </wire>
-    <wire>
       <p1 x="-8920" y="-2020"/>
       <p2 x="-8800" y="-2020"/>
     </wire>
@@ -7765,6 +8173,10 @@ Need to account for add(inc)sub(dec) - tried using bit 7 after 1&apos;s comp ...
     <wire>
       <p1 x="-8920" y="-2660"/>
       <p2 x="-8900" y="-2660"/>
+    </wire>
+    <wire>
+      <p1 x="-7240" y="-2280"/>
+      <p2 x="-7040" y="-2280"/>
     </wire>
     <wire>
       <p1 x="-10800" y="-2920"/>
@@ -8159,6 +8571,22 @@ Need to account for add(inc)sub(dec) - tried using bit 7 after 1&apos;s comp ...
       <p2 x="-9200" y="-1660"/>
     </wire>
     <wire>
+      <p1 x="-7240" y="-2560"/>
+      <p2 x="-7200" y="-2560"/>
+    </wire>
+    <wire>
+      <p1 x="-7080" y="-2560"/>
+      <p2 x="-7060" y="-2560"/>
+    </wire>
+    <wire>
+      <p1 x="-6740" y="-2560"/>
+      <p2 x="-6720" y="-2560"/>
+    </wire>
+    <wire>
+      <p1 x="-6880" y="-2560"/>
+      <p2 x="-6860" y="-2560"/>
+    </wire>
+    <wire>
       <p1 x="-9780" y="-2560"/>
       <p2 x="-9700" y="-2560"/>
     </wire>
@@ -8247,6 +8675,10 @@ Need to account for add(inc)sub(dec) - tried using bit 7 after 1&apos;s comp ...
       <p2 x="-10820" y="-2040"/>
     </wire>
     <wire>
+      <p1 x="-6980" y="-2600"/>
+      <p2 x="-6980" y="-2360"/>
+    </wire>
+    <wire>
       <p1 x="-9480" y="-1780"/>
       <p2 x="-9480" y="-1540"/>
     </wire>
@@ -8305,6 +8737,10 @@ Need to account for add(inc)sub(dec) - tried using bit 7 after 1&apos;s comp ...
     <wire>
       <p1 x="-10760" y="-2120"/>
       <p2 x="-10760" y="-2060"/>
+    </wire>
+    <wire>
+      <p1 x="-7240" y="-2400"/>
+      <p2 x="-7240" y="-2280"/>
     </wire>
     <wire>
       <p1 x="-9420" y="-2000"/>
@@ -8479,6 +8915,14 @@ Need to account for add(inc)sub(dec) - tried using bit 7 after 1&apos;s comp ...
       <p2 x="-10600" y="-2780"/>
     </wire>
     <wire>
+      <p1 x="-7340" y="-2640"/>
+      <p2 x="-7340" y="-2520"/>
+    </wire>
+    <wire>
+      <p1 x="-7020" y="-2640"/>
+      <p2 x="-7020" y="-2440"/>
+    </wire>
+    <wire>
       <p1 x="-10860" y="-3500"/>
       <p2 x="-10860" y="-3440"/>
     </wire>
@@ -8585,6 +9029,10 @@ Need to account for add(inc)sub(dec) - tried using bit 7 after 1&apos;s comp ...
     <wire>
       <p1 x="-9400" y="-2520"/>
       <p2 x="-9400" y="-2420"/>
+    </wire>
+    <wire>
+      <p1 x="-7040" y="-2400"/>
+      <p2 x="-7040" y="-2280"/>
     </wire>
     <wire>
       <p1 x="-8000" y="-1960"/>

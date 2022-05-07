@@ -25,8 +25,8 @@ Microinstructions are converted to little-endian order when written to the outpu
 | Indirect, Y | `ADC ($44),Y` | The argument points to a two byte zero page value which is retrieved and added to Y to give the operand. 
 | Relative | `BPL $50` | The operand is an 8 bit signed offset from the PC. 
 | Zero page | `ADC $44` | The argument is the zero-page address of the operand 
-| Zero page, X | `ADC $44,X` | The zero page argument is added to X to give the zero page address of the operand.  Addition wrap to zero page. 
-| Zero page, Y | `STA $00,Y` | The zero page argument is added to Y to give the zero page address of the operand.  Addition wrap to zero page. 
+| Zero page, X | `ADC $44,X` | The zero page argument is added to X to give the zero page address of the operand.  Addition wraps to zero page. 
+| Zero page, Y | `STA $00,Y` | The zero page argument is added to Y to give the zero page address of the operand.  Addition wraps to zero page. 
 
 # References
 
