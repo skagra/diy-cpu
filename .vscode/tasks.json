@@ -38,7 +38,7 @@
             "RAM.asm",
             "-f3",
             "-obin/RAM.bin",
-            "-lRAM.txt"
+            "-lbin/RAM.txt"
          ],
          "dependsOn": [
             "mkdir-machine-code"

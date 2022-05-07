@@ -8,7 +8,7 @@ namespace microasm
       private enum Section { None, Flags, UCOps, MCOps, Code }
 
       // Number of bytes for control signals
-      private const int FLAGS_SIZE_IN_BYTES = 4;
+      private const int FLAGS_SIZE_IN_BYTES = 5;
 
       // Size of each uOpCode - FLAGS_SIZE_IN_BYTES+2 for 16 bit uROM address
       private const int WORD_SIZE_IN_BYTES = FLAGS_SIZE_IN_BYTES + 2;

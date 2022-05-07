@@ -8,6 +8,8 @@
 main:       LDA #$77
             STA p1
             LDA #$66
+            LDX #$11
+            LDY #$22
 incer:      INX
             JMP incer
             
