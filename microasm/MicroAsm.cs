@@ -8,7 +8,7 @@ namespace microasm
       private enum Section { None, Flags, UCOps, MCOps, Code }
 
       // Number of bytes for control signals
-      private const int FLAGS_SIZE_IN_BYTES = 5;
+      private const int FLAGS_SIZE_IN_BYTES = 8;
 
       // Size of each uOpCode - FLAGS_SIZE_IN_BYTES+2 for 16 bit uROM address
       private const int WORD_SIZE_IN_BYTES = FLAGS_SIZE_IN_BYTES + 2;
@@ -17,7 +17,13 @@ namespace microasm
       private const int WORD_COUNT = 0x10000;
 
       // Size of the output ROM in bytes
-      private const int ROM_SIZE_BYTES = WORD_SIZE_IN_BYTES * WORD_COUNT;
+      private const int TOTAL_ROM_SIZE_BYTES = WORD_SIZE_IN_BYTES * WORD_COUNT;
+
+      // Width in bytes of data in each output ROM file
+      private const int ROM_DATA_WIDTH_BYTES=2;
+
+      // Size of each ROM
+      private const int ROM_SIZE_BYTES=ROM_DATA_WIDTH_BYTES*65536;
 
       // Characters which introduce a comment in the uCode file
       private const string COMMENT_CHARS = "//";
@@ -53,7 +59,7 @@ namespace microasm
       private readonly Dictionary<string, int> _opAddrs = new();
       private readonly List<string> _outputLog = new();
 
-      private readonly byte[] _ROM = new byte[ROM_SIZE_BYTES];
+      private readonly byte[] _ROM = new byte[TOTAL_ROM_SIZE_BYTES];
 
       private int _romAddress = 0;
       private Section currentSection = Section.None;
@@ -414,16 +420,28 @@ namespace microasm
 
       }
 
+      // TODO: WRONG!!!! No calculating #roms correctly and now allowing number of byes does not match rom size 
       public void WriteROMFile(string romFile)
       {
-         var binWriter = new BinaryWriter(File.Open(romFile, FileMode.Create));
-
-         for (var index = 0; index < _ROM.Length; index++)
-         {
-            binWriter.Write(_ROM[index]);
+         int numROMFiles=(TOTAL_ROM_SIZE_BYTES + ROM_SIZE_BYTES -1)/ ROM_SIZE_BYTES;
+         var writers=new BinaryWriter[numROMFiles];
+         for (var romIndex=0; romIndex<numROMFiles; romIndex++) {
+            writers[romIndex]=new BinaryWriter(File.Open($"{romFile}-{romIndex}.bin", FileMode.Create));
          }
 
-         binWriter.Close();
+         int byteIndex=0;
+         while (byteIndex<TOTAL_ROM_SIZE_BYTES) {
+            for (int romIndex=0; romIndex<numROMFiles && byteIndex<TOTAL_ROM_SIZE_BYTES; romIndex++) {   
+               for (int byteInRom=0; byteInRom<ROM_DATA_WIDTH_BYTES; byteInRom++) { //TODO
+                  writers[romIndex].Write(_ROM[byteIndex]);  
+                  byteIndex++;
+               }
+            }
+         }
+
+         for (var romIndex=0; romIndex<numROMFiles; romIndex++) {
+            writers[romIndex].Close();
+         }
       }
 
       private void Parse(string sourceFile)
