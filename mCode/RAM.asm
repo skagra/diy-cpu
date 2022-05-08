@@ -11,8 +11,11 @@ main:       LDA #$77
             LDX #$11
             LDY #$22
 incer:      INX
+            BEQ halt
             JMP incer
             
+halt:       BRK
+
 ; Zero page variables
             SEG.U variables
             ORG $100

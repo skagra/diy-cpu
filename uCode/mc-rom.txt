@@ -183,6 +183,7 @@ P/SRC-ALU       P/SRC/1
 P/SRC-CDATA     P/SRC/1 | P/SRC/0
 
 .mcops
+BRK            00
 LDA_IMM        A9
 STA_ABS        8D
 LDA_ABS        AD
@@ -190,6 +191,7 @@ JMP_ABS        4C
 INX            E8
 LDX_IMM        A2
 LDY_IMM        A0
+BEQ            F0
 
 .code
 
@@ -247,3 +249,15 @@ PCH<-MBR | uJMP FETCH
 .opcode INX
 ALUA<-X
 X<-ALU | ALUOP-INC | PZ/LD | PN/LD | P/SRC-ALU | uJMP FETCH
+
+.opcode BEQ
+uZJMP jumping
+uJMP FETCH
+.label jumping
+uJSR IMM
+MBR/OUT/CDATA | PC/LD/ADD 
+PC-INC
+uJMP FETCH
+
+.opcode BRK
+HALT
