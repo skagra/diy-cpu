@@ -13,6 +13,7 @@
 * Investigate using multiple phases of clocks to reduce execution cycles
 * Consider generating HTML as asm output optionally then we can have mouse overs to ID flags and to link to definitions
 * Consider direct connection between A and ALUA - this might cut cycles for most ALU operations by 1
+* Add flags support for non ALU operations e.g. LDA should set Z and N as appropriate
 * Write up current design
   * Architecture
   * Explanation of all control signals
