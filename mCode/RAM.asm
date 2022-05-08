@@ -5,16 +5,16 @@
             ORG $0
 
 ; Main routine
-main:       LDA #$77
+main:       LDA #$AA
             STA p1
-            LDA #$66
-            LDX #$11
-            LDY #$22
+            LDX #$EE
 incer:      INX
             BEQ halt
             JMP incer
             
-halt:       BRK
+halt:       LDX $CC
+            LDA $BB
+            BRK
 
 ; Zero page variables
             SEG.U variables

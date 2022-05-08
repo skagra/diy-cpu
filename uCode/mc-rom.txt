@@ -251,12 +251,11 @@ ALUA<-X
 X<-ALU | ALUOP-INC | PZ/LD | PN/LD | P/SRC-ALU | uJMP FETCH
 
 .opcode BEQ
+uJSR IMM
 uZJMP jumping
 uJMP FETCH
 .label jumping
-uJSR IMM
 MBR/OUT/CDATA | PC/LD/ADD 
-PC-INC
 uJMP FETCH
 
 .opcode BRK
