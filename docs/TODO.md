@@ -1,16 +1,20 @@
 # TO DO
 
-* ~~Remove hardcoded length dependencies from microasm.~~ DONE
 * Reorder control lines into more logical groupings
-* Add HALT switch
-* Add Reset switch - and initialize via vector
-* Consider using consistent addressing mode bit patterns together with phased uCode execution to automatically have correct addressing code executed and avoid the use subroutines.   This would reduce both execution cycles and code complexity.
-* ~~Sort out an machine code assembler to more easily create test code (dasm?)~~ DONE
-* Consider moving memory decoding logic into a sub-circuit
-* Split PC out to hi and lo and modify signal lines appropriately
-* ~~Add jump operation~~ DONE
-* Add ALU
-* Work out how to handle ALU flags
+* Add stack support
+* Revisit size of uCode ROM
+* Look at decoding opcode and addr mode via ROMS and related control unit changes, this would be a new decoder circuit
+* Test new ALU and conditional jump operations
+  * Add new MC opcodes to support this
+* Initialize via via vector
+* Add shift/rot operatiosn to ALU and CPU
+* Consider design of ALU flag handling, can this be simplified?
+* Consider moving ALU registers down into ALU sub-circuit
 * Investigate using multiple phases of clocks to reduce execution cycles
 * Consider generating HTML as asm output optionally then we can have mouse overs to ID flags and to link to definitions
+* Consider direct connection between A and ALUA - this might cut cycles for most ALU operations by 1
+* Write up current design
+  * Architecture
+  * Explanation of all control signals
+* Have microasm account for where word size does not fit exactly with uROMs
   
