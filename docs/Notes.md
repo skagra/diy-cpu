@@ -1,14 +1,19 @@
 # Microinstruction Format
 
-Microinstructions are 48 bits in length with the following format:
+Microinstructions are 72 bits in length with the following format:
 
 ```
-0xSSSAA
+0xSSSSSSSSAA
 ```
 
-Where `S` bytes are control signals, and `A` bytes are the target address for a microcode `jmp` or `jsr` operation.
+Where `S` bytes are control signals, and `A` bytes are the target address for a microcode `uJMP`, `uZJMP`, `uNJMP`, `uVJMP`, `uCJMP` or `uJSR` operation.
 
 Microinstructions are converted to little-endian order when written to the output ROM file by `microasm`.
+
+```
+Natural order                    uROM (little endian) order
+S9 S8 S7 S6 S5 S4 S3 S2 A1 A0 => AO A1 S2 S3 S4 S5 S6 S7 S8 S9 
+```
 
 # Addressing Modes
 
@@ -30,10 +35,8 @@ Microinstructions are converted to little-endian order when written to the outpu
 
 # References
 
-* 6502 Instruction set - good analysis of bit patterns for addressing modes:
-https://link.springer.com/content/pdf/bbm%3A978-1-349-07360-3%2F1.pdf
-* Nice indexed list of opcodes:
-http://www.6502.org/tutorials/6502opcodes.html
+* 6502 Instruction set - good analysis of bit patterns for addressing modes: https://link.springer.com/content/pdf/bbm%3A978-1-349-07360-3%2F1.pdf
+* Nice indexed list of opcodes: http://www.6502.org/tutorials/6502opcodes.html
 * Table of opcodes with some grouping breakdown https://llx.com/Neil/a2/opcodes.html
 * Assembler - DASM https://dasm-assembler.github.io/
 * Someone else has done something similar: https://c74project.com/
