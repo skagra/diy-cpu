@@ -126,8 +126,7 @@ namespace microasm
 
          for (var byteIndex = value.Length - 1; byteIndex >= 0; byteIndex--)
          {
-            result.Append(ByteToBitString(value[byteIndex]).Replace("0", "."));
-
+            result.Append(ByteToBitString(value[byteIndex]).Replace("0", ".") + " ");
          }
 
          result.Append("\t");
@@ -405,7 +404,7 @@ namespace microasm
          }
          else
          {
-            _outputLog.Add("\n" + line);
+            _outputLog.Add($"\n{line,-40}");
          }
       }
 
