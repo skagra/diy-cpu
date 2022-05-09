@@ -172,7 +172,7 @@ ALUOP-OR        ALUOP/0
 ALUOP-NOT       ALUOP/1 
 ALUOP-XOR       ALUOP/1 | ALUOP/0
 ALUOP-ADD       ALUOP/2 
-ALUOP-SUB       ALUOP/2  ALUOP/0
+ALUOP-SUB       ALUOP/2 | ALUOP/0
 ALUOP-INC       ALUOP/2 | ALUOP/1
 ALUOP-DEC       ALUOP/2 | ALUOP/1 | ALUOP/0
 
@@ -192,6 +192,8 @@ INX            E8
 LDX_IMM        A2
 LDY_IMM        A0
 BEQ            F0
+TAX            AA
+TXA            8A
 
 .code
 
@@ -222,6 +224,12 @@ MARH<-MBR | uRTS
 .opcode LDA_IMM
 uJSR IMM
 A<-MBR | PZ/LD | PN/LD | P/SRC/0 | P/SRC/1 | uJMP FETCH
+
+.opcode TAX
+A/OUT/CDATA | X/LD/CDATA | uJMP FETCH
+
+.opcode TXA
+X/OUT/CDATA | A/LD/CDATA | uJMP FETCH
 
 .opcode LDX_IMM
 uJSR IMM

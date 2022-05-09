@@ -5,8 +5,8 @@
             ORG $0
 
 ; Main routine
-main:       LDA #$11
-            LDX #$CC
+main:       LDA #$EE
+            TAX
 
 inc:        INX
             BEQ halt
