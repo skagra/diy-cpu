@@ -42,7 +42,7 @@
         </entry>
         <entry>
           <string>lastDataFile</string>
-          <file>C:\Development\diy-cpu\uCode\bin\uROM-0.bin</file>
+          <file>D:\Development\diy-cpu\uCode\bin\uROM-0.bin</file>
         </entry>
         <entry>
           <string>autoReload</string>
@@ -1352,7 +1352,7 @@
         </entry>
         <entry>
           <string>lastDataFile</string>
-          <file>C:\Development\diy-cpu\uCode\bin\uROM-1.bin</file>
+          <file>D:\Development\diy-cpu\uCode\bin\uROM-1.bin</file>
         </entry>
         <entry>
           <string>autoReload</string>
@@ -1386,7 +1386,7 @@
         </entry>
         <entry>
           <string>lastDataFile</string>
-          <file>C:\Development\diy-cpu\uCode\bin\uROM-2.bin</file>
+          <file>D:\Development\diy-cpu\uCode\bin\uROM-2.bin</file>
         </entry>
         <entry>
           <string>autoReload</string>
@@ -1420,7 +1420,7 @@
         </entry>
         <entry>
           <string>lastDataFile</string>
-          <file>C:\Development\diy-cpu\uCode\bin\uROM-3.bin</file>
+          <file>D:\Development\diy-cpu\uCode\bin\uROM-3.bin</file>
         </entry>
         <entry>
           <string>autoReload</string>
@@ -1564,7 +1564,7 @@
         </entry>
         <entry>
           <string>lastDataFile</string>
-          <file>C:\Development\diy-cpu\uCode\bin\uROM-4.bin</file>
+          <file>D:\Development\diy-cpu\uCode\bin\uROM-4.bin</file>
         </entry>
         <entry>
           <string>autoReload</string>
@@ -3248,7 +3248,7 @@
         </entry>
         <entry>
           <string>Label</string>
-          <string>V/LD</string>
+          <string>PV/LD</string>
         </entry>
       </elementAttributes>
       <pos x="-800" y="280"/>
@@ -3262,7 +3262,7 @@
         </entry>
         <entry>
           <string>Label</string>
-          <string>Z/LD</string>
+          <string>PZ/LD</string>
         </entry>
       </elementAttributes>
       <pos x="-800" y="300"/>
@@ -3318,7 +3318,7 @@
         </entry>
         <entry>
           <string>Label</string>
-          <string>ALUA/LD/DATA</string>
+          <string>ALUA/LD/CDATA</string>
         </entry>
       </elementAttributes>
       <pos x="-800" y="380"/>
@@ -3374,7 +3374,7 @@
         </entry>
         <entry>
           <string>Label</string>
-          <string>ALU/OP0</string>
+          <string>ALU/OP/0</string>
         </entry>
       </elementAttributes>
       <pos x="-800" y="460"/>

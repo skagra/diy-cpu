@@ -18,4 +18,5 @@
   * Architecture
   * Explanation of all control signals
 * Have microasm account for where word size does not fit exactly with uROMs
+* Improve log output implementation in microasm - its all over the code base at the moment with multiple hard coded numbers
   

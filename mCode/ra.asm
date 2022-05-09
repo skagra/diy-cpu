@@ -5,15 +5,15 @@
             ORG $0
 
 ; Main routine
-main:       LDA #$11
-            LDX #$CC
-
-inc:        INX
+main:       LDA #$AA
+            STA p1
+            LDX #$EE
+incer:      INX
             BEQ halt
-            JMP inc
+            JMP incer
             
-halt:       LDA #$DD
-            LDY #$FF
+halt:       LDX $CC
+            LDA $BB
             BRK
 
 ; Zero page variables
@@ -21,3 +21,4 @@ halt:       LDA #$DD
             ORG $100
 
 p1:         DS 1
+

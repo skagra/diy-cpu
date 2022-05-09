@@ -20,10 +20,10 @@ namespace microasm
       private const int TOTAL_ROM_SIZE_BYTES = WORD_SIZE_IN_BYTES * WORD_COUNT;
 
       // Width in bytes of data in each output ROM file
-      private const int ROM_DATA_WIDTH_BYTES=2;
+      private const int ROM_DATA_WIDTH_BYTES = 2;
 
       // Size of each ROM
-      private const int ROM_SIZE_BYTES=ROM_DATA_WIDTH_BYTES*65536;
+      private const int ROM_SIZE_BYTES = ROM_DATA_WIDTH_BYTES * 65536;
 
       // Characters which introduce a comment in the uCode file
       private const string COMMENT_CHARS = "//";
@@ -307,6 +307,28 @@ namespace microasm
          }
       }
 
+      private void ProcessOpCodeLine(string line, int lineNumber, int phase)
+      {
+         var opCodeParts = line.Split(new char[] { ' ', '\t' }, StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
+         if (opCodeParts.Length != 2)
+         {
+            throw new MicroAsmException($"'{OPCODE}' lines must consist of two space separated values", line, lineNumber);
+         }
+
+         try
+         {
+            _romAddress = _opAddrs[opCodeParts[1]];
+         }
+         catch (KeyNotFoundException)
+         {
+            throw new MicroAsmException($"'{OPCODE}' value not found", line, lineNumber);
+         }
+         if (phase == 1)
+         {
+            _outputLog.Add($"\n{OPCODE} {opCodeParts[1]}");
+         }
+      }
+
       private void ParseCodeLinePass0(string line, int lineNumber)
       {
 
@@ -317,8 +339,8 @@ namespace microasm
             try
             {
                var addressWord = new byte[WORD_SIZE_IN_BYTES];
-               addressWord[0] = (byte)(_romAddress & 0xFF);
-               addressWord[1] = (byte)((_romAddress >> 8) & 0xFF);
+               addressWord[0] = (byte)(_romAddress & 0xFF); // Low byte
+               addressWord[1] = (byte)((_romAddress >> 8) & 0xFF); // High
                for (var offset = 2; offset < WORD_SIZE_IN_BYTES; offset++)
                {
                   addressWord[offset] = 0;
@@ -332,7 +354,11 @@ namespace microasm
          }
          else
          {
-            if (!line.StartsWith(OPCODE))
+            if (line.StartsWith(OPCODE))
+            {
+               ProcessOpCodeLine(line, lineNumber, 0);
+            }
+            else
             {
                _romAddress += 1;
             }
@@ -347,21 +373,7 @@ namespace microasm
          {
             if (line.StartsWith(OPCODE))
             {
-               var opCodeParts = line.Split(new char[] { ' ', '\t' }, StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
-               if (opCodeParts.Length != 2)
-               {
-                  throw new MicroAsmException($"'{OPCODE}' lines must consist of two space separated vales", line, lineNumber);
-               }
-
-               try
-               {
-                  _romAddress = _opAddrs[opCodeParts[1]];
-               }
-               catch (KeyNotFoundException)
-               {
-                  throw new MicroAsmException($"'{OPCODE}' value not found", line, lineNumber);
-               }
-               _outputLog.Add($"{OPCODE} {opCodeParts[1]}");
+               ProcessOpCodeLine(line, lineNumber, 1);
             }
             else
             {
@@ -380,13 +392,20 @@ namespace microasm
                   outputLogByteArray[offset] = value[offset];
                }
 
-               _outputLog.Add($"{_romAddress:X4}\t{line,-30} {CreateByteArrayString(_ROM[byteRomAddress..(byteRomAddress + WORD_SIZE_IN_BYTES)])}");
+               var logLine = $"{_romAddress:X4}    {line,-30}";
+               if (line.Length > 28)
+               {
+                  logLine += $"\n{' ',38}";
+               }
+               logLine += $"{CreateByteArrayString(_ROM[byteRomAddress..(byteRomAddress + WORD_SIZE_IN_BYTES)])}";
+               _outputLog.Add(logLine);
+
                _romAddress++;
             }
          }
          else
          {
-            _outputLog.Add(line);
+            _outputLog.Add("\n" + line);
          }
       }
 
@@ -420,26 +439,31 @@ namespace microasm
 
       }
 
-      // TODO: WRONG!!!! No calculating #roms correctly and now allowing number of byes does not match rom size 
+      // TODO: WRONG! Not allowing number of byes does not match rom size 
       public void WriteROMFile(string romFile)
       {
-         int numROMFiles=(TOTAL_ROM_SIZE_BYTES + ROM_SIZE_BYTES -1)/ ROM_SIZE_BYTES;
-         var writers=new BinaryWriter[numROMFiles];
-         for (var romIndex=0; romIndex<numROMFiles; romIndex++) {
-            writers[romIndex]=new BinaryWriter(File.Open($"{romFile}-{romIndex}.bin", FileMode.Create));
+         int numROMFiles = (TOTAL_ROM_SIZE_BYTES + ROM_SIZE_BYTES - 1) / ROM_SIZE_BYTES;
+         var writers = new BinaryWriter[numROMFiles];
+         for (var romIndex = 0; romIndex < numROMFiles; romIndex++)
+         {
+            writers[romIndex] = new BinaryWriter(File.Open($"{romFile}-{romIndex}.bin", FileMode.Create));
          }
 
-         int byteIndex=0;
-         while (byteIndex<TOTAL_ROM_SIZE_BYTES) {
-            for (int romIndex=0; romIndex<numROMFiles && byteIndex<TOTAL_ROM_SIZE_BYTES; romIndex++) {   
-               for (int byteInRom=0; byteInRom<ROM_DATA_WIDTH_BYTES; byteInRom++) { //TODO
-                  writers[romIndex].Write(_ROM[byteIndex]);  
+         int byteIndex = 0;
+         while (byteIndex < TOTAL_ROM_SIZE_BYTES)
+         {
+            for (int romIndex = 0; romIndex < numROMFiles && byteIndex < TOTAL_ROM_SIZE_BYTES; romIndex++)
+            {
+               for (int byteInRom = 0; byteInRom < ROM_DATA_WIDTH_BYTES; byteInRom++)
+               {
+                  writers[romIndex].Write(_ROM[byteIndex]);
                   byteIndex++;
                }
             }
          }
 
-         for (var romIndex=0; romIndex<numROMFiles; romIndex++) {
+         for (var romIndex = 0; romIndex < numROMFiles; romIndex++)
+         {
             writers[romIndex].Close();
          }
       }

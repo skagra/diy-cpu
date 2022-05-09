@@ -2,7 +2,7 @@
    "profiles": {
       "microasm": {
          "commandName": "Project",
-         "commandLineArgs": "..\\ucode\\mc-rom.txt ..\\ucode\\bin\\uROM",
+         "commandLineArgs": "..\\ucode\\uROM.txt ..\\ucode\\bin\\uROM",
          "workingDirectory": "$(ProjectDir)"
       }
    }
