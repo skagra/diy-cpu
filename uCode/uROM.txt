@@ -206,8 +206,7 @@ uJMPOP
 // Immediate mode - fetch PC into MBR
 .label IMM
 MAR<-PC 
-MBR<-XDATA | PC-INC
-uRTS
+MBR<-XDATA | PC-INC | uRTS
 
 // Absolute mode
 .label ABS
@@ -217,8 +216,7 @@ STASH<-MBR
 MAR<-PC
 MBR<-XDATA | PC-INC
 MARL<-STASH
-MARH<-MBR
-uRTS
+MARH<-MBR | uRTS
 
 // Op code implementations
 .opcode LDA_IMM
@@ -257,8 +255,7 @@ uJSR IMM
 uZJMP JUMPING
 uJMP FETCH
 .label JUMPING
-MBR/OUT/CDATA | PC/LD/ADD 
-uJMP FETCH
+MBR/OUT/CDATA | PC/LD/ADD | uJMP FETCH
 
 .opcode BRK
 HALT
