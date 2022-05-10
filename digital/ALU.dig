@@ -1002,26 +1002,6 @@
       <pos x="-11040" y="-2360"/>
     </visualElement>
     <visualElement>
-      <elementName>In</elementName>
-      <elementAttributes>
-        <entry>
-          <string>Label</string>
-          <string>Nin</string>
-        </entry>
-      </elementAttributes>
-      <pos x="-11140" y="-2660"/>
-    </visualElement>
-    <visualElement>
-      <elementName>Tunnel</elementName>
-      <elementAttributes>
-        <entry>
-          <string>NetName</string>
-          <string>Z|in</string>
-        </entry>
-      </elementAttributes>
-      <pos x="-11100" y="-2540"/>
-    </visualElement>
-    <visualElement>
       <elementName>Tunnel</elementName>
       <elementAttributes>
         <entry>
@@ -1160,7 +1140,7 @@
       <elementAttributes>
         <entry>
           <string>rotation</string>
-          <rotation reference="../../../../visualElement[98]/elementAttributes/entry/rotation"/>
+          <rotation reference="../../../../visualElement[96]/elementAttributes/entry/rotation"/>
         </entry>
         <entry>
           <string>NetName</string>
@@ -1174,7 +1154,7 @@
       <elementAttributes>
         <entry>
           <string>rotation</string>
-          <rotation reference="../../../../visualElement[98]/elementAttributes/entry/rotation"/>
+          <rotation reference="../../../../visualElement[96]/elementAttributes/entry/rotation"/>
         </entry>
         <entry>
           <string>NetName</string>
@@ -5057,7 +5037,7 @@ Need to account for add(inc)sub(dec) - tried using bit 7 after 1&apos;s comp ...
       <elementAttributes>
         <entry>
           <string>rotation</string>
-          <rotation reference="../../../../visualElement[432]/elementAttributes/entry/rotation"/>
+          <rotation reference="../../../../visualElement[430]/elementAttributes/entry/rotation"/>
         </entry>
         <entry>
           <string>NetName</string>
@@ -5071,7 +5051,7 @@ Need to account for add(inc)sub(dec) - tried using bit 7 after 1&apos;s comp ...
       <elementAttributes>
         <entry>
           <string>rotation</string>
-          <rotation reference="../../../../visualElement[432]/elementAttributes/entry/rotation"/>
+          <rotation reference="../../../../visualElement[430]/elementAttributes/entry/rotation"/>
         </entry>
         <entry>
           <string>NetName</string>
@@ -5085,7 +5065,7 @@ Need to account for add(inc)sub(dec) - tried using bit 7 after 1&apos;s comp ...
       <elementAttributes>
         <entry>
           <string>rotation</string>
-          <rotation reference="../../../../visualElement[432]/elementAttributes/entry/rotation"/>
+          <rotation reference="../../../../visualElement[430]/elementAttributes/entry/rotation"/>
         </entry>
         <entry>
           <string>NetName</string>
@@ -5705,64 +5685,24 @@ Need to account for add(inc)sub(dec) - tried using bit 7 after 1&apos;s comp ...
       <pos x="-11060" y="-2060"/>
     </visualElement>
     <visualElement>
-      <elementName>In</elementName>
-      <elementAttributes>
-        <entry>
-          <string>Label</string>
-          <string>Vin</string>
-        </entry>
-      </elementAttributes>
-      <pos x="-11140" y="-2600"/>
-    </visualElement>
-    <visualElement>
-      <elementName>Tunnel</elementName>
-      <elementAttributes>
-        <entry>
-          <string>NetName</string>
-          <string>Nin</string>
-        </entry>
-      </elementAttributes>
-      <pos x="-11100" y="-2660"/>
-    </visualElement>
-    <visualElement>
-      <elementName>In</elementName>
-      <elementAttributes>
-        <entry>
-          <string>Label</string>
-          <string>Zin</string>
-        </entry>
-      </elementAttributes>
-      <pos x="-11140" y="-2540"/>
-    </visualElement>
-    <visualElement>
       <elementName>Tunnel</elementName>
       <elementAttributes>
         <entry>
           <string>NetName</string>
           <string>Cin</string>
-        </entry>
-      </elementAttributes>
-      <pos x="-11100" y="-2480"/>
-    </visualElement>
-    <visualElement>
-      <elementName>In</elementName>
-      <elementAttributes>
-        <entry>
-          <string>Label</string>
-          <string>Cin</string>
-        </entry>
-      </elementAttributes>
-      <pos x="-11140" y="-2480"/>
-    </visualElement>
-    <visualElement>
-      <elementName>Tunnel</elementName>
-      <elementAttributes>
-        <entry>
-          <string>NetName</string>
-          <string>Vin</string>
         </entry>
       </elementAttributes>
       <pos x="-11100" y="-2600"/>
+    </visualElement>
+    <visualElement>
+      <elementName>In</elementName>
+      <elementAttributes>
+        <entry>
+          <string>Label</string>
+          <string>Cin</string>
+        </entry>
+      </elementAttributes>
+      <pos x="-11140" y="-2600"/>
     </visualElement>
     <visualElement>
       <elementName>Rectangle</elementName>
@@ -6963,10 +6903,6 @@ Need to account for add(inc)sub(dec) - tried using bit 7 after 1&apos;s comp ...
       <p2 x="-9120" y="-2480"/>
     </wire>
     <wire>
-      <p1 x="-11140" y="-2480"/>
-      <p2 x="-11100" y="-2480"/>
-    </wire>
-    <wire>
       <p1 x="-10580" y="-2100"/>
       <p2 x="-10560" y="-2100"/>
     </wire>
@@ -7743,10 +7679,6 @@ Need to account for add(inc)sub(dec) - tried using bit 7 after 1&apos;s comp ...
       <p2 x="-10840" y="-2020"/>
     </wire>
     <wire>
-      <p1 x="-11140" y="-2660"/>
-      <p2 x="-11100" y="-2660"/>
-    </wire>
-    <wire>
       <p1 x="-8520" y="-2660"/>
       <p2 x="-8480" y="-2660"/>
     </wire>
@@ -7877,10 +7809,6 @@ Need to account for add(inc)sub(dec) - tried using bit 7 after 1&apos;s comp ...
     <wire>
       <p1 x="-10040" y="-3560"/>
       <p2 x="-10000" y="-3560"/>
-    </wire>
-    <wire>
-      <p1 x="-11140" y="-2540"/>
-      <p2 x="-11100" y="-2540"/>
     </wire>
     <wire>
       <p1 x="-8500" y="-2540"/>
