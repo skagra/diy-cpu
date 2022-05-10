@@ -37,10 +37,11 @@ namespace microasm
       // Definition of actual uCode
       private const string SECTION_CODE = ".code";
 
-      // Identifies uCode as representing a mOpcode causing it to be placed in the appropriate location in the ROM
+      // Identifies uCode implementing a machine code op
       private const string OPCODE = ".opcode";
 
-      private const string ADDRMODE = ".mode";
+      // Identifies uCode implementation a machine code addressing mode
+      private const string MODE = ".mode";
 
       // Label a location so it may be referred to later
       private const string LABEL = ".label";
@@ -56,7 +57,7 @@ namespace microasm
       private readonly Dictionary<string, byte[]> _codeSymbols = new();
 
       private readonly Dictionary<string, int> _opCodeRoutineAddresses = new();
-      private readonly Dictionary<string, int> _addrModeRoutineAddresses = new();
+      private readonly Dictionary<string, int> _modeRoutineAddresses = new();
 
       private readonly MappingRom _opCodeMappingROM;
       private readonly MappingRom _modeMappingROM;
@@ -195,7 +196,7 @@ namespace microasm
 
       public string DumpModeMap()
       {
-         return DumpMap(_addrModeRoutineAddresses);
+         return DumpMap(_modeRoutineAddresses);
       }
 
       public string DumpOpCodeMap()
@@ -309,25 +310,26 @@ namespace microasm
          var opCodeParts = line.Split(new char[] { ' ', '\t' }, StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
          if (opCodeParts.Length != 2)
          {
-            throw new MicroAsmException($"'{ADDRMODE}' lines must consist of two space separated values", line, lineNumber);
+            throw new MicroAsmException($"'{MODE}' lines must consist of two space separated values", line, lineNumber);
          }
 
          if (phase == 0)
          {
             try
             {
-               _addrModeRoutineAddresses[opCodeParts[1]] = _romAddress;
+               _modeRoutineAddresses[opCodeParts[1]] = _romAddress;
             }
             catch (KeyNotFoundException)
             {
-               throw new MicroAsmException($"'{ADDRMODE}' value not found", line, lineNumber);
+               throw new MicroAsmException($"'{MODE}' value not found", line, lineNumber);
             }
          }
          else
          {
-            _outputLog.Add($"\n{ADDRMODE} {opCodeParts[1]}");
+            _outputLog.Add($"\n{MODE} {opCodeParts[1]}");
          }
       }
+
       private void ParseCodeLinePass0(string line, int lineNumber)
       {
 
@@ -358,7 +360,7 @@ namespace microasm
                ProcessOpCodeLine(line, lineNumber, 0);
             }
             else
-            if (line.StartsWith(ADDRMODE))
+            if (line.StartsWith(MODE))
             {
                ProcessAddrModeLine(line, lineNumber, 0);
             }
@@ -379,7 +381,7 @@ namespace microasm
                ProcessOpCodeLine(line, lineNumber, 1);
             }
             else
-            if (line.StartsWith(ADDRMODE))
+            if (line.StartsWith(MODE))
             {
                ProcessAddrModeLine(line, lineNumber, 1);
             }
@@ -479,7 +481,7 @@ namespace microasm
 
       public void WriteModeMappingFile(string fileName)
       {
-         WriteROMMAppingFile(_modeMappingROM, _addrModeRoutineAddresses, fileName);
+         WriteROMMAppingFile(_modeMappingROM, _modeRoutineAddresses, fileName);
       }
 
       private void WriteROMMAppingFile(MappingRom mapping, Dictionary<string, int> _mappingAddresses, string romFile)
