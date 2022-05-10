@@ -68,12 +68,6 @@ namespace microasm
       {
          var result = new StringBuilder();
 
-         result.AppendLine("Mapping ROM");
-         result.AppendLine("-----------");
-         result.AppendLine();
-         result.AppendLine($"Input file: '{Path.GetFullPath(_fileName)}'");
-         result.AppendLine();
-
          for (var index = 0; index < _mapping.Length; index++)
          {
             if (_mapping[index] != null)

@@ -5,7 +5,7 @@ namespace microasm
    public class MicroAsm
    {
       // Idenfies the section of the uCode file being parsed
-      private enum Section { None, Flags, UCOps, MCOps, Code }
+      private enum Section { None, Flags, UCOps, Code }
 
       // Number of bytes for control signals
       private const int FLAGS_SIZE_IN_BYTES = 8;
@@ -34,9 +34,6 @@ namespace microasm
       // uInstructions as combinations of control flags
       private const string SECTION_UCOPS = ".ucops";
 
-      // mOpcodes
-      // private const string SECTION_MCOPS = ".mcops";
-
       // Definition of actual uCode
       private const string SECTION_CODE = ".code";
 
@@ -58,7 +55,12 @@ namespace microasm
       private readonly Dictionary<string, byte[]> _labelSymbols = new();
       private readonly Dictionary<string, byte[]> _codeSymbols = new();
 
-      //private readonly Dictionary<string, int> _opAddrs = new();
+      private readonly Dictionary<string, int> _opCodeRoutineAddresses = new();
+      private readonly Dictionary<string, int> _addrModeRoutineAddresses = new();
+
+      private readonly MappingRom _opCodeMappingROM;
+      private readonly MappingRom _modeMappingROM;
+
       private readonly List<string> _outputLog = new();
 
       private readonly byte[] _ROM = new byte[TOTAL_ROM_SIZE_BYTES];
@@ -66,15 +68,11 @@ namespace microasm
       private int _romAddress = 0;
       private Section currentSection = Section.None;
 
-      private readonly MappingRom _opCodeMappingROM;
-
-      private readonly MappingRom _modeMappingROM;
-
       public MicroAsm(MappingRom opCodeMappingROM, MappingRom modeMappingROM, string sourceFile)
       {
-         Parse(sourceFile);
          _opCodeMappingROM = opCodeMappingROM;
          _modeMappingROM = modeMappingROM;
+         Parse(sourceFile);
       }
 
       private byte[] ResolveSymbol(string symbol, string line, int lineNumber)
@@ -152,53 +150,57 @@ namespace microasm
       }
 
       // Converts from little-endian to natural order
-      private void DumpSymbols(Dictionary<string, byte[]> symbols)
+      private string DumpSymbols(Dictionary<string, byte[]> symbols)
       {
+         var result = new StringBuilder();
          symbols.Keys.OrderBy(k => k).ToList().ForEach(k =>
          {
             var value = symbols[k];
-            Console.WriteLine($"{k,-40} {CreateByteArrayString(value)}");
+            result.AppendLine($"{k,-40} {CreateByteArrayString(value)}");
          });
+         return result.ToString();
       }
 
-      public void DumpFlagSymbols()
+      private string DumpMap(Dictionary<string, int> symbols)
       {
-         Console.WriteLine("Flags Symbol Table");
-         Console.WriteLine("------------------\n");
-         DumpSymbols(_flagSymbols);
+         var result = new StringBuilder();
+         symbols.Keys.OrderBy(k => k).ToList().ForEach(k =>
+         {
+            var value = symbols[k];
+            result.AppendLine($"{k,-20} {value:X4}");
+         });
+
+         return result.ToString();
       }
 
-      public void DumpUCopsSymbols()
+      public string DumpFlagSymbols()
       {
-         Console.WriteLine("UCOPS Symbol Table");
-         Console.WriteLine("------------------\n");
-         DumpSymbols(_ucopsSymbols);
+         return DumpSymbols(_flagSymbols);
       }
 
-      public void DumpLabelSymbols()
+      public string DumpUCopsSymbols()
       {
-         Console.WriteLine("Labels Symbol Table");
-         Console.WriteLine("------------------\n");
-         DumpSymbols(_labelSymbols);
+         return DumpSymbols(_ucopsSymbols);
       }
 
-      // public void DumpOpsAddrs()
-      // {
-      //    Console.WriteLine("uAddress of Operations");
-      //    Console.WriteLine("----------------------\n");
-
-      //    _opAddrs.Keys.OrderBy(k => k).ToList().ForEach(k =>
-      //    {
-      //       Console.WriteLine($"{k,-40}{_opAddrs[k]:X4}");
-      //    });
-      // }
-
-      public void DumpOutputLog()
+      public string DumpLabelSymbols()
       {
-         Console.WriteLine("Resolved Source");
-         Console.WriteLine("---------------\n");
+         return DumpSymbols(_labelSymbols);
+      }
 
-         _outputLog.ForEach(l => Console.WriteLine(l));
+      public string DumpOutputLog()
+      {
+         return (string.Join('\n', _outputLog));
+      }
+
+      public string DumpModeMap()
+      {
+         return DumpMap(_addrModeRoutineAddresses);
+      }
+
+      public string DumpOpCodeMap()
+      {
+         return DumpMap(_opCodeRoutineAddresses);
       }
 
       private void ParseFlagsLine(string line, int lineNumber)
@@ -241,50 +243,10 @@ namespace microasm
          }
       }
 
-      // private void ParseMCOpsLine(string line, int lineNumber)
-      // {
-      //    var mcopsParts = line.Split(new char[] { ' ', '\t' }, StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
-
-      //    if (mcopsParts.Length != 2)
-      //    {
-      //       throw new MicroAsmException($"'{SECTION_MCOPS}' entries must consist of two space separated parts",
-      //           line, lineNumber);
-      //    }
-
-      //    var symbol = mcopsParts[0];
-      //    var valueString = mcopsParts[1];
-
-      //    if (valueString.Length != 2)
-      //    {
-      //       throw new MicroAsmException($"Values in '{SECTION_MCOPS}' entries must consist of two hex characters",
-      //           line, lineNumber);
-      //    }
-
-      //    byte value;
-      //    try
-      //    {
-      //       value = byte.Parse(valueString, System.Globalization.NumberStyles.HexNumber);
-      //    }
-      //    catch (Exception)
-      //    {
-      //       throw new MicroAsmException($"Failed to parse '{SECTION_MCOPS}' value '{valueString}'",
-      //           line, lineNumber);
-      //    }
-
-      //    // 16 words for each instruction, starting a 4096 base
-      //    // Addresses 0001 oooo oooo iiii are OpCodes i
-      //    // Addresses 0000 xxxx xxxx xxxx are other routines
-      //    UInt16 mappedAddress = (UInt16)(value << 4 | 0b1000000000000);
-      //    try
-      //    {
-      //       _opAddrs.Add(symbol, mappedAddress);
-      //    }
-      //    catch (ArgumentException)
-      //    {
-      //       throw new MicroAsmException($"Duplicate symbol '{symbol}'",
-      //           line, lineNumber);
-      //    }
-      // }
+      public int GetRomSizeWords()
+      {
+         return _romAddress;
+      }
 
       private void ParseUCOpsLine(string line, int lineNumber)
       {
@@ -314,8 +276,6 @@ namespace microasm
          }
       }
 
-      private readonly Dictionary<string, int> _opCodeRoutineAddresses = new();
-
       // TODO: SAME CODE TWICE FACTOR OUT
       private void ProcessOpCodeLine(string line, int lineNumber, int phase)
       {
@@ -342,7 +302,6 @@ namespace microasm
          }
       }
 
-      private readonly Dictionary<string, int> _addrModeRoutineAddresses = new();
 
       // TODO: SAME CODE TWICE FACTOR OUT
       private void ProcessAddrModeLine(string line, int lineNumber, int phase)
@@ -472,10 +431,6 @@ namespace microasm
                   ParseUCOpsLine(line, lineNumber);
                   break;
 
-               // case Section.MCOps:
-               //    ParseMCOpsLine(line, lineNumber);
-               //    break;
-
                case Section.Code:
                   ParseCodeLinePass0(line, lineNumber);
                   break;
@@ -488,7 +443,7 @@ namespace microasm
 
       }
 
-      // TODO: WRONG! Not allowing number of byes does not match rom size 
+      // TODO: Not allowing number of bytes does not match rom size 
       public void WriteROMFile(string romFile)
       {
          int numROMFiles = (TOTAL_ROM_SIZE_BYTES + ROM_SIZE_BYTES - 1) / ROM_SIZE_BYTES;
@@ -534,21 +489,17 @@ namespace microasm
          // TODO: HACKY
          for (var index = 0; index < 256; index++)
          {
-            // Console.WriteLine("INDEX=" + index);
-            // TODO: Should be a byte!!!
             var resolvedMapping = mapping.ResolveIndex(index);
             if (resolvedMapping != null)
             {
                int addr = _mappingAddresses[resolvedMapping];
                writer.Write((byte)(addr & 0xFF));
-               //   Console.WriteLine($"Writing {(byte)(addr & 0xFF):X}");
                writer.Write((byte)((addr >> 8) & 0xFF));
             }
             else
             {
-               writer.Write((byte)0xEE);
-               // Console.WriteLine($"Writing {(byte)0xEE:X}");
-               writer.Write((byte)0xEE);
+               writer.Write((byte)0xFF);
+               writer.Write((byte)0xFF);
             }
          }
          writer.Close();
@@ -576,10 +527,6 @@ namespace microasm
                      case SECTION_UCOPS:
                         currentSection = Section.UCOps;
                         break;
-
-                     // case SECTION_MCOPS:
-                     //    currentSection = Section.MCOps;
-                     //    break;
 
                      case SECTION_CODE:
                         currentSection = Section.Code;
