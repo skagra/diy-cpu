@@ -21,35 +21,45 @@
          Console.WriteLine($"Output file: '{Path.GetFullPath(outputFile)}'");
          Console.WriteLine();
 
-         try
+         var opCodeMap = new MappingRom("../uCode/opCodeMap.txt");
+         var addrModeMap = new MappingRom("../uCode/AddrModeMap.txt");
+
+         Console.WriteLine(opCodeMap);
+         Console.WriteLine(addrModeMap);
+
+         // try
+         // {
+         var outputDir = Path.GetDirectoryName(outputFile);
+         if (!Directory.Exists(outputDir))
          {
-            var outputDir=Path.GetDirectoryName(outputFile);
-            if (!Directory.Exists(outputDir)) {
-               Directory.CreateDirectory(outputDir);
-            }
-
-            var ma = new MicroAsm(inputFile);
-
-            ma.DumpFlagSymbols();
-            Console.WriteLine();
-
-            ma.DumpUCopsSymbols();
-            Console.WriteLine();
-
-            ma.DumpLabelSymbols();
-            Console.WriteLine();
-
-            ma.DumpOpsAddrs();
-            Console.WriteLine();
-
-            ma.DumpOutputLog();
-
-            ma.WriteROMFile(outputFile);
+            Directory.CreateDirectory(outputDir);
          }
-         catch (Exception e)
-         {
-            Console.WriteLine(e.Message);
-         }
+
+         var ma = new MicroAsm(opCodeMap, addrModeMap, inputFile);
+
+         ma.DumpFlagSymbols();
+         Console.WriteLine();
+
+         ma.DumpUCopsSymbols();
+         Console.WriteLine();
+
+         ma.DumpLabelSymbols();
+         Console.WriteLine();
+
+         // ma.DumpOpsAddrs();
+         // Console.WriteLine();
+
+         ma.DumpOutputLog();
+
+         ma.WriteOpCodeMappingFile(Path.Join(outputDir, "opcodemap.bin"));
+         ma.WriteModeMappingFile(Path.Join(outputDir, "modemap.bin"));
+
+         ma.WriteROMFile(outputFile);
+         // }
+         // catch (Exception e)
+         // {
+         //    Console.WriteLine(e.Message);
+         // }
       }
    }
 }

@@ -35,13 +35,15 @@ namespace microasm
       private const string SECTION_UCOPS = ".ucops";
 
       // mOpcodes
-      private const string SECTION_MCOPS = ".mcops";
+      // private const string SECTION_MCOPS = ".mcops";
 
       // Definition of actual uCode
       private const string SECTION_CODE = ".code";
 
       // Identifies uCode as representing a mOpcode causing it to be placed in the appropriate location in the ROM
       private const string OPCODE = ".opcode";
+
+      private const string ADDRMODE = ".mode";
 
       // Label a location so it may be referred to later
       private const string LABEL = ".label";
@@ -56,7 +58,7 @@ namespace microasm
       private readonly Dictionary<string, byte[]> _labelSymbols = new();
       private readonly Dictionary<string, byte[]> _codeSymbols = new();
 
-      private readonly Dictionary<string, int> _opAddrs = new();
+      //private readonly Dictionary<string, int> _opAddrs = new();
       private readonly List<string> _outputLog = new();
 
       private readonly byte[] _ROM = new byte[TOTAL_ROM_SIZE_BYTES];
@@ -64,9 +66,15 @@ namespace microasm
       private int _romAddress = 0;
       private Section currentSection = Section.None;
 
-      public MicroAsm(string sourceFile)
+      private readonly MappingRom _opCodeMappingROM;
+
+      private readonly MappingRom _modeMappingROM;
+
+      public MicroAsm(MappingRom opCodeMappingROM, MappingRom modeMappingROM, string sourceFile)
       {
          Parse(sourceFile);
+         _opCodeMappingROM = opCodeMappingROM;
+         _modeMappingROM = modeMappingROM;
       }
 
       private byte[] ResolveSymbol(string symbol, string line, int lineNumber)
@@ -174,16 +182,16 @@ namespace microasm
          DumpSymbols(_labelSymbols);
       }
 
-      public void DumpOpsAddrs()
-      {
-         Console.WriteLine("uAddress of Operations");
-         Console.WriteLine("----------------------\n");
+      // public void DumpOpsAddrs()
+      // {
+      //    Console.WriteLine("uAddress of Operations");
+      //    Console.WriteLine("----------------------\n");
 
-         _opAddrs.Keys.OrderBy(k => k).ToList().ForEach(k =>
-         {
-            Console.WriteLine($"{k,-40}{_opAddrs[k]:X4}");
-         });
-      }
+      //    _opAddrs.Keys.OrderBy(k => k).ToList().ForEach(k =>
+      //    {
+      //       Console.WriteLine($"{k,-40}{_opAddrs[k]:X4}");
+      //    });
+      // }
 
       public void DumpOutputLog()
       {
@@ -233,50 +241,50 @@ namespace microasm
          }
       }
 
-      private void ParseMCOpsLine(string line, int lineNumber)
-      {
-         var mcopsParts = line.Split(new char[] { ' ', '\t' }, StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
+      // private void ParseMCOpsLine(string line, int lineNumber)
+      // {
+      //    var mcopsParts = line.Split(new char[] { ' ', '\t' }, StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
 
-         if (mcopsParts.Length != 2)
-         {
-            throw new MicroAsmException($"'{SECTION_MCOPS}' entries must consist of two space separated parts",
-                line, lineNumber);
-         }
+      //    if (mcopsParts.Length != 2)
+      //    {
+      //       throw new MicroAsmException($"'{SECTION_MCOPS}' entries must consist of two space separated parts",
+      //           line, lineNumber);
+      //    }
 
-         var symbol = mcopsParts[0];
-         var valueString = mcopsParts[1];
+      //    var symbol = mcopsParts[0];
+      //    var valueString = mcopsParts[1];
 
-         if (valueString.Length != 2)
-         {
-            throw new MicroAsmException($"Values in '{SECTION_MCOPS}' entries must consist of two hex characters",
-                line, lineNumber);
-         }
+      //    if (valueString.Length != 2)
+      //    {
+      //       throw new MicroAsmException($"Values in '{SECTION_MCOPS}' entries must consist of two hex characters",
+      //           line, lineNumber);
+      //    }
 
-         byte value;
-         try
-         {
-            value = byte.Parse(valueString, System.Globalization.NumberStyles.HexNumber);
-         }
-         catch (Exception)
-         {
-            throw new MicroAsmException($"Failed to parse '{SECTION_MCOPS}' value '{valueString}'",
-                line, lineNumber);
-         }
+      //    byte value;
+      //    try
+      //    {
+      //       value = byte.Parse(valueString, System.Globalization.NumberStyles.HexNumber);
+      //    }
+      //    catch (Exception)
+      //    {
+      //       throw new MicroAsmException($"Failed to parse '{SECTION_MCOPS}' value '{valueString}'",
+      //           line, lineNumber);
+      //    }
 
-         // 16 words for each instruction, starting a 4096 base
-         // Addresses 0001 oooo oooo iiii are OpCodes i
-         // Addresses 0000 xxxx xxxx xxxx are other routines
-         UInt16 mappedAddress = (UInt16)(value << 4 | 0b1000000000000);
-         try
-         {
-            _opAddrs.Add(symbol, mappedAddress);
-         }
-         catch (ArgumentException)
-         {
-            throw new MicroAsmException($"Duplicate symbol '{symbol}'",
-                line, lineNumber);
-         }
-      }
+      //    // 16 words for each instruction, starting a 4096 base
+      //    // Addresses 0001 oooo oooo iiii are OpCodes i
+      //    // Addresses 0000 xxxx xxxx xxxx are other routines
+      //    UInt16 mappedAddress = (UInt16)(value << 4 | 0b1000000000000);
+      //    try
+      //    {
+      //       _opAddrs.Add(symbol, mappedAddress);
+      //    }
+      //    catch (ArgumentException)
+      //    {
+      //       throw new MicroAsmException($"Duplicate symbol '{symbol}'",
+      //           line, lineNumber);
+      //    }
+      // }
 
       private void ParseUCOpsLine(string line, int lineNumber)
       {
@@ -306,6 +314,9 @@ namespace microasm
          }
       }
 
+      private readonly Dictionary<string, int> _opCodeRoutineAddresses = new();
+
+      // TODO: SAME CODE TWICE FACTOR OUT
       private void ProcessOpCodeLine(string line, int lineNumber, int phase)
       {
          var opCodeParts = line.Split(new char[] { ' ', '\t' }, StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
@@ -314,20 +325,50 @@ namespace microasm
             throw new MicroAsmException($"'{OPCODE}' lines must consist of two space separated values", line, lineNumber);
          }
 
-         try
+         if (phase == 0)
          {
-            _romAddress = _opAddrs[opCodeParts[1]];
+            try
+            {
+               _opCodeRoutineAddresses[opCodeParts[1]] = _romAddress;
+            }
+            catch (KeyNotFoundException)
+            {
+               throw new MicroAsmException($"'{OPCODE}' value not found", line, lineNumber);
+            }
          }
-         catch (KeyNotFoundException)
-         {
-            throw new MicroAsmException($"'{OPCODE}' value not found", line, lineNumber);
-         }
-         if (phase == 1)
+         else
          {
             _outputLog.Add($"\n{OPCODE} {opCodeParts[1]}");
          }
       }
 
+      private readonly Dictionary<string, int> _addrModeRoutineAddresses = new();
+
+      // TODO: SAME CODE TWICE FACTOR OUT
+      private void ProcessAddrModeLine(string line, int lineNumber, int phase)
+      {
+         var opCodeParts = line.Split(new char[] { ' ', '\t' }, StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
+         if (opCodeParts.Length != 2)
+         {
+            throw new MicroAsmException($"'{ADDRMODE}' lines must consist of two space separated values", line, lineNumber);
+         }
+
+         if (phase == 0)
+         {
+            try
+            {
+               _addrModeRoutineAddresses[opCodeParts[1]] = _romAddress;
+            }
+            catch (KeyNotFoundException)
+            {
+               throw new MicroAsmException($"'{ADDRMODE}' value not found", line, lineNumber);
+            }
+         }
+         else
+         {
+            _outputLog.Add($"\n{ADDRMODE} {opCodeParts[1]}");
+         }
+      }
       private void ParseCodeLinePass0(string line, int lineNumber)
       {
 
@@ -358,11 +399,15 @@ namespace microasm
                ProcessOpCodeLine(line, lineNumber, 0);
             }
             else
+            if (line.StartsWith(ADDRMODE))
+            {
+               ProcessAddrModeLine(line, lineNumber, 0);
+            }
+            else
             {
                _romAddress += 1;
             }
          }
-
       }
 
       private void ParseCodeLinePass1(string line, int lineNumber)
@@ -373,6 +418,11 @@ namespace microasm
             if (line.StartsWith(OPCODE))
             {
                ProcessOpCodeLine(line, lineNumber, 1);
+            }
+            else
+            if (line.StartsWith(ADDRMODE))
+            {
+               ProcessAddrModeLine(line, lineNumber, 1);
             }
             else
             {
@@ -422,9 +472,9 @@ namespace microasm
                   ParseUCOpsLine(line, lineNumber);
                   break;
 
-               case Section.MCOps:
-                  ParseMCOpsLine(line, lineNumber);
-                  break;
+               // case Section.MCOps:
+               //    ParseMCOpsLine(line, lineNumber);
+               //    break;
 
                case Section.Code:
                   ParseCodeLinePass0(line, lineNumber);
@@ -467,6 +517,43 @@ namespace microasm
          }
       }
 
+      public void WriteOpCodeMappingFile(string fileName)
+      {
+         WriteROMMAppingFile(_opCodeMappingROM, _opCodeRoutineAddresses, fileName);
+      }
+
+      public void WriteModeMappingFile(string fileName)
+      {
+         WriteROMMAppingFile(_modeMappingROM, _addrModeRoutineAddresses, fileName);
+      }
+
+      private void WriteROMMAppingFile(MappingRom mapping, Dictionary<string, int> _mappingAddresses, string romFile)
+      {
+         var writer = new BinaryWriter(File.Open(romFile, FileMode.Create));
+
+         // TODO: HACKY
+         for (var index = 0; index < 256; index++)
+         {
+            // Console.WriteLine("INDEX=" + index);
+            // TODO: Should be a byte!!!
+            var resolvedMapping = mapping.ResolveIndex(index);
+            if (resolvedMapping != null)
+            {
+               int addr = _mappingAddresses[resolvedMapping];
+               writer.Write((byte)(addr & 0xFF));
+               //   Console.WriteLine($"Writing {(byte)(addr & 0xFF):X}");
+               writer.Write((byte)((addr >> 8) & 0xFF));
+            }
+            else
+            {
+               writer.Write((byte)0xEE);
+               // Console.WriteLine($"Writing {(byte)0xEE:X}");
+               writer.Write((byte)0xEE);
+            }
+         }
+         writer.Close();
+      }
+
       private void Parse(string sourceFile)
       {
          for (int pass = 0; pass < 2; pass++)
@@ -490,9 +577,9 @@ namespace microasm
                         currentSection = Section.UCOps;
                         break;
 
-                     case SECTION_MCOPS:
-                        currentSection = Section.MCOps;
-                        break;
+                     // case SECTION_MCOPS:
+                     //    currentSection = Section.MCOps;
+                     //    break;
 
                      case SECTION_CODE:
                         currentSection = Section.Code;

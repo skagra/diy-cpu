@@ -6,11 +6,7 @@
 ZERO             ........ ........ ........ ........ ........ ........ ........ ........
 
 // uControl Unit operations
-// uPCINC           ........ ........ ........ ........ ........ ........ ........ .......1    
 uJMP             ........ ........ ........ ........ ........ ........ ........ ......1.
-uJSR             ........ ........ ........ ........ ........ ........ ........ .....1..
-uRTS             ........ ........ ........ ........ ........ ........ ........ ....1... 
-uJMPOP           ........ ........ ........ ........ ........ ........ ........ ...1....    
 uNJMP            ........ ........ ........ ........ ........ ........ ........ ..1.....    
 uVJMP            ........ ........ ........ ........ ........ ........ ........ .1......    
 uZJMP            ........ ........ ........ ........ ........ ........ ........ 1.......    
@@ -99,6 +95,11 @@ ALUOP/0          ........ ........ ..1..... ........ ........ ........ ........ 
 ALUOP/1          ........ ........ .1...... ........ ........ ........ ........ ........
 ALUOP/2          ........ ........ 1....... ........ ........ ........ ........ ........
 
+// Phase Flags
+uP0              ........ .......1 ........ ........ ........ ........ ........ ........
+uP1              ........ ......1. ........ ........ ........ ........ ........ ........
+uP2              ........ .....1.. ........ ........ ........ ........ ........ ........
+
 .ucops
 // Increment the PC
 PC-INC          PC/INC | PC/LD/ADD
@@ -182,88 +183,70 @@ P/SRC-1         P/SRC/0
 P/SRC-ALU       P/SRC/1
 P/SRC-CDATA     P/SRC/1 | P/SRC/0
 
-.mcops
-BRK            00
-LDA_IMM        A9
-STA_ABS        8D
-LDA_ABS        AD
-JMP_ABS        4C
-INX            E8
-LDX_IMM        A2
-LDY_IMM        A0
-BEQ            F0
-TAX            AA
-TXA            8A
-
 .code
-
-// Common microcode routines
 
 // Fetch instruction at PC into IR
 .label FETCH
 MAR<-PC 
 PC-INC | IR<-XDATA 
-uJMPOP
+// Separate cycle as we don't have a handle on the op code until the previous cycle is complete
+uP1
 
 // Immediate mode - fetch PC into MBR
-.label IMM
+.mode IMM
 MAR<-PC 
-MBR<-XDATA | PC-INC | uRTS
+MBR<-XDATA | PC-INC | uP2
 
-// Absolute mode
-.label ABS
+.mode REL
+MAR<-PC 
+MBR<-XDATA | PC-INC | uP2
+
+.mode IMP
+uP2
+
+// Absolute mode 
+.mode ABS
 MAR<-PC
 MBR<-XDATA | PC-INC
 STASH<-MBR
 MAR<-PC
 MBR<-XDATA | PC-INC
 MARL<-STASH
-MARH<-MBR | uRTS
+MARH<-MBR | uP2
 
 // Op code implementations
-.opcode LDA_IMM
-uJSR IMM
-A<-MBR | PZ/LD | PN/LD | P/SRC/0 | P/SRC/1 | uJMP FETCH
+.opcode LDA
+A<-MBR | PZ/LD | PN/LD | P/SRC/0 | P/SRC/1 | uP0
 
 .opcode TAX
-A/OUT/CDATA | X/LD/CDATA | uJMP FETCH
+A/OUT/CDATA | X/LD/CDATA | uP0
 
 .opcode TXA
-X/OUT/CDATA | A/LD/CDATA | uJMP FETCH
+X/OUT/CDATA | A/LD/CDATA | uP0
 
-.opcode LDX_IMM
-uJSR IMM
-X<-MBR | uJMP FETCH
+.opcode LDX
+X<-MBR | uP0
 
-.opcode LDY_IMM
-uJSR IMM
-Y<-MBR | uJMP FETCH
+.opcode LDY
+Y<-MBR | uP0
 
-.opcode STA_ABS
-uJSR ABS
+.opcode STA
 MBR<-A 
-MEM<-MBR | uJMP FETCH
+MEM<-MBR | uP0
 
-.opcode LDA_ABS
-uJSR ABS
-MBR<-XDATA
-A<-MBR | uJMP FETCH
-
-.opcode JMP_ABS
-uJSR ABS
+.opcode JMP
 PCL<-STASH     
-PCH<-MBR | uJMP FETCH
+PCH<-MBR | uP0
 
 .opcode INX
 ALUA<-X
-X<-ALU | ALUOP-INC | PZ/LD | PN/LD | P/SRC-ALU | uJMP FETCH
+X<-ALU | ALUOP-INC | PZ/LD | PN/LD | P/SRC-ALU | uP0
 
 .opcode BEQ
-uJSR IMM
-uZJMP JUMPING
-uJMP FETCH
-.label JUMPING
-MBR/OUT/CDATA | PC/LD/ADD | uJMP FETCH
+uZJMP BEQ_TRUE
+uP0
+.label BEQ_TRUE
+MBR/OUT/CDATA | PC/LD/ADD | uP0
 
 .opcode BRK
 HALT

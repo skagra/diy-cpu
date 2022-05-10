@@ -1,0 +1,7 @@
+// Mapping between addressing modes and op code values
+
+IMM  A9 A2 A0
+ABS  8D AD 4C
+IMP  E8 AA 8A 00
+REL  F0 
+     
