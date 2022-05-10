@@ -10,3 +10,5 @@ LDY   A0
 BEQ   F0
 TAX   AA
 TXA   8A
+PHA   48
+PLA   68

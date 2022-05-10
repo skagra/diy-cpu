@@ -6,6 +6,9 @@
 
 ; Main routine
 main:       LDA #$EE
+            PHA
+            LDA #$22
+            PLA
             TAX
 
 inc:        INX

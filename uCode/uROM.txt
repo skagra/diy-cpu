@@ -98,6 +98,11 @@ ALUOP/0          ........ ........ ...1.... ........ ........ ........ ........ 
 ALUOP/1          ........ ........ ..1..... ........ ........ ........ ........ ........
 ALUOP/2          ........ ........ .1...... ........ ........ ........ ........ ........
 
+// Stack pointer - starts at $0100 and grows upwards to $01FF
+S/INC            ........ ........ 1....... ........ ........ ........ ........ ........
+S/DEC            ........ .......1 ........ ........ ........ ........ ........ ........
+S/OUT/CADDR      ........ ......1. ........ ........ ........ ........ ........ ........
+
 .ucops
 // Increment the PC
 PC-INC          PC/INC | PC/LD/ADD
@@ -245,6 +250,16 @@ uZJMP BEQ_TRUE
 uP0
 .label BEQ_TRUE
 MBR/OUT/CDATA | PC/LD/ADD | uP0
+
+.opcode PHA
+S/OUT/CADDR | MARL/LD/CADDRL | MARH/LD/CADDRH | A/OUT/CDATA | MBR/LD/CDATA
+MEM<-MBR | S/INC | uP0
+
+.opcode PLA
+S/DEC 
+S/OUT/CADDR | MARL/LD/CADDRL | MARH/LD/CADDRH 
+MEM/OUT/XDATA | MBR/LD/XDATA
+A<-MBR | uP0
 
 .opcode BRK
 HALT
