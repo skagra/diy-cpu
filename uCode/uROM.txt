@@ -38,7 +38,7 @@ MBR/OUT/CDATA    ........ ........ ........ ........ ........ .......1 ........ 
 MARL/LD/CADDRL   ........ ........ ........ ........ ........ ......1. ........ ........
 MARH/LD/CADDRH   ........ ........ ........ ........ ........ .....1.. ........ ........  
 
-// Open internal data bus to the internal address bus (L/H)
+// Open path from internal data bus to the internal address bus (L/H)
 CDATA/TO/CADDRL  ........ ........ ........ ........ ........ ....1... ........ ........
 CDATA/TO/CADDRH  ........ ........ ........ ........ ........ ...1.... ........ ........
 
@@ -115,11 +115,11 @@ PC-INC          PC/INC | PC/LD/ADD
 // Move PC into the MAR(H/L) via the internal address bus (H/L) 
 MAR<-PC         PC/OUT/CADDR | MARH/LD/CADDRH | MARL/LD/CADDRL
 
-// Move move memory at MAR(H/L) into IR
-IR<-XDATA       MEM/OUT/XDATA | IR/LD/XDATA
+// Move memory at MAR(H/L) into IR
+IR<-MEM         MEM/OUT/XDATA | IR/LD/XDATA
 
-// Move the content of the external data bus into the MBR
-MBR<-XDATA      MEM/OUT/XDATA | MBR/LD/XDATA
+// Move memory at MAR(H/L) into the MBR
+MBR<-MEM        MEM/OUT/XDATA | MBR/LD/XDATA
 
 // Move the content of the MBR to A via the internal data bus
 A<-MBR          MBR/OUT/CDATA | A/LD/CDATA
@@ -160,20 +160,26 @@ PCH<-MBR        MBR/OUT/CDATA | CDATA/TO/CADDRH | PCH/LD/CADDRH
 // Move the content of A into ALUA via the internal data bus
 ALUA<-A         A/OUT/CDATA | ALUA/LD/CDATA
 
-// Move the content of X into ALUB via the internal data bus
+// Move the content of X into ALUA via the internal data bus
 ALUA<-X         X/OUT/CDATA | ALUA/LD/CDATA
 
 // Move the content of X into ALUB via the internal data bus
 ALUB<-X         X/OUT/CDATA | ALUB/LD/CDATA
 
+// Move the content of Y into ALUA via the internal data bus
+ALUA<-Y         X/OUT/CDATA | ALUA/LD/CDATA
+
 // Move the content of Y into ALUB via the internal data bus
-ALUB<-YDATA     Y/OUT/CDATA | ALUB/LD/CDATA
+ALUB<-Y         Y/OUT/CDATA | ALUB/LD/CDATA
 
 // Move the output of the ALU into A via the internal data bus
 A<-ALU          ALUR/OUT/CDATA | A/LD/CDATA
 
 // Move the output of the ALU into X via the internal data bus
 X<-ALU          ALUR/OUT/CDATA | X/LD/CDATA
+
+// Move the output of the ALU into Y via the internal data bus
+Y<-ALU          ALUR/OUT/CDATA | Y/LD/CDATA
 
 // ALU operations
 ALUOP-AND       ZERO
@@ -193,27 +199,28 @@ P/SRC-CDATA     P/SRC/1 | P/SRC/0
 
 .code
 
-// Init code - missing reset of P register
-uP0/LD/UNEXTADDR | p0
+// Init code
+uP0/LD/UNEXTADDR p0
 CDATA/LD/FF | S/LD/CDATA
 CDATA/LD/0 | CDATA/TO/CADDRL | CDATA/TO/CADDRH | PCH/LD/CADDRH | PCL/LD/CADDRL | MARH/LD/CADDRH | MARL/LD/CADDRL | MBR/LD/CDATA 
 CDATA/LD/0 | A/LD/CDATA | X/LD/CDATA | Y/LD/CDATA | STASH/LD/CDATA | ALUA/LD/CDATA | ALUB/LD/CDATA 
+PZ/LD | PN/LD | PC/LD | PV/LD | P/SRC-0
 
 // Fetch instruction at PC into IR
 .label p0
 MAR<-PC 
-PC-INC | IR<-XDATA 
-// Separate cycle as we don't have a handle on the op code until the previous cycle is complete
+PC-INC | IR<-MEM 
+// Separate cycle as we don't have a handle on the op code for decoding until the previous cycle is complete
 uP1
 
 // Immediate mode - fetch PC into MBR
 .mode IMM
 MAR<-PC 
-MBR<-XDATA | PC-INC | uP2
+MBR<-MEM | PC-INC | uP2
 
 .mode REL
 MAR<-PC 
-MBR<-XDATA | PC-INC | uP2
+MBR<-MEM | PC-INC | uP2
 
 .mode IMP
 uP2
@@ -221,16 +228,16 @@ uP2
 // Absolute mode 
 .mode ABS
 MAR<-PC
-MBR<-XDATA | PC-INC
+MBR<-MEM | PC-INC
 STASH<-MBR
 MAR<-PC
-MBR<-XDATA | PC-INC
+MBR<-MEM | PC-INC
 MARL<-STASH
 MARH<-MBR | uP2
 
 // Op code implementations
 .opcode LDA
-A<-MBR | PZ/LD | PN/LD | P/SRC/0 | P/SRC/1 | uP0
+A<-MBR | PZ/LD | PN/LD | P/SRC-CDATA | uP0
 
 .opcode TAX
 A/OUT/CDATA | X/LD/CDATA | uP0
