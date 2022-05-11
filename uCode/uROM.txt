@@ -102,6 +102,11 @@ ALUOP/2          ........ ........ .1...... ........ ........ ........ ........ 
 S/INC            ........ ........ 1....... ........ ........ ........ ........ ........
 S/DEC            ........ .......1 ........ ........ ........ ........ ........ ........
 S/OUT/CADDR      ........ ......1. ........ ........ ........ ........ ........ ........
+S/LD/CDATA       ........ .....1.. ........ ........ ........ ........ ........ ........
+
+CDATA/LD/0       ........ ....1... ........ ........ ........ ........ ........ ........
+uP0/LD/UNEXTADDR ........ ...1.... ........ ........ ........ ........ ........ ........
+CDATA/LD/FF      ........ ..1..... ........ ........ ........ ........ ........ ........
 
 .ucops
 // Increment the PC
@@ -188,8 +193,14 @@ P/SRC-CDATA     P/SRC/1 | P/SRC/0
 
 .code
 
+// Init code - missing reset of P register
+uP0/LD/UNEXTADDR | p0
+CDATA/LD/FF | S/LD/CDATA
+CDATA/LD/0 | CDATA/TO/CADDRL | CDATA/TO/CADDRH | PCH/LD/CADDRH | PCL/LD/CADDRL | MARH/LD/CADDRH | MARL/LD/CADDRL | MBR/LD/CDATA 
+CDATA/LD/0 | A/LD/CDATA | X/LD/CDATA | Y/LD/CDATA | STASH/LD/CDATA | ALUA/LD/CDATA | ALUB/LD/CDATA 
+
 // Fetch instruction at PC into IR
-.label FETCH
+.label p0
 MAR<-PC 
 PC-INC | IR<-XDATA 
 // Separate cycle as we don't have a handle on the op code until the previous cycle is complete
@@ -253,10 +264,10 @@ MBR/OUT/CDATA | PC/LD/ADD | uP0
 
 .opcode PHA
 S/OUT/CADDR | MARL/LD/CADDRL | MARH/LD/CADDRH | A/OUT/CDATA | MBR/LD/CDATA
-MEM<-MBR | S/INC | uP0
+MEM<-MBR | S/DEC | uP0
 
 .opcode PLA
-S/DEC 
+S/INC 
 S/OUT/CADDR | MARL/LD/CADDRL | MARH/LD/CADDRH 
 MEM/OUT/XDATA | MBR/LD/XDATA
 A<-MBR | uP0
