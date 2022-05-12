@@ -1,8 +1,10 @@
 // Mapping between addressing modes and op code values
 
+// JSR ($20) being IMP is a temp hack
+
 IMM  A9 A2 A0
 ABS  8D AD 4C
-IMP  E8 AA 8A 00 48 68
+IMP  E8 AA 8A 00 48 68 20 60
 REL  F0
 
      

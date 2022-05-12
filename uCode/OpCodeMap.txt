@@ -12,3 +12,5 @@ TAX   AA
 TXA   8A
 PHA   48
 PLA   68
+JSR   20
+RTS   60

@@ -39,19 +39,19 @@ MARL/LD/CADDRL   ........ ........ ........ ........ ........ ......1. ........ 
 MARH/LD/CADDRH   ........ ........ ........ ........ ........ .....1.. ........ ........  
 
 // Open path from internal data bus to the internal address bus (L/H)
-CDATA/TO/CADDRL  ........ ........ ........ ........ ........ ....1... ........ ........
-CDATA/TO/CADDRH  ........ ........ ........ ........ ........ ...1.... ........ ........
+PCL/LD/CDATA     ........ ........ ........ ........ ........ ....1... ........ ........
+PCH/LD/CDATA     ........ ........ ........ ........ ........ ...1.... ........ ........
 
 // Progam counter 
 PC/INC           ........ ........ ........ ........ ........ ..1..... ........ ........    
 PC/LD/ADD        ........ ........ ........ ........ ........ .1...... ........ ........
 PC/OUT/CADDR     ........ ........ ........ ........ ........ 1....... ........ ........  
-PCL/LD/CADDRL    ........ ........ ........ ........ .......1 ........ ........ ........
-PCH/LD/CADDRH    ........ ........ ........ ........ ......1. ........ ........ ........
+// xxPCL/LD/CADDRL    ........ ........ ........ ........ .......1 ........ ........ ........
+// xxPCH/LD/CADDRH    ........ ........ ........ ........ ......1. ........ ........ ........
 
 // Temporay "stash" register
-STASH/LD/CDATA   ........ ........ ........ ........ .....1.. ........ ........ ........
-STASH/OUT/CDATA  ........ ........ ........ ........ ....1... ........ ........ ........
+STASHH/LD/CDATA   ........ ........ ........ ........ .....1.. ........ ........ ........
+STASHH/OUT/CDATA  ........ ........ ........ ........ ....1... ........ ........ ........
 
 // Accumulator
 A/LD/CDATA       ........ ........ ........ ........ ...1.... ........ ........ ........   
@@ -107,6 +107,13 @@ S/LD/CDATA       ........ .....1.. ........ ........ ........ ........ ........ 
 CDATA/LD/0       ........ ....1... ........ ........ ........ ........ ........ ........
 uP0/LD/UNEXTADDR ........ ...1.... ........ ........ ........ ........ ........ ........
 CDATA/LD/FF      ........ ..1..... ........ ........ ........ ........ ........ ........
+S/OUT/CDATA      ........ .1...... ........ ........ ........ ........ ........ ........
+PCL/OUT/CDATA    ........ 1....... ........ ........ ........ ........ ........ ........
+PCH/OUT/CDATA    .......1 ........ ........ ........ ........ ........ ........ ........
+STASHL/LD/CDATA  ......1. ........ ........ ........ ........ ........ ........ ........
+STASHL/OUT/CDATA .....1.. ........ ........ ........ ........ ........ ........ ........
+CDATA/TO/CADDRL  ....1... ........ ........ ........ ........ ........ ........ ........
+CDATA/TO/CADDRH  ...1.... ........ ........ ........ ........ ........ ........ ........
 
 .ucops
 // Increment the PC
@@ -134,16 +141,18 @@ X<-MBR          MBR/OUT/CDATA | X/LD/CDATA
 Y<-MBR          MBR/OUT/CDATA | Y/LD/CDATA
 
 // Move the content of the MBR to the STASH register via the internal data bus
-STASH<-MBR      MBR/OUT/CDATA | STASH/LD/CDATA
+STASHH<-MBR     MBR/OUT/CDATA | STASHH/LD/CDATA
+
+STASHL<-MBR     MBR/OUT/CDATA | STASHL/LD/CDATA
 
 // Move content ADDRH on the internal address bus (L) via the internal data bus
-STASH<-ADDRL    STASH/OUT/CDATA | CDATA/TO/CADDRL
+STASHL<-ADDRL   STASHL/OUT/CDATA | CDATA/TO/CADDRL
 
 // Move content ADDRH on the internal address bus (H) via the internal data bus
-STASH<-ADDRH    STASH/OUT/CDATA | CDATA/TO/CADDRH
+STASHH<-ADDRH   STASHH/OUT/CDATA | CDATA/TO/CADDRH
 
 // Move the content of STASH into the MAR(L) via the internal data bus and internal address bus (L)
-MARL<-STASH     STASH/OUT/CDATA | CDATA/TO/CADDRL | MARL/LD/CADDRL
+MARL<-STASHL    STASHL/OUT/CDATA | CDATA/TO/CADDRL | MARL/LD/CADDRL
 
 // Move the content of MBR into the MAR(H) via internal data bus and the internal address must (H)
 MARH<-MBR       MBR/OUT/CDATA | CDATA/TO/CADDRH | MARH/LD/CADDRH
@@ -152,10 +161,10 @@ MARH<-MBR       MBR/OUT/CDATA | CDATA/TO/CADDRH | MARH/LD/CADDRH
 MEM<-MBR        MBR/OUT/XDATA | MEM/LD/XDATA
 
 // Move the content of STASH into the PC(L) via the internal data bus and the internal address bus (L)
-PCL<-STASH      STASH/OUT/CDATA | CDATA/TO/CADDRL | PCL/LD/CADDRL
+PCL<-STASHL     STASHL/OUT/CDATA | PCL/LD/CDATA
 
 // Move the content of MBR into the PC(H) via the internal data bus and the internal address bus (H)
-PCH<-MBR        MBR/OUT/CDATA | CDATA/TO/CADDRH | PCH/LD/CADDRH
+PCH<-MBR        MBR/OUT/CDATA | PCH/LD/CDATA
 
 // Move the content of A into ALUA via the internal data bus
 ALUA<-A         A/OUT/CDATA | ALUA/LD/CDATA
@@ -202,8 +211,8 @@ P/SRC-CDATA     P/SRC/1 | P/SRC/0
 // Init code
 uP0/LD/UNEXTADDR p0
 CDATA/LD/FF | S/LD/CDATA
-CDATA/LD/0 | CDATA/TO/CADDRL | CDATA/TO/CADDRH | PCH/LD/CADDRH | PCL/LD/CADDRL | MARH/LD/CADDRH | MARL/LD/CADDRL | MBR/LD/CDATA 
-CDATA/LD/0 | A/LD/CDATA | X/LD/CDATA | Y/LD/CDATA | STASH/LD/CDATA | ALUA/LD/CDATA | ALUB/LD/CDATA 
+CDATA/LD/0 | PCH/LD/CDATA | PCL/LD/CDATA | CDATA/TO/CADDRH | CDATA/TO/CADDRL | MARH/LD/CADDRH | MARL/LD/CADDRL | MBR/LD/CDATA 
+CDATA/LD/0 | A/LD/CDATA | X/LD/CDATA | Y/LD/CDATA | STASHH/LD/CDATA | STASHL/LD/CDATA | ALUA/LD/CDATA | ALUB/LD/CDATA 
 PZ/LD | PN/LD | PC/LD | PV/LD | P/SRC-0
 
 // Fetch instruction at PC into IR
@@ -229,10 +238,10 @@ uP2
 .mode ABS
 MAR<-PC
 MBR<-MEM | PC-INC
-STASH<-MBR
+STASHL<-MBR
 MAR<-PC
 MBR<-MEM | PC-INC
-MARL<-STASH
+STASHL/OUT/CDATA | CDATA/TO/CADDRL | MARL/LD/CADDRL
 MARH<-MBR | uP2
 
 // Op code implementations
@@ -256,7 +265,7 @@ MBR<-A
 MEM<-MBR | uP0
 
 .opcode JMP
-PCL<-STASH     
+PCL<-STASHL     
 PCH<-MBR | uP0
 
 .opcode INX
@@ -278,6 +287,36 @@ S/INC
 S/OUT/CADDR | MARL/LD/CADDRL | MARH/LD/CADDRH 
 MEM/OUT/XDATA | MBR/LD/XDATA
 A<-MBR | uP0
+
+// Problem need to inc the PC by two before storing
+.opcode JSR
+// Grab values at PC and PC+1 and store them in stash registers (target address)
+MAR<-PC
+MBR<-MEM | PC-INC
+STASHL<-MBR
+MAR<-PC
+MBR<-MEM | PC-INC
+STASHH<-MBR
+
+// Push the PC onto the stack
+S/OUT/CADDR | MARL/LD/CADDRL | MARH/LD/CADDRH | PCL/OUT/CDATA | MBR/LD/CDATA
+MEM<-MBR | S/DEC
+S/OUT/CADDR | MARL/LD/CADDRL | MARH/LD/CADDRH | PCH/OUT/CDATA | MBR/LD/CDATA
+MEM<-MBR | S/DEC
+
+// Jump to the target address
+STASHL/OUT/CDATA | PCL/LD/CDATA
+STASHH/OUT/CDATA | PCH/LD/CDATA | uP0
+
+.opcode RTS
+S/INC 
+S/OUT/CADDR | MARL/LD/CADDRL | MARH/LD/CADDRH
+MBR<-MEM | S/INC
+MBR/OUT/CDATA | STASHH/LD/CDATA
+STASHH/OUT/CDATA | PCH/LD/CDATA
+S/OUT/CADDR | MARL/LD/CADDRL | MARH/LD/CADDRH
+MBR<-MEM
+MBR/OUT/CDATA | PCL/LD/CDATA | uP0
 
 .opcode BRK
 HALT

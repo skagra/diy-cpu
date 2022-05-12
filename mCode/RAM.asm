@@ -5,7 +5,8 @@
             ORG $0
 
 ; Main routine
-main:       LDA #$EE
+main:       JSR l1 
+            LDA #$EE
             PHA
             LDA #$22
             PLA
@@ -19,6 +20,13 @@ halt:       LDA #$DD
             LDY #$FF
             BRK
 
+l1:         LDA #01
+            JSR l2
+            LDA #03
+            RTS
+
+l2:         LDA #02
+            RTS
 ; Zero page variables
             SEG.U variables
             ORG $100
