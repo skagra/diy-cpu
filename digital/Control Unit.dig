@@ -80,7 +80,7 @@
         </entry>
         <entry>
           <string>Label</string>
-          <string>CAR</string>
+          <string>uCAR</string>
         </entry>
         <entry>
           <string>Bits</string>
@@ -222,7 +222,7 @@
         </entry>
         <entry>
           <string>NetName</string>
-          <string>uADDRNEXT</string>
+          <string>uParam</string>
         </entry>
       </elementAttributes>
       <pos x="-1560" y="100"/>
@@ -318,7 +318,7 @@
         </entry>
         <entry>
           <string>NetName</string>
-          <string>CAR</string>
+          <string>uCAR</string>
         </entry>
       </elementAttributes>
       <pos x="-1560" y="-240"/>
@@ -414,7 +414,7 @@
         </entry>
         <entry>
           <string>NetName</string>
-          <string>Next</string>
+          <string>uNextCAR</string>
         </entry>
       </elementAttributes>
       <pos x="-1360" y="100"/>
@@ -574,7 +574,7 @@
       <elementAttributes>
         <entry>
           <string>NetName</string>
-          <string>NextMux</string>
+          <string>uNextMux</string>
         </entry>
       </elementAttributes>
       <pos x="1260" y="180"/>
@@ -856,7 +856,7 @@
         </entry>
         <entry>
           <string>NetName</string>
-          <string>NextMux</string>
+          <string>uNextMux</string>
         </entry>
       </elementAttributes>
       <pos x="-1580" y="440"/>
@@ -870,7 +870,7 @@
         </entry>
         <entry>
           <string>NetName</string>
-          <string>Next</string>
+          <string>uNextCAR</string>
         </entry>
       </elementAttributes>
       <pos x="1040" y="-420"/>
@@ -1222,7 +1222,7 @@
         </entry>
         <entry>
           <string>NetName</string>
-          <string>uADDRNEXT</string>
+          <string>uParam</string>
         </entry>
       </elementAttributes>
       <pos x="480" y="-440"/>
@@ -1384,7 +1384,7 @@
         </entry>
         <entry>
           <string>lastDataFile</string>
-          <file>D:\Development\diy-cpu\uCode\bin\modemap.bin</file>
+          <file>D:\Development\diy-cpu\uCode\bin\uModeDecoder.bin</file>
         </entry>
         <entry>
           <string>autoReload</string>
@@ -1418,7 +1418,7 @@
         </entry>
         <entry>
           <string>lastDataFile</string>
-          <file>D:\Development\diy-cpu\uCode\bin\opcodemap.bin</file>
+          <file>D:\Development\diy-cpu\uCode\bin\uOpCodeDecoder.bin</file>
         </entry>
         <entry>
           <string>autoReload</string>
@@ -1436,7 +1436,7 @@
         </entry>
         <entry>
           <string>NetName</string>
-          <string>CAR</string>
+          <string>uCAR</string>
         </entry>
       </elementAttributes>
       <pos x="820" y="-400"/>
@@ -1450,7 +1450,7 @@
         </entry>
         <entry>
           <string>NetName</string>
-          <string>uADDRNEXT</string>
+          <string>uParam</string>
         </entry>
       </elementAttributes>
       <pos x="920" y="260"/>
@@ -1599,7 +1599,7 @@
       <elementAttributes>
         <entry>
           <string>NetName</string>
-          <string>CAR</string>
+          <string>uCAR</string>
         </entry>
       </elementAttributes>
       <pos x="-760" y="820"/>
@@ -1609,7 +1609,7 @@
       <elementAttributes>
         <entry>
           <string>NetName</string>
-          <string>uADDRNEXT</string>
+          <string>uParam</string>
         </entry>
       </elementAttributes>
       <pos x="-760" y="840"/>
@@ -1619,7 +1619,7 @@
       <elementAttributes>
         <entry>
           <string>NetName</string>
-          <string>Next</string>
+          <string>uNextCAR</string>
         </entry>
       </elementAttributes>
       <pos x="-760" y="860"/>
@@ -1629,7 +1629,7 @@
       <elementAttributes>
         <entry>
           <string>NetName</string>
-          <string>NextMux</string>
+          <string>uNextMux</string>
         </entry>
       </elementAttributes>
       <pos x="-760" y="880"/>
@@ -1647,7 +1647,7 @@
         </entry>
         <entry>
           <string>Label</string>
-          <string>&lt;CAR&gt;</string>
+          <string>&lt;uCAR&gt;</string>
         </entry>
         <entry>
           <string>Bits</string>
@@ -1669,7 +1669,7 @@
         </entry>
         <entry>
           <string>Label</string>
-          <string>&lt;UNEXTADDR&gt;</string>
+          <string>&lt;uParam&gt;</string>
         </entry>
         <entry>
           <string>Bits</string>
@@ -1691,7 +1691,7 @@
         </entry>
         <entry>
           <string>Label</string>
-          <string>&lt;NEXT&gt;</string>
+          <string>&lt;uNEXTCAR&gt;</string>
         </entry>
         <entry>
           <string>Bits</string>
@@ -1713,7 +1713,7 @@
         </entry>
         <entry>
           <string>Label</string>
-          <string>&lt;NEXTMUX&gt;</string>
+          <string>&lt;uNEXTMUX&gt;</string>
         </entry>
         <entry>
           <string>Bits</string>
@@ -1741,7 +1741,7 @@
         </entry>
         <entry>
           <string>NetName</string>
-          <string>ModeMap</string>
+          <string>uModeDecoder</string>
         </entry>
       </elementAttributes>
       <pos x="820" y="-20"/>
@@ -1755,7 +1755,7 @@
         </entry>
         <entry>
           <string>NetName</string>
-          <string>OpCodeMap</string>
+          <string>uOpCodeDecoder</string>
         </entry>
       </elementAttributes>
       <pos x="820" y="120"/>
@@ -1765,7 +1765,7 @@
       <elementAttributes>
         <entry>
           <string>NetName</string>
-          <string>ModeMap</string>
+          <string>uModeDecoder</string>
         </entry>
       </elementAttributes>
       <pos x="-760" y="900"/>
@@ -1775,7 +1775,7 @@
       <elementAttributes>
         <entry>
           <string>NetName</string>
-          <string>OpCodeMap</string>
+          <string>uOpCodeDecoder</string>
         </entry>
       </elementAttributes>
       <pos x="-760" y="920"/>
@@ -1793,7 +1793,7 @@
         </entry>
         <entry>
           <string>Label</string>
-          <string>&lt;MODEMAP&gt;</string>
+          <string>&lt;uMODEDECODER&gt;</string>
         </entry>
         <entry>
           <string>Bits</string>
@@ -1815,7 +1815,7 @@
         </entry>
         <entry>
           <string>Label</string>
-          <string>&lt;OPCODEMAP&gt;</string>
+          <string>&lt;uOPCODEDECODER&gt;</string>
         </entry>
         <entry>
           <string>Bits</string>
@@ -1877,7 +1877,7 @@
       <elementAttributes>
         <entry>
           <string>NetName</string>
-          <string>uADDRNEXT</string>
+          <string>uParam</string>
         </entry>
       </elementAttributes>
       <pos x="1000" y="-140"/>
@@ -4111,6 +4111,26 @@
         </entry>
       </elementAttributes>
       <pos x="-280" y="-300"/>
+    </visualElement>
+    <visualElement>
+      <elementName>Text</elementName>
+      <elementAttributes>
+        <entry>
+          <string>textFontSize</string>
+          <int>17</int>
+        </entry>
+        <entry>
+          <string>Description</string>
+          <string>Next Mux
+
+0 0 0 +1
+0 0 1 p0
+0 1 0 p1
+0 1 1 p2
+1 X X uJMPs</string>
+        </entry>
+      </elementAttributes>
+      <pos x="1320" y="-60"/>
     </visualElement>
   </visualElements>
   <wires>

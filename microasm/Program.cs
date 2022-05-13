@@ -5,8 +5,8 @@
       private const string OP_CODE_MAP_DEFINITION = "OpCodeMap.txt";
       private const string MODE_MAP_DEFINITION = "ModeMap.txt";
       private const string MICROCODE_DEFINITION = "uROM.txt";
-      private const string OP_CODE_MAP_ROM = "OpCodeMap.bin";
-      private const string MODE_MAP_ROM = "ModeMap.bin";
+      private const string OP_CODE_MAP_ROM = "uOpCodeDecoder.bin";
+      private const string MODE_MAP_ROM = "uModeDecoder.bin";
       private const string MICROCODE_ROM = "uROM";
 
       public static void Main(string[] args)
