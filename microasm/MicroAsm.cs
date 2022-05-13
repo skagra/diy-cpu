@@ -69,10 +69,13 @@ namespace microasm
       private int _romAddress = 0;
       private Section currentSection = Section.None;
 
+      private readonly string _sourceFile;
+
       public MicroAsm(MappingRom opCodeMappingROM, MappingRom modeMappingROM, string sourceFile)
       {
          _opCodeMappingROM = opCodeMappingROM;
          _modeMappingROM = modeMappingROM;
+         _sourceFile = sourceFile;
          Parse(sourceFile);
       }
 
@@ -85,7 +88,7 @@ namespace microasm
             _labelSymbols.TryGetValue(symbol, value: out result) ||
             _codeSymbols.TryGetValue(symbol, value: out result)))
          {
-            throw new MicroAsmException($"Symbol not found '{symbol}'", line, lineNumber);
+            throw new MicroAsmException($"Symbol not found '{symbol}'", line, lineNumber, _sourceFile);
          }
 
          return result;
@@ -209,7 +212,7 @@ namespace microasm
          var flagsParts = line.Split(' ', '\t', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
          if (flagsParts.Length < 2)
          {
-            throw new MicroAsmException($"Flag lines must consist of two white-space separated values", line, lineNumber);
+            throw new MicroAsmException($"Flag lines must consist of two white-space separated values", line, lineNumber, _sourceFile);
          }
 
          var symbolString = flagsParts[0];
@@ -217,7 +220,7 @@ namespace microasm
 
          if (valueString.Length != FLAGS_SIZE_IN_BYTES * 8)
          {
-            throw new MicroAsmException($"Flag value must be '{FLAGS_SIZE_IN_BYTES * 8}' characters long", line, lineNumber);
+            throw new MicroAsmException($"Flag value must be '{FLAGS_SIZE_IN_BYTES * 8}' characters long", line, lineNumber, _sourceFile);
          }
 
          var value = new byte[WORD_SIZE_IN_BYTES];
@@ -232,7 +235,7 @@ namespace microasm
          }
          catch (ArgumentException)
          {
-            throw new MicroAsmException($"Duplicate symbol '{symbolString}'", line, lineNumber);
+            throw new MicroAsmException($"Duplicate symbol '{symbolString}'", line, lineNumber, _sourceFile);
          }
       }
 
@@ -255,7 +258,7 @@ namespace microasm
 
          if (ucopsParts.Length < 2)
          {
-            throw new MicroAsmException($"Each '{SECTION_UCOPS}' entry must contain a symbol followed by one or more values", line, lineNumber);
+            throw new MicroAsmException($"Each '{SECTION_UCOPS}' entry must contain a symbol followed by one or more values", line, lineNumber, _sourceFile);
          }
 
          var symbol = ucopsParts[0];
@@ -273,7 +276,7 @@ namespace microasm
          }
          catch (ArgumentException)
          {
-            throw new MicroAsmException($"Duplicate symbol '{symbol}'", line, lineNumber);
+            throw new MicroAsmException($"Duplicate symbol '{symbol}'", line, lineNumber, _sourceFile);
          }
       }
 
@@ -283,7 +286,7 @@ namespace microasm
          var opCodeParts = line.Split(new char[] { ' ', '\t' }, StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
          if (opCodeParts.Length != 2)
          {
-            throw new MicroAsmException($"'{OPCODE}' lines must consist of two space separated values", line, lineNumber);
+            throw new MicroAsmException($"'{OPCODE}' lines must consist of two space separated values", line, lineNumber, _sourceFile);
          }
 
          if (phase == 0)
@@ -294,7 +297,7 @@ namespace microasm
             }
             catch (KeyNotFoundException)
             {
-               throw new MicroAsmException($"'{OPCODE}' value not found", line, lineNumber);
+               throw new MicroAsmException($"'{OPCODE}' value not found", line, lineNumber, _sourceFile);
             }
          }
          else
@@ -310,7 +313,7 @@ namespace microasm
          var opCodeParts = line.Split(new char[] { ' ', '\t' }, StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
          if (opCodeParts.Length != 2)
          {
-            throw new MicroAsmException($"'{MODE}' lines must consist of two space separated values", line, lineNumber);
+            throw new MicroAsmException($"'{MODE}' lines must consist of two space separated values", line, lineNumber, _sourceFile);
          }
 
          if (phase == 0)
@@ -321,7 +324,7 @@ namespace microasm
             }
             catch (KeyNotFoundException)
             {
-               throw new MicroAsmException($"'{MODE}' value not found", line, lineNumber);
+               throw new MicroAsmException($"'{MODE}' value not found", line, lineNumber, _sourceFile);
             }
          }
          else
@@ -350,7 +353,7 @@ namespace microasm
             }
             catch
             {
-               throw new MicroAsmException($"Duplicate symbol '{symbol}'", line, lineNumber);
+               throw new MicroAsmException($"Duplicate symbol '{symbol}'", line, lineNumber, _sourceFile);
             }
          }
          else
@@ -500,8 +503,8 @@ namespace microasm
             }
             else
             {
-               writer.Write((byte)0xFF);
-               writer.Write((byte)0xFF);
+               writer.Write((byte)0x00); // BRK - CPU will halt on any undefined instruction
+               writer.Write((byte)0x00);
             }
          }
          writer.Close();
@@ -541,7 +544,7 @@ namespace microasm
                         }
                         else
                         {
-                           throw new MicroAsmException($"Directive outside of section", trimmedLine, lineNumber);
+                           throw new MicroAsmException($"Directive outside of section", trimmedLine, lineNumber, _sourceFile);
                         }
                         break;
                   }

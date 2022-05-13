@@ -36,23 +36,23 @@ namespace microasm
                         var index = byte.Parse(value, System.Globalization.NumberStyles.HexNumber);
                         if (_mapping[index] != null)
                         {
-                           throw new MicroAsmException($"A mapping to this value has already been seen '{index:X2}'.", line, lineNumber);
+                           throw new MicroAsmException($"A mapping to this value has already been seen '{index:X2}'.", line, lineNumber, _fileName);
                         }
                         _mapping[index] = symbol;
                      });
                   }
                   catch (IndexOutOfRangeException)
                   {
-                     throw new MicroAsmException($"Mapping value must be less than {_mapping.Length}.", line, lineNumber);
+                     throw new MicroAsmException($"Mapping value must be less than {_mapping.Length}.", line, lineNumber, _fileName);
                   }
                   catch (FormatException)
                   {
-                     throw new MicroAsmException($"Values must be given as hex bytes.", line, lineNumber);
+                     throw new MicroAsmException($"Values must be given as hex bytes.", line, lineNumber, _fileName);
                   }
                }
                else
                {
-                  throw new MicroAsmException("Rom mapping lines must have a least one value.", line, lineNumber);
+                  throw new MicroAsmException("Rom mapping lines must have a least one value.", line, lineNumber, _fileName);
                }
             }
             lineNumber++;
