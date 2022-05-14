@@ -20,3 +20,6 @@
 * Have microasm account for where word size does not fit exactly with uROMs
 * Improve log output implementation in microasm - its all over the code base at the moment with multiple hard coded numbers
 * Consider changing name of ALUP to ALUC now it stores only the carry flag
+* Factor out microasm per file section
+* Add terminal for output
+* Consider adding keyboard for input (likely need interrupt support in CPU first)

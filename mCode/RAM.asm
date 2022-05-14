@@ -5,7 +5,9 @@
             ORG $0
 
 ; Main routine
-main:       JSR l1 
+main:       LDA #$23
+            STA $4000
+            JSR l1 
             LDA #$EE
             PHA
             LDA #$22

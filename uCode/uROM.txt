@@ -51,7 +51,7 @@ MARH/LD/CADDRH   ........ ........ ........ ........ ........ 1....... ........ 
 
 // Progam counter 
 PC/INC           ........ ........ ........ ........ .......1 ........ ........ ........
-PC/LD/ADD        ........ ........ ........ ........ ......1. ........ ........ ........
+PC/ADD/CDATA     ........ ........ ........ ........ ......1. ........ ........ ........
 PCL/LD/CDATA     ........ ........ ........ ........ .....1.. ........ ........ ........
 PCL/OUT/CDATA    ........ ........ ........ ........ ....1... ........ ........ ........
 PCH/LD/CDATA     ........ ........ ........ ........ ...1.... ........ ........ ........
@@ -138,7 +138,7 @@ PCL<-STASHL     STASHL/OUT/CDATA | PCL/LD/CDATA
 PCH<-MBR        MBR/OUT/CDATA | PCH/LD/CDATA
 
 // Increment the PC
-PC-INC          PC/INC | PC/LD/ADD
+PC-INC          PC/INC 
 
 // Move value into A via the internal data bus
 A<-MBR          MBR/OUT/CDATA | A/LD/CDATA
@@ -254,7 +254,7 @@ X<-ALU | ALUOP-INC | PZ/LD | PN/LD | P/SRC-ALU | uP0
 uZJMP BEQ_TRUE
 uP0
 .label BEQ_TRUE
-MBR/OUT/CDATA | PC/LD/ADD | uP0
+MBR/OUT/CDATA | PC/ADD/CDATA | uP0
 
 .opcode PHA
 MAR<-S | MBR<-A

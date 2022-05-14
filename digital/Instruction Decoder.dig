@@ -3,10 +3,6 @@
   <version>1</version>
   <attributes>
     <entry>
-      <string>Width</string>
-      <int>10</int>
-    </entry>
-    <entry>
       <string>backgroundColor</string>
       <awt-color>
         <red>255</red>
@@ -14,6 +10,10 @@
         <blue>255</blue>
         <alpha>255</alpha>
       </awt-color>
+    </entry>
+    <entry>
+      <string>Width</string>
+      <int>10</int>
     </entry>
   </attributes>
   <visualElements>
@@ -42,7 +42,7 @@
         </entry>
         <entry>
           <string>lastDataFile</string>
-          <file>D:\Development\diy-cpu\uCode\bin\uModeDecoder.bin</file>
+          <file>E:\Development\diy-cpu\uCode\bin\uModeDecoder.bin</file>
         </entry>
         <entry>
           <string>autoReload</string>
@@ -76,7 +76,7 @@
         </entry>
         <entry>
           <string>lastDataFile</string>
-          <file>D:\Development\diy-cpu\uCode\bin\uOpCodeDecoder.bin</file>
+          <file>E:\Development\diy-cpu\uCode\bin\uOpCodeDecoder.bin</file>
         </entry>
         <entry>
           <string>autoReload</string>
@@ -181,16 +181,16 @@
       <elementName>Out</elementName>
       <elementAttributes>
         <entry>
+          <string>rotation</string>
+          <rotation rotation="2"/>
+        </entry>
+        <entry>
           <string>Label</string>
           <string>DEMODE</string>
         </entry>
         <entry>
           <string>Bits</string>
           <int>8</int>
-        </entry>
-        <entry>
-          <string>rotation</string>
-          <rotation rotation="2"/>
         </entry>
       </elementAttributes>
       <pos x="360" y="180"/>
