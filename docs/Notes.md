@@ -15,6 +15,37 @@ Natural order                    uROM (little endian) order
 S9 S8 S7 S6 S5 S4 S3 S2 A1 A0 => AO A1 S2 S3 S4 S5 S6 S7 S8 S9 
 ```
 
+# Memory Map
+
+```
+  +===========+ 
+  |           | FEEE
+  |    ROM    |
+  |           | C000
+  +===========+
+  |           | BFFF
+  |    N/A    | 
+  |           | 8000 
+  +===========+
+  |           | 7FFF
+  |    I/O    | 
+  |           | 4000
+  +===========+
+  |           | 3FFF
+  |    RAM    |
+  |           | 0200
+  |...........| 
+  |           | 01FF
+  |   Stack   | 
+  |           | 0100 
+  +...........+
+  |           | 00FF
+  | Zero Page |
+  |           | 0000
+  +===========+     
+```
+
+
 # Addressing Modes
 
 | Mode | Example | Description |

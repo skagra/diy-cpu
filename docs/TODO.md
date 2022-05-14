@@ -1,9 +1,6 @@
 # TO DO
 
-* Reorder control lines into more logical groupings
-* Add stack support
 * Revisit size of uCode ROM
-* Look at decoding opcode and addr mode via ROMS and related control unit changes, this would be a new decoder circuit
 * Test new ALU and conditional jump operations
   * Add new MC opcodes to support this
 * Initialize via via vector
@@ -20,6 +17,5 @@
 * Have microasm account for where word size does not fit exactly with uROMs
 * Improve log output implementation in microasm - its all over the code base at the moment with multiple hard coded numbers
 * Consider changing name of ALUP to ALUC now it stores only the carry flag
-* Factor out microasm per file section
-* Add terminal for output
+* Factor out microasm per file section and microcode definition into separate files too
 * Consider adding keyboard for input (likely need interrupt support in CPU first)

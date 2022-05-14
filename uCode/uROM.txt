@@ -161,6 +161,8 @@ ALUA<-X         X/OUT/CDATA | ALUA/LD/CDATA
 ALUA<-Y         X/OUT/CDATA | ALUA/LD/CDATA
 ALUB<-Y         Y/OUT/CDATA | ALUB/LD/CDATA
 ALUB<-X         X/OUT/CDATA | ALUB/LD/CDATA
+ALUA<-MBR       MBR/OUT/CDATA | ALUA/LD/CDATA
+ALUB<-MBR       MBR/OUT/CDATA | ALUB/LD/CDATA
 
 // Move the output of the ALU into registers via the internal data bus
 A<-ALU          ALUR/OUT/CDATA | A/LD/CDATA
@@ -221,6 +223,18 @@ MAR<-PC
 MBR<-MEM | PC-INC
 MARL<-STASHL  
 MARH<-MBR | uP2
+
+// Abs index by X
+//.mode ABSX
+// Grab the low order byte
+//MAR<-PC
+//MBR<-MEM | PC-INC
+// Move it to ALUA and grab the second address value
+//MBR<-ALUA
+//X/OUT/CDATA | ALU/LD/CDATA | ALU/OP/ADD 
+//uJCJMP | uJMP/INV ABSXSAMEPAGE
+//
+//.label ABSXSAMEPAGE
 
 // Op code implementations
 .opcode LDA
