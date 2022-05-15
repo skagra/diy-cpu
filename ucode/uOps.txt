@@ -1,0 +1,69 @@
+// Definition of microcode operations in terms of control flags
+
+// Move the content of the MBR into memory via the external data bus
+MEM<-MBR        MBR/OUT/XDATA | MEM/LD/XDATA
+
+// Move memory at MAR(H/L) into the MBR
+MBR<-MEM        MEM/OUT/XDATA | MBR/LD/XDATA
+MBR<-A          A/OUT/CDATA | MBR/LD/CDATA
+
+// Move PC into the MAR(H/L) via the internal address bus (H/L) 
+MAR<-PC         PC/OUT/CADDR | MARH/LD/CADDRH | MARL/LD/CADDRL
+MAR<-S          S/OUT/CADDR | MARL/LD/CADDRL | MARH/LD/CADDRH 
+MARL<-STASHL    STASHL/OUT/CDATA | CDATA/TO/CADDRL | MARL/LD/CADDRL
+MARH<-MBR       MBR/OUT/CDATA | CDATA/TO/CADDRH | MARH/LD/CADDRH
+
+// Move memory at MAR(H/L) into IR
+IR<-MEM         MEM/OUT/XDATA | IR/LD/XDATA
+
+// Move value in PC (H/L)
+PCL<-STASHL     STASHL/OUT/CDATA | PCL/LD/CDATA
+PCH<-MBR        MBR/OUT/CDATA | PCH/LD/CDATA
+
+// Increment the PC
+PC-INC          PC/INC 
+
+// Move value into A via the internal data bus
+A<-MBR          MBR/OUT/CDATA | A/LD/CDATA
+
+// Move value into X via the internal data bus
+X<-MBR          MBR/OUT/CDATA | X/LD/CDATA
+
+// Move value into Y via the internal data bus
+Y<-MBR          MBR/OUT/CDATA | Y/LD/CDATA
+
+// Move value into STASHL via the internal data bus
+STASHL<-MBR     MBR/OUT/CDATA | STASHL/LD/CDATA
+
+// Move value into STASHH via the internal data bus
+STASHH<-MBR     MBR/OUT/CDATA | STASHH/LD/CDATA
+
+// Move register into ALUA/B via the internal data bus
+ALUA<-A         A/OUT/CDATA | ALUA/LD/CDATA
+ALUA<-X         X/OUT/CDATA | ALUA/LD/CDATA
+ALUA<-Y         X/OUT/CDATA | ALUA/LD/CDATA
+ALUB<-Y         Y/OUT/CDATA | ALUB/LD/CDATA
+ALUB<-X         X/OUT/CDATA | ALUB/LD/CDATA
+ALUA<-MBR       MBR/OUT/CDATA | ALUA/LD/CDATA
+ALUB<-MBR       MBR/OUT/CDATA | ALUB/LD/CDATA
+
+// Move the output of the ALU into registers via the internal data bus
+A<-ALU          ALUR/OUT/CDATA | A/LD/CDATA
+X<-ALU          ALUR/OUT/CDATA | X/LD/CDATA
+Y<-ALU          ALUR/OUT/CDATA | Y/LD/CDATA
+
+// ALU operations
+ALUOP-AND       ZERO
+ALUOP-OR        ALUOP/0
+ALUOP-NOT       ALUOP/1 
+ALUOP-XOR       ALUOP/1 | ALUOP/0
+ALUOP-ADD       ALUOP/2 
+ALUOP-SUB       ALUOP/2 | ALUOP/0
+ALUOP-INC       ALUOP/2 | ALUOP/1
+ALUOP-DEC       ALUOP/2 | ALUOP/1 | ALUOP/0
+
+// Sources of P value
+P/SRC-0         ZERO
+P/SRC-1         P/SRC/0
+P/SRC-ALU       P/SRC/1
+P/SRC-CDATA     P/SRC/1 | P/SRC/0

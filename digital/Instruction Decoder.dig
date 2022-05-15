@@ -42,7 +42,7 @@
         </entry>
         <entry>
           <string>lastDataFile</string>
-          <file>E:\Development\diy-cpu\uCode\bin\uModeDecoder.bin</file>
+          <file>E:\Development\diy-cpu\uCode\bin\mModeDecoder.bin</file>
         </entry>
         <entry>
           <string>autoReload</string>
@@ -76,7 +76,7 @@
         </entry>
         <entry>
           <string>lastDataFile</string>
-          <file>E:\Development\diy-cpu\uCode\bin\uOpCodeDecoder.bin</file>
+          <file>E:\Development\diy-cpu\uCode\bin\mOpDecoder.bin</file>
         </entry>
         <entry>
           <string>autoReload</string>
@@ -190,7 +190,7 @@
         </entry>
         <entry>
           <string>Bits</string>
-          <int>8</int>
+          <int>16</int>
         </entry>
       </elementAttributes>
       <pos x="360" y="180"/>
@@ -218,7 +218,7 @@
         </entry>
         <entry>
           <string>Bits</string>
-          <int>8</int>
+          <int>16</int>
         </entry>
       </elementAttributes>
       <pos x="360" y="240"/>

@@ -1,101 +1,94 @@
 ﻿namespace microasm
 {
-   public class MicroAsmRunner
-   {
-      private const string OP_CODE_MAP_DEFINITION = "OpCodeMap.txt";
-      private const string MODE_MAP_DEFINITION = "ModeMap.txt";
-      private const string MICROCODE_DEFINITION = "uROM.txt";
-      private const string OP_CODE_MAP_ROM = "uOpCodeDecoder.bin";
-      private const string MODE_MAP_ROM = "uModeDecoder.bin";
-      private const string MICROCODE_ROM = "uROM";
+    public class MicroAsmRunner
+    {
+        private const string MCODE_OP_DECODER_DEFINITION = "mOpDecoder.txt";
+        private const string MCODE_MODE_DECODER_DEFINITION = "mModeDecoder.txt";
+        private const string UCODE_DEFINITION = "uCode.txt";
+        private const string UCTRL_DEFINITION = "uCtrl.txt";
+        private const string UOPS_DEFINITION = "uOps.txt";
+        private const string MCODE_OP_DECODER_ROM = "mOpDecoder.bin";
+        private const string MCODE_MODE_DECODER_ROM = "mModeDecoder.bin";
+        private const string MICROCODE_ROM_PREFIX = "uROM";
 
-      public static void Main(string[] args)
-      {
-         Console.WriteLine("MicroAsm");
-         Console.WriteLine("--------");
-         Console.WriteLine();
-
-         if (args.Length != 2)
-         {
-            Console.WriteLine("Usage: microasm source-directory output-directory");
-            return;
-         }
-
-         var inputDir = args[0];
-         var outputDir = args[1];
-
-         Console.WriteLine($"Input dir: '{Path.GetFullPath(inputDir)}'");
-         Console.WriteLine($"Output dir: '{Path.GetFullPath(outputDir)}'");
-         Console.WriteLine();
-
-         try
-         {
-            if (!Directory.Exists(outputDir))
-            {
-               Directory.CreateDirectory(outputDir);
-            }
-
-            var opCodeMap = new MappingRom(Path.Join(inputDir, OP_CODE_MAP_DEFINITION));
-            var modeMap = new MappingRom(Path.Join(inputDir, MODE_MAP_DEFINITION));
-
-            var ma = new MicroAsm(opCodeMap, modeMap, Path.Join(inputDir, MICROCODE_DEFINITION));
-
-            Console.WriteLine("mCode Map");
-            Console.WriteLine("---------");
-            Console.WriteLine();
-            Console.WriteLine(opCodeMap);
-
-            Console.WriteLine("mMode Map");
+        public static void Main(string[] args)
+        {
+            Console.WriteLine("MicroAsm");
             Console.WriteLine("--------");
             Console.WriteLine();
-            Console.WriteLine(modeMap);
 
-            Console.WriteLine("Flag Symbol Table");
-            Console.WriteLine("-----------------");
-            Console.WriteLine();
-            Console.WriteLine(ma.DumpFlagSymbols());
-            Console.WriteLine();
+            if (args.Length != 2)
+            {
+                Console.WriteLine("Usage: microasm <source-directory> <output-directory>");
+                return;
+            }
 
-            Console.WriteLine("uOps Symbol Table");
-            Console.WriteLine("-----------------");
-            Console.WriteLine();
-            Console.WriteLine(ma.DumpUCopsSymbols());
-            Console.WriteLine();
+            var inputDir = args[0];
+            var outputDir = args[1];
 
-            Console.WriteLine("Label Symbol Table");
-            Console.WriteLine("------------------");
-            Console.WriteLine();
-            Console.WriteLine(ma.DumpLabelSymbols());
+            Console.WriteLine($"Input dir: '{Path.GetFullPath(inputDir)}'");
+            Console.WriteLine($"Output dir: '{Path.GetFullPath(outputDir)}'");
             Console.WriteLine();
 
-            Console.WriteLine("Generated mMode Map");
-            Console.WriteLine("-------------------");
-            Console.WriteLine();
-            Console.WriteLine(ma.DumpModeMap());
-            Console.WriteLine();
+            try
+            {
+                if (!Directory.Exists(outputDir))
+                {
+                    Directory.CreateDirectory(outputDir);
+                }
 
-            Console.WriteLine("Generated mCode Map");
-            Console.WriteLine("-------------------");
-            Console.WriteLine();
-            Console.WriteLine(ma.DumpOpCodeMap());
-            Console.WriteLine();
+                var mCodeOpDecoderDefinition = new DecoderRom(Path.Join(inputDir, MCODE_OP_DECODER_DEFINITION));
+                var mCodeModeDecoderDefinition = new DecoderRom(Path.Join(inputDir, MCODE_MODE_DECODER_DEFINITION));
 
-            Console.WriteLine("Generated uCode");
-            Console.WriteLine("---------------");
-            Console.WriteLine();
-            Console.WriteLine($"uROM size: {ma.GetRomSizeWords()} words");
-            Console.WriteLine();
-            Console.WriteLine(ma.DumpOutputLog());
-            Console.WriteLine();
+                var uCtrlDefinition = new MicroCtrl(Path.Join(inputDir, UCTRL_DEFINITION));
+                var uOpsDefinition = new MicroOps(uCtrlDefinition, Path.Join(inputDir, UOPS_DEFINITION));
 
-            ma.WriteOpCodeMappingFile(Path.Join(outputDir, OP_CODE_MAP_ROM));
-            ma.WriteModeMappingFile(Path.Join(outputDir, MODE_MAP_ROM));
-            ma.WriteROMFile(Path.Join(outputDir, MICROCODE_ROM));
-         }
-         catch (Exception e)
-         {
-            Console.WriteLine(e.Message);
-         }
-      }
-   }
+                var microAsm = new MicroAsm(mCodeOpDecoderDefinition, mCodeModeDecoderDefinition, uCtrlDefinition, uOpsDefinition, Path.Join(inputDir, UCODE_DEFINITION));
+
+                Console.WriteLine("mCode Decoder");
+                Console.WriteLine("-------------");
+                Console.WriteLine();
+                Console.WriteLine(mCodeOpDecoderDefinition);
+
+                Console.WriteLine("mMode Decoder");
+                Console.WriteLine("-------------");
+                Console.WriteLine();
+                Console.WriteLine(mCodeModeDecoderDefinition);
+
+                Console.WriteLine("uControl Symbol Table");
+                Console.WriteLine("---------------------");
+                Console.WriteLine();
+                Console.WriteLine(uCtrlDefinition.ToString());
+                Console.WriteLine();
+
+                Console.WriteLine("uOps Symbol Table");
+                Console.WriteLine("-----------------");
+                Console.WriteLine();
+                Console.WriteLine(uOpsDefinition.ToString());
+                Console.WriteLine();
+
+                Console.WriteLine("uLabel Symbol Table");
+                Console.WriteLine("-------------------");
+                Console.WriteLine();
+                Console.WriteLine(microAsm.DumpLabelSymbols());
+                Console.WriteLine();
+
+                Console.WriteLine("uRom");
+                Console.WriteLine("----");
+                Console.WriteLine();
+                Console.WriteLine($"Size: {microAsm.GetURomSizeWords()} words");
+                Console.WriteLine();
+                Console.WriteLine(microAsm.DumpURom());
+                Console.WriteLine();
+
+                microAsm.WriteMOpDecoderRom(Path.Join(outputDir, MCODE_OP_DECODER_ROM));
+                microAsm.WriteMModeDecoderRom(Path.Join(outputDir, MCODE_MODE_DECODER_ROM));
+                microAsm.WriteUCodeRom(Path.Join(outputDir, MICROCODE_ROM_PREFIX));
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+            }
+        }
+    }
 }

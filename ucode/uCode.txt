@@ -1,0 +1,123 @@
+// Init code
+ZERO
+uP0-INIT p0
+CDATA/LD/FF | S/LD/CDATA
+CDATA/LD/0 | PCH/LD/CDATA | PCL/LD/CDATA | CDATA/TO/CADDRH | CDATA/TO/CADDRL | MARH/LD/CADDRH | MARL/LD/CADDRL | MBR/LD/CDATA 
+CDATA/LD/0 | A/LD/CDATA | X/LD/CDATA | Y/LD/CDATA | STASHH/LD/CDATA | STASHL/LD/CDATA | ALUA/LD/CDATA | ALUB/LD/CDATA 
+PZ/LD | PN/LD | PC/LD | PV/LD | P/SRC-0
+
+// Fetch instruction at PC into IR
+.label p0
+MAR<-PC 
+PC-INC | IR<-MEM 
+// Separate cycle as we don't have a handle on the op code for decoding until the previous cycle is complete
+uP1
+
+// Immediate mode - fetch PC into MBR
+.mode IMM
+MAR<-PC 
+MBR<-MEM | PC-INC | uP2
+
+.mode REL
+MAR<-PC 
+MBR<-MEM | PC-INC | uP2
+
+.mode IMP
+uP2
+
+// Absolute mode 
+.mode ABS
+MAR<-PC
+MBR<-MEM | PC-INC
+STASHL<-MBR
+MAR<-PC
+MBR<-MEM | PC-INC
+MARL<-STASHL  
+MARH<-MBR | uP2
+
+// Abs index by X
+//.mode ABSX
+// Grab the low order byte
+//MAR<-PC
+//MBR<-MEM | PC-INC
+// Move it to ALUA and grab the second address value
+//MBR<-ALUA
+//X/OUT/CDATA | ALU/LD/CDATA | ALU/OP/ADD 
+//uJCJMP | uJMP/INV ABSXSAMEPAGE
+//
+//.label ABSXSAMEPAGE
+
+// Op code implementations
+.opcode LDA
+A<-MBR | PZ/LD | PN/LD | P/SRC-CDATA | uP0
+
+.opcode TAX
+A/OUT/CDATA | X/LD/CDATA | uP0
+
+.opcode TXA
+X/OUT/CDATA | A/LD/CDATA | uP0
+
+.opcode LDX
+X<-MBR | uP0
+
+.opcode LDY
+Y<-MBR | uP0
+
+.opcode STA
+MBR<-A 
+MEM<-MBR | uP0
+
+.opcode JMP
+PCL<-STASHL     
+PCH<-MBR | uP0
+
+.opcode INX
+ALUA<-X
+X<-ALU | ALUOP-INC | PZ/LD | PN/LD | P/SRC-ALU | uP0
+
+.opcode BEQ
+uZJMP BEQ_TRUE
+uP0
+.label BEQ_TRUE
+MBR/OUT/CDATA | PC/ADD/CDATA | uP0
+
+.opcode PHA
+MAR<-S | MBR<-A
+MEM<-MBR | S/DEC | uP0
+
+.opcode PLA
+S/INC 
+MAR<-S  
+MBR<-MEM
+A<-MBR | uP0
+
+// Problem need to inc the PC by two before storing
+.opcode JSR
+// Grab values at PC and PC+1 and store them in stash registers (target address)
+MAR<-PC
+MBR<-MEM | PC-INC
+STASHL<-MBR
+MAR<-PC
+MBR<-MEM | PC-INC
+STASHH<-MBR
+// Push the PC onto the stack
+S/OUT/CADDR | MARL/LD/CADDRL | MARH/LD/CADDRH | PCL/OUT/CDATA | MBR/LD/CDATA
+MEM<-MBR | S/DEC
+S/OUT/CADDR | MARL/LD/CADDRL | MARH/LD/CADDRH | PCH/OUT/CDATA | MBR/LD/CDATA
+MEM<-MBR | S/DEC
+// Jump to the target address
+STASHL/OUT/CDATA | PCL/LD/CDATA
+STASHH/OUT/CDATA | PCH/LD/CDATA | uP0
+
+.opcode RTS
+S/INC
+S/OUT/CADDR | MARL/LD/CADDRL | MARH/LD/CADDRH
+MBR<-MEM | S/INC
+MBR/OUT/CDATA | STASHH/LD/CDATA
+STASHH/OUT/CDATA | PCH/LD/CDATA
+S/OUT/CADDR | MARL/LD/CADDRL | MARH/LD/CADDRH
+MBR<-MEM
+MBR/OUT/CDATA | PCL/LD/CDATA | uP0
+
+.opcode BRK
+HALT
