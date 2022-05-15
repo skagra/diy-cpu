@@ -1,4 +1,5 @@
 // Init code
+.label RESET
 ZERO
 uP0-INIT p0
 CDATA/LD/FF | S/LD/CDATA

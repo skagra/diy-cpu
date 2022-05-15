@@ -249,8 +249,8 @@
                             ParseCodeLinePass1(line, lineNumber);
                         }
                     }
+                    lineNumber++;
                 }
-                lineNumber++;
             }
         }
 
@@ -301,16 +301,21 @@
             for (var index = 0; index < 256; index++)
             {
                 var symbol = decoderRom.ResolveIndex(index);
-                if (symbol != null)
-                {
-                    int addr = symbolAddresses[symbol];
-                    writer.Write((byte)(addr & 0xFF));
-                    writer.Write((byte)((addr >> 8) & 0xFF));
-                }
-                else
-                {
-                    writer.Write((byte)0xFF); // Flags an error condition
-                    writer.Write((byte)0xFF);
+                try 
+                {  
+                    if (symbol != null)
+                    {
+                        int addr = symbolAddresses[symbol];
+                        writer.Write((byte)(addr & 0xFF));
+                        writer.Write((byte)((addr >> 8) & 0xFF));
+                    }
+                    else
+                    {
+                        writer.Write((byte)0xFF); // Flags an error condition
+                        writer.Write((byte)0xFF);
+                    }
+                } catch (KeyNotFoundException) {
+                    throw new MicroAsmException($"The symbol '{symbol}' was not found in the decoder");
                 }
             }
             writer.Close();
