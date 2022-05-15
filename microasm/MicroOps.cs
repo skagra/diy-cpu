@@ -59,7 +59,7 @@ namespace microasm
                 }
                 else
                 {
-                    throw new MicroAsmException($"Symbol not found '{symbol}'", line, lineNumber, _sourceFile);
+                    throw new MicroAsmException($"Symbol not found '{currentRhs}'", line, lineNumber, _sourceFile);
                 }
             }
 

@@ -5685,26 +5685,6 @@ Need to account for add(inc)sub(dec) - tried using bit 7 after 1&apos;s comp ...
       <pos x="-11060" y="-2060"/>
     </visualElement>
     <visualElement>
-      <elementName>Tunnel</elementName>
-      <elementAttributes>
-        <entry>
-          <string>NetName</string>
-          <string>Cin</string>
-        </entry>
-      </elementAttributes>
-      <pos x="-11100" y="-2600"/>
-    </visualElement>
-    <visualElement>
-      <elementName>In</elementName>
-      <elementAttributes>
-        <entry>
-          <string>Label</string>
-          <string>Cin</string>
-        </entry>
-      </elementAttributes>
-      <pos x="-11140" y="-2600"/>
-    </visualElement>
-    <visualElement>
       <elementName>Rectangle</elementName>
       <elementAttributes>
         <entry>
@@ -6195,6 +6175,26 @@ Need to account for add(inc)sub(dec) - tried using bit 7 after 1&apos;s comp ...
         </entry>
       </elementAttributes>
       <pos x="-10480" y="-2780"/>
+    </visualElement>
+    <visualElement>
+      <elementName>Tunnel</elementName>
+      <elementAttributes>
+        <entry>
+          <string>NetName</string>
+          <string>Cin</string>
+        </entry>
+      </elementAttributes>
+      <pos x="-11120" y="-2520"/>
+    </visualElement>
+    <visualElement>
+      <elementName>In</elementName>
+      <elementAttributes>
+        <entry>
+          <string>Label</string>
+          <string>Cin</string>
+        </entry>
+      </elementAttributes>
+      <pos x="-11140" y="-2520"/>
     </visualElement>
   </visualElements>
   <wires>
@@ -6761,10 +6761,6 @@ Need to account for add(inc)sub(dec) - tried using bit 7 after 1&apos;s comp ...
     <wire>
       <p1 x="-9240" y="-2600"/>
       <p2 x="-9140" y="-2600"/>
-    </wire>
-    <wire>
-      <p1 x="-11140" y="-2600"/>
-      <p2 x="-11100" y="-2600"/>
     </wire>
     <wire>
       <p1 x="-9600" y="-3240"/>
@@ -7541,6 +7537,10 @@ Need to account for add(inc)sub(dec) - tried using bit 7 after 1&apos;s comp ...
     <wire>
       <p1 x="-9240" y="-2520"/>
       <p2 x="-9200" y="-2520"/>
+    </wire>
+    <wire>
+      <p1 x="-11140" y="-2520"/>
+      <p2 x="-11120" y="-2520"/>
     </wire>
     <wire>
       <p1 x="-10580" y="-2140"/>

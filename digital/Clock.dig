@@ -3,10 +3,6 @@
   <version>1</version>
   <attributes>
     <entry>
-      <string>Width</string>
-      <int>8</int>
-    </entry>
-    <entry>
       <string>backgroundColor</string>
       <awt-color>
         <red>255</red>
@@ -14,6 +10,10 @@
         <blue>255</blue>
         <alpha>255</alpha>
       </awt-color>
+    </entry>
+    <entry>
+      <string>Width</string>
+      <int>8</int>
     </entry>
   </attributes>
   <visualElements>
@@ -95,12 +95,12 @@
       <elementName>Out</elementName>
       <elementAttributes>
         <entry>
-          <string>Label</string>
-          <string>HALTED</string>
-        </entry>
-        <entry>
           <string>rotation</string>
           <rotation rotation="2"/>
+        </entry>
+        <entry>
+          <string>Label</string>
+          <string>HALTED</string>
         </entry>
       </elementAttributes>
       <pos x="300" y="520"/>
@@ -150,7 +150,7 @@
       <pos x="340" y="600"/>
     </visualElement>
     <visualElement>
-      <elementName>In</elementName>
+      <elementName>Clock</elementName>
       <elementAttributes>
         <entry>
           <string>Label</string>

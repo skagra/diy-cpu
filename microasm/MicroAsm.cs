@@ -267,11 +267,7 @@
             int byteIndex = 0;
             while (byteIndex < TOTAL_ROM_SIZE_BYTES)
             {
-                for (
-                    var romIndex = 0;
-                    romIndex < numROMFiles && byteIndex < TOTAL_ROM_SIZE_BYTES;
-                    romIndex++
-                )
+                for (var romIndex = 0; romIndex < numROMFiles && byteIndex < TOTAL_ROM_SIZE_BYTES; romIndex++)
                 {
                     for (int byteInRom = 0; byteInRom < ROM_DATA_WIDTH_BYTES; byteInRom++)
                     {
@@ -313,8 +309,8 @@
                 }
                 else
                 {
-                    writer.Write((byte)0x00); // BRK - CPU will halt on any undefined instruction
-                    writer.Write((byte)0x00);
+                    writer.Write((byte)0xFF); // Flags an error condition
+                    writer.Write((byte)0xFF);
                 }
             }
             writer.Close();

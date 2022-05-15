@@ -3,10 +3,6 @@
   <version>1</version>
   <attributes>
     <entry>
-      <string>Width</string>
-      <int>4</int>
-    </entry>
-    <entry>
       <string>backgroundColor</string>
       <awt-color>
         <red>255</red>
@@ -14,6 +10,10 @@
         <blue>255</blue>
         <alpha>255</alpha>
       </awt-color>
+    </entry>
+    <entry>
+      <string>Width</string>
+      <int>4</int>
     </entry>
   </attributes>
   <visualElements>
@@ -542,6 +542,16 @@
       <pos x="-800" y="680"/>
     </visualElement>
     <visualElement>
+      <elementName>Clock</elementName>
+      <elementAttributes>
+        <entry>
+          <string>Label</string>
+          <string>C</string>
+        </entry>
+      </elementAttributes>
+      <pos x="-780" y="360"/>
+    </visualElement>
+    <visualElement>
       <elementName>Tunnel</elementName>
       <elementAttributes>
         <entry>
@@ -550,16 +560,6 @@
         </entry>
       </elementAttributes>
       <pos x="-760" y="360"/>
-    </visualElement>
-    <visualElement>
-      <elementName>In</elementName>
-      <elementAttributes>
-        <entry>
-          <string>Label</string>
-          <string>C</string>
-        </entry>
-      </elementAttributes>
-      <pos x="-780" y="360"/>
     </visualElement>
   </visualElements>
   <wires>

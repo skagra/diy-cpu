@@ -1,16 +1,18 @@
 // Mapping between op code symbols and machine code values
 
-BRK   00
-LDA   A9 AD
-STA   8D
-JMP   4C
-INX   E8
-LDX   A2
-LDY   A0
-BEQ   F0
-TAX   AA
-TXA   8A
-PHA   48
-PLA   68
-JSR   20
-RTS   60
+BRK     00
+LDA     A9 AD BD
+STA     8D
+JMP     4C
+INX     E8
+LDX     A2 
+LDY     A0
+BEQ     F0
+TAX     AA
+TXA     8A
+PHA     48
+PLA     68
+JSR     20
+RTS     60
+
+

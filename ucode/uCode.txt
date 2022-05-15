@@ -13,6 +13,7 @@ PC-INC | IR<-MEM
 // Separate cycle as we don't have a handle on the op code for decoding until the previous cycle is complete
 uP1
 
+// TODO: Resolve to address not to value for all addressing modes
 // Immediate mode - fetch PC into MBR
 .mode IMM
 MAR<-PC 
@@ -35,17 +36,27 @@ MBR<-MEM | PC-INC
 MARL<-STASHL  
 MARH<-MBR | uP2
 
+// TODO Code does not account for crossing page boundaries
+// TODO Clear the carry! (well set it to zero in ALU input reg)
 // Abs index by X
-//.mode ABSX
-// Grab the low order byte
-//MAR<-PC
-//MBR<-MEM | PC-INC
-// Move it to ALUA and grab the second address value
-//MBR<-ALUA
-//X/OUT/CDATA | ALU/LD/CDATA | ALU/OP/ADD 
-//uJCJMP | uJMP/INV ABSXSAMEPAGE
-//
-//.label ABSXSAMEPAGE
+.mode ABSX 
+// Grab the low order byte of the baseaddress
+MAR<-PC
+MBR<-MEM | PC-INC
+// Move it to ALUA 
+ALUA<-MBR
+// Grab the high oder byte of the base address
+MAR<-PC
+MBR<-MEM | PC-INC
+// Add X to the low byte value
+X/OUT/CDATA | ALUB/LD/CDATA 
+// TODO: As we don't hold the result of the ALU in a register op needs to be set on same cycle and moving result. Add a register?
+ALUOP-ADD| MARL<-ALU
+// Move the high order byte into the of the base address into the MARH
+MARH<-MBR
+// Move the calcuation result into the low byte of the MARH
+MBR<-MEM
+uP2
 
 // Op code implementations
 .opcode LDA
@@ -120,4 +131,6 @@ MBR<-MEM
 MBR/OUT/CDATA | PCL/LD/CDATA | uP0
 
 .opcode BRK
-HALT
+HALT | uP0
+
+
