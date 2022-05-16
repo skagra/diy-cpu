@@ -4147,6 +4147,48 @@
         </entry>
         <entry>
           <string>Label</string>
+          <string>CUP/SRC/ALU</string>
+        </entry>
+      </elementAttributes>
+      <pos x="-780" y="680"/>
+    </visualElement>
+    <visualElement>
+      <elementName>Tunnel</elementName>
+      <elementAttributes>
+        <entry>
+          <string>rotation</string>
+          <rotation rotation="2"/>
+        </entry>
+        <entry>
+          <string>NetName</string>
+          <string>CUP/SRC/ALU</string>
+        </entry>
+      </elementAttributes>
+      <pos x="440" y="380"/>
+    </visualElement>
+    <visualElement>
+      <elementName>Tunnel</elementName>
+      <elementAttributes>
+        <entry>
+          <string>rotation</string>
+          <rotation rotation="2"/>
+        </entry>
+        <entry>
+          <string>NetName</string>
+          <string>CUP/SRC/ALU</string>
+        </entry>
+      </elementAttributes>
+      <pos x="-800" y="680"/>
+    </visualElement>
+    <visualElement>
+      <elementName>Out</elementName>
+      <elementAttributes>
+        <entry>
+          <string>small</string>
+          <boolean>true</boolean>
+        </entry>
+        <entry>
+          <string>Label</string>
           <string>ERR</string>
         </entry>
       </elementAttributes>
@@ -4497,6 +4539,10 @@
     <wire>
       <p1 x="200" y="40"/>
       <p2 x="220" y="40"/>
+    </wire>
+    <wire>
+      <p1 x="-800" y="680"/>
+      <p2 x="-780" y="680"/>
     </wire>
     <wire>
       <p1 x="780" y="-300"/>
@@ -4921,6 +4967,10 @@
     <wire>
       <p1 x="-800" y="-380"/>
       <p2 x="-780" y="-380"/>
+    </wire>
+    <wire>
+      <p1 x="440" y="380"/>
+      <p2 x="460" y="380"/>
     </wire>
     <wire>
       <p1 x="1280" y="-380"/>

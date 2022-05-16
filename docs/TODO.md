@@ -17,3 +17,5 @@
 * Have microasm account for where word size does not fit exactly with uROMs
 * Improve log output implementation in microasm - its all over the code base at the moment with multiple hard coded numbers
 * Consider adding keyboard for input (likely need interrupt support in CPU first)
+* Check ALU ignorese carry in on inc/dec operations
+* As we don't hold the result of the ALU in a register op needs to be set on same cycle and moving result. Add a register?

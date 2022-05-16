@@ -40,7 +40,7 @@ sayhello:   LDX #0
             JMP .next
 .done:      RTS
 
-            ORG $400
+            ORG $4FD
 hello:      DC    "Hello World" 
             DC.B  0
 
