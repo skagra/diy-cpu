@@ -14,16 +14,19 @@ PC-INC | IR<-MEM
 // Separate cycle as we don't have a handle on the op code for decoding until the previous cycle is complete
 uP1
 
-// TODO: Resolve to address not to value for all addressing modes
-// Immediate mode - fetch PC into MBR
+// Addressing modes
+
+// Immediate mode
 .mode IMM
 MAR<-PC 
-MBR<-MEM | PC-INC | uP2
+PC-INC | uP2
 
+// Relative mode
 .mode REL
 MAR<-PC 
-MBR<-MEM | PC-INC | uP2
+PC-INC | uP2
 
+// Implied mode
 .mode IMP
 uP2
 
@@ -39,7 +42,7 @@ MARH<-MBR | uP2
 
 // TODO Code does not account for crossing page boundaries
 // TODO Clear the carry! (well set it to zero in ALU input reg)
-// Abs index by X
+// Abs index by X mode
 .mode ABSX 
 // Grab the low order byte of the baseaddress
 MAR<-PC
@@ -59,8 +62,9 @@ MARH<-MBR
 MBR<-MEM
 uP2
 
-// Op code implementations
+// Op codes
 .opcode LDA
+MBR<-MEM
 A<-MBR | PZ/LD | PN/LD | P/SRC-CDATA | uP0
 
 .opcode TAX
@@ -88,6 +92,7 @@ ALUA<-X
 X<-ALU | ALUOP-INC | PZ/LD | PN/LD | P/SRC-ALU | uP0
 
 .opcode BEQ
+MBR<-MEM
 uZJMP BEQ_TRUE
 uP0
 .label BEQ_TRUE
