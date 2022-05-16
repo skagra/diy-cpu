@@ -269,7 +269,7 @@
         </entry>
         <entry>
           <string>NetName</string>
-          <string>C</string>
+          <string>Cin</string>
         </entry>
       </elementAttributes>
       <pos x="560" y="400"/>

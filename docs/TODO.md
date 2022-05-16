@@ -6,16 +6,14 @@
 * Initialize via via vector
 * Add shift/rot operatiosn to ALU and CPU
 * Consider design of ALU flag handling, can this be simplified?
-* Consider moving ALU registers down into ALU sub-circuit
+* Do we need a latch on the output of the ALU?
 * Investigate using multiple phases of clocks to reduce execution cycles
 * Consider generating HTML as asm output optionally then we can have mouse overs to ID flags and to link to definitions
 * Consider direct connection between A and ALUA - this might cut cycles for most ALU operations by 1
-* Add flags support for non ALU operations e.g. LDA should set Z and N as appropriate
+* Add/review setting of P flags for all existing operations
 * Write up current design
   * Architecture
   * Explanation of all control signals
 * Have microasm account for where word size does not fit exactly with uROMs
 * Improve log output implementation in microasm - its all over the code base at the moment with multiple hard coded numbers
-* Consider changing name of ALUP to ALUC now it stores only the carry flag
-* Factor out microasm per file section and microcode definition into separate files too
 * Consider adding keyboard for input (likely need interrupt support in CPU first)
