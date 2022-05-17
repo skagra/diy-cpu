@@ -74,3 +74,4 @@ S9 S8 S7 S6 S5 S4 S3 S2 A1 A0 => AO A1 S2 S3 S4 S5 S6 S7 S8 S9
 * 6502 programming manual - https://archive.org/details/mos_microcomputers_programming_manual
 * Very nice summary - https://xotmatrix.github.io/6502/6502-instruction-set.html
 * Instruction layout - https://www.masswerk.at/6502/6502_instruction_set.html#layout
+* Synertek 6502 programming manual - http://archive.6502.org/datasheets/synertek_programming_manual.pdf
