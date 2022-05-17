@@ -1,7 +1,7 @@
 // TODO: Review flag handling throughout
 // TODO: Review C flag in INC/DEC operations in ALU
 
-// Init code
+// Init code --->
 .label RESET
 ZERO
 uP0-INIT p0
@@ -9,27 +9,17 @@ CDATA/LD/FF | S/LD/CDATA
 CDATA/LD/0 | PCH/LD/CDATA | PCL/LD/CDATA | CDATA/TO/CADDRH | CDATA/TO/CADDRL | MARH/LD/CADDRH | MARL/LD/CADDRL | MBR/LD/CDATA 
 CDATA/LD/0 | A/LD/CDATA | X/LD/CDATA | Y/LD/CDATA | STASHH/LD/CDATA | STASHL/LD/CDATA | ALUA/LD/CDATA | ALUB/LD/CDATA | ALUC<-0
 PZ/LD | PN/LD | PC/LD | PV/LD | P/SRC-0
+// <--- Init code
 
-// Fetch (uP0)
+// Fetch (uP0) --->
 .label p0
 MAR<-PC | PC-INC | IR<-MEM                                          // Separate cycle as we don't have a handle on the op code for decoding until the previous cycle is complete
 uP1                                                                 // Jump to uP1
+// <--- Fetch (uP0)
 
-// Addressing modes (uP1)
+// Addressing modes (uP1) --->
 
-// Immediate mode
-.mode IMM
-MAR<-PC | PC-INC | uP2                                              // Move the PC into MAR and jump to uP2
-
-// Relative mode
-.mode REL
-MAR<-PC | PC-INC | uP2                                              // Move the PC into MAR and jump to uP2
-
-// Implied mode
-.mode IMP 
-uP2                                                                 // Jump directly to uP2
-
-// Absolute mode
+// Absolute 
 .mode ABS
 MAR<-PC | MBR<-MEM | PC-INC                                         // Read the LSB address at PC, and increase PC
 STASHL<-MBR                                                         // Store the LSB in STASHL
@@ -37,20 +27,53 @@ MAR<-PC | MBR<-MEM | PC-INC                                         // Read the 
 MARL<-STASHL                                                        // Move the LSB into MARL
 MARH<-MBR | uP2                                                     // Move the MSB int MARL and jumpt to uP2
 
-// Abs index by X mode
+// Abs index by X 
 .mode ABSX 
 MAR<-PC | MBR<-MEM | PC-INC                                         // Read the LSB of the index base then increase the PC
 ALUA<-MBR                                                           // Move the LSB to ALUA
 MAR<-PC | MBR<-MEM | PC-INC                                         // Read the MSB of the index base  
 X/OUT/CDATA | ALUB/LD/CDATA | ALUC<-0                               // Move X into ALUB and reset the carry flag
-ALUOP-ADD | MARL<-ALU | CUP/SRC/ALU | uJMP/INV | uCJMP ABSXDONE     // Add X and the LSB, store the result in MARL and check whether we've spanned a page boundar
+ALUOP-ADD | MARL<-ALU | CUP/SRC/ALU | uJMP/INV | uCJMP ABSX_DONE    // Add X and the LSB, store the result in MARL and check whether we've spanned a page boundar
 ALUA<-MBR | ALUC<-0                                                 // Spanned a page boundary - move MSB to ALUA 
 ALUOP-INC | MARH<-ALU | uP2                                         // Increase the MSB, store the result in MARH, then jump to uP2
-.label ABSXDONE
+.label ABSX_DONE
 MARH<-MBR                                                           // Move the high order byte into the of the base address into the MARH
 MBR<-MEM | uP2                                                      // Move the calcuation result into the low byte of the MARH, then jump to uP2
 
-// Op codes (uP2)
+// Abs index by X 
+.mode ABSY
+MAR<-PC | MBR<-MEM | PC-INC                                         // Read the LSB of the index base then increase the PC
+ALUA<-MBR                                                           // Move the LSB to ALUA
+MAR<-PC | MBR<-MEM | PC-INC                                         // Read the MSB of the index base  
+Y/OUT/CDATA | ALUB/LD/CDATA | ALUC<-0                               // Move Y into ALUB and reset the carry flag
+ALUOP-ADD | MARL<-ALU | CUP/SRC/ALU | uJMP/INV | uCJMP ABSY_DONE    // Add Y and the LSB, store the result in MARL and check whether we've spanned a page boundar
+ALUA<-MBR | ALUC<-0                                                 // Spanned a page boundary - move MSB to ALUA 
+ALUOP-INC | MARH<-ALU | uP2                                         // Increase the MSB, store the result in MARH, then jump to uP2
+.label ABSY_DONE
+MARH<-MBR                                                           // Move the high order byte into the of the base address into the MARH
+MBR<-MEM | uP2                                                      // Move the calcuation result into the low byte of the MARH, then jump to uP2
+
+// Immediate 
+.mode IMM
+MAR<-PC | PC-INC | uP2                                              // Move the PC into MAR and jump to uP2
+
+// Relative 
+.mode REL
+MAR<-PC | PC-INC | uP2                                              // Move the PC into MAR and jump to uP2
+
+// Implied 
+.mode IMP 
+uP2                                                                 // Jump directly to uP2
+
+// Zero 
+.mode ZP
+MAR<-PC | MBR<-MEM | PC-INC                                         // Read the zero page address of the operand
+MARL<-MBR                                                           // Move the address into the LSB of the MAR
+CDATA/LD/0 | CDATA/TO/CADDRH | MARH/LD/CADDRH | uP2                   // Move zero into the MSB of the MAR
+
+// <--- Addressing modes (uP1) 
+
+// Op codes (uP2) --->
 
 .opcode LDA
 MBR<-MEM                                                            // Read value at MAR 
@@ -120,4 +143,4 @@ MBR/OUT/CDATA | PCL/LD/CDATA | uP0                                  // Move the 
 .opcode BRK
 HALT
 
-
+// <--- Op codes (uP2)

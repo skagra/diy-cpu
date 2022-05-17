@@ -154,7 +154,7 @@
                 }
                 catch
                 {
-                    throw new MicroAsmException("Duplicate symbol '{symbol}'",
+                    throw new MicroAsmException($"Duplicate symbol '{symbol}'",
                         line, lineNumber, _sourceFile
                     );
                 }
