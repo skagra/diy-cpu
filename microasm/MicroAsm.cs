@@ -228,6 +228,8 @@
             }
         }
 
+
+
         private void Parse()
         {
             for (int pass = 0; pass < 2; pass++)
@@ -236,9 +238,9 @@
                 _romAddress = 0;
                 foreach (var line in File.ReadLines(_sourceFile))
                 {
-                    var trimmedLine = line.Trim();
+                    var trimmedLine = TrimAndStripComments(line);
 
-                    if (trimmedLine.Length > 0 && !trimmedLine.StartsWith(COMMENT_CHARACTERS))
+                    if (trimmedLine.Length > 0)
                     {
                         if (pass == 0)
                         {
@@ -246,7 +248,7 @@
                         }
                         else
                         {
-                            ParseCodeLinePass1(line, lineNumber);
+                            ParseCodeLinePass1(trimmedLine, lineNumber);
                         }
                     }
                     lineNumber++;
@@ -301,8 +303,8 @@
             for (var index = 0; index < 256; index++)
             {
                 var symbol = decoderRom.ResolveIndex(index);
-                try 
-                {  
+                try
+                {
                     if (symbol != null)
                     {
                         int addr = symbolAddresses[symbol];
@@ -314,7 +316,9 @@
                         writer.Write((byte)0xFF); // Flags an error condition
                         writer.Write((byte)0xFF);
                     }
-                } catch (KeyNotFoundException) {
+                }
+                catch (KeyNotFoundException)
+                {
                     throw new MicroAsmException($"The symbol '{symbol}' was not found in the decoder");
                 }
             }

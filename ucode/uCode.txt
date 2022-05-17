@@ -9,59 +9,41 @@ PZ/LD | PN/LD | PC/LD | PV/LD | P/SRC-0
 
 // Fetch instruction at PC into IR
 .label p0
-MAR<-PC 
-PC-INC | IR<-MEM 
-// Separate cycle as we don't have a handle on the op code for decoding until the previous cycle is complete
-uP1
+MAR<-PC | PC-INC | IR<-MEM 
+uP1                                                              // Separate cycle as we don't have a handle on the op code for decoding until the previous cycle is complete
 
 // Addressing modes
 
 // Immediate mode
 .mode IMM
-MAR<-PC 
-PC-INC | uP2
+MAR<-PC | PC-INC | uP2
 
 // Relative mode
 .mode REL
-MAR<-PC 
-PC-INC | uP2
+MAR<-PC | PC-INC | uP2
 
 // Implied mode
-.mode IMP
-uP2
+.mode IMP 
+uP2 
 
 // Absolute mode 
 .mode ABS
-MAR<-PC
-MBR<-MEM | PC-INC
-STASHL<-MBR
-MAR<-PC
-MBR<-MEM | PC-INC
+MAR<-PC | MBR<-MEM | PC-INC
+STASHL<-MBR | MAR<-PC | MBR<-MEM | PC-INC
 MARL<-STASHL  
 MARH<-MBR | uP2
 
 // Abs index by X mode
 .mode ABSX 
-// Grab the LSB of the index base
-MAR<-PC
-MBR<-MEM | PC-INC
-// Move it to ALUA 
-ALUA<-MBR
-// Grab the MSB of the index base
-MAR<-PC
-MBR<-MEM | PC-INC
-// Move it to ALUB
-X/OUT/CDATA | ALUB/LD/CDATA | ALUC<-0
-// Add X and the LSB and check whether we've jumped a page boundary
-ALUOP-ADD | MARL<-ALU | CUP/SRC/ALU | uJMP/INV | uCJMP ABSXDONE
-// Jumped a page boundary so need to increment the MSB
-ALUA<-MBR | ALUC<-0
-ALUOP-INC | MARH<-ALU | uP2
+MAR<-PC | MBR<-MEM | PC-INC                                      // Grab the LSB of the index base then increase the PC
+MAR<-PC | MBR<-MEM | ALUA<-MBR | | PC-INC                        // Grab the MSB of the index base then move the LSB to ALUA
+X/OUT/CDATA | ALUB/LD/CDATA | ALUC<-0                            // Move X into ALUB and reset the carry flag
+ALUOP-ADD | MARL<-ALU | CUP/SRC/ALU | uJMP/INV | uCJMP ABSXDONE  // Add X and the LSB, store the result in MARL and check whether we've spanned a page boundar
+ALUA<-MBR | ALUC<-0                                              // Spanned a page boundary - move MSB to ALUA 
+ALUOP-INC | MARH<-ALU | uP2                                      // Increase the MSB, store the result in MARH, then jump to uP2
 .label ABSXDONE
-// Move the high order byte into the of the base address into the MARH
-MARH<-MBR
-// Move the calcuation result into the low byte of the MARH
-MBR<-MEM | uP2
+MARH<-MBR                                                        // Move the high order byte into the of the base address into the MARH
+MBR<-MEM | uP2                                                   // Move the calcuation result into the low byte of the MARH
 
 // Op codes
 .opcode LDA
@@ -105,36 +87,27 @@ MEM<-MBR | S/DEC | uP0
 
 .opcode PLA
 S/INC 
-MAR<-S  
-MBR<-MEM
+MAR<-S | MBR<-MEM
 A<-MBR | uP0
 
-// Problem need to inc the PC by two before storing
 .opcode JSR
-// Grab values at PC and PC+1 and store them in stash registers (target address)
-MAR<-PC
-MBR<-MEM | PC-INC
-STASHL<-MBR
-MAR<-PC
-MBR<-MEM | PC-INC
-STASHH<-MBR
-// Push the PC onto the stack
-S/OUT/CADDR | MARL/LD/CADDRL | MARH/LD/CADDRH | PCL/OUT/CDATA | MBR/LD/CDATA
+MAR<-PC | MBR<-MEM | PC-INC                                                         // Grab the LSB of the target address
+STASHL<-MBR                                                                         // Store the LSB in STASHL
+MAR<-PC | MBR<-MEM | PC-INC                                                         // Grab the MSB of the target address
+STASHH<-MBR                                                                         // Store the MSB in STASHH
+S/OUT/CADDR | MARL/LD/CADDRL | MARH/LD/CADDRH | PCL/OUT/CDATA | MBR/LD/CDATA        // Push the LSB of the PC onto the stack 
 MEM<-MBR | S/DEC
-S/OUT/CADDR | MARL/LD/CADDRL | MARH/LD/CADDRH | PCH/OUT/CDATA | MBR/LD/CDATA
-MEM<-MBR | S/DEC
-// Jump to the target address
-STASHL/OUT/CDATA | PCL/LD/CDATA
+S/OUT/CADDR | MARL/LD/CADDRL | MARH/LD/CADDRH | PCH/OUT/CDATA | MBR/LD/CDATA        // Push the MSB of the PC onto the stack
+MEM<-MBR | S/DEC                                                                   
+STASHL/OUT/CDATA | PCL/LD/CDATA                                                     // Move the stored target address into the PC
 STASHH/OUT/CDATA | PCH/LD/CDATA | uP0
 
 .opcode RTS
 S/INC
-S/OUT/CADDR | MARL/LD/CADDRL | MARH/LD/CADDRH
-MBR<-MEM | S/INC
+S/OUT/CADDR | MARL/LD/CADDRL | MARH/LD/CADDRH | MBR<-MEM | S/INC
 MBR/OUT/CDATA | STASHH/LD/CDATA
 STASHH/OUT/CDATA | PCH/LD/CDATA
-S/OUT/CADDR | MARL/LD/CADDRL | MARH/LD/CADDRH
-MBR<-MEM
+S/OUT/CADDR | MARL/LD/CADDRL | MARH/LD/CADDRH | MBR<-MEM
 MBR/OUT/CDATA | PCL/LD/CDATA | uP0
 
 .opcode BRK

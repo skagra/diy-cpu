@@ -2,6 +2,8 @@ using System.Text;
 
 namespace microasm
 {
+    using static MicroAsmConstants;
+
     public static class MicroAsmFormatting
     {
         public static string ByteToBitString(byte value)
@@ -55,6 +57,17 @@ namespace microasm
             );
 
             return result.ToString();
+        }
+
+        public static string TrimAndStripComments(string line)
+        {
+            var commentIndex = line.IndexOf(COMMENT_CHARACTERS);
+            if (commentIndex != -1)
+            {
+                line = line.Substring(0, commentIndex);
+
+            }
+            return line.Trim();
         }
     }
 }

@@ -102,10 +102,10 @@ namespace microasm
 
             foreach (var line in File.ReadLines(_sourceFile))
             {
-                var trimmedLine = line.Trim();
+                var trimmedLine = TrimAndStripComments(line);
 
                 // Skip empty lines and comment lies
-                if (trimmedLine.Length > 0 && !trimmedLine.StartsWith(COMMENT_CHARACTERS))
+                if (trimmedLine.Length > 0)
                 {
                     ParseFlagsLine(trimmedLine, lineNumber);
                 }
