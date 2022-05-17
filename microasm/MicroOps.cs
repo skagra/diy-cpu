@@ -76,7 +76,6 @@ namespace microasm
                {
                   resolved = false;
                   break;
-
                }
             }
 
