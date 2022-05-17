@@ -45,7 +45,7 @@ PCL<-STASHL     STASHL/OUT/CDATA | PCL/LD/CDATA
 PCH<-STASHH     STASHH/OUT/CDATA | PCH/LD/CDATA
 
 // Increment the PC
-PC-INC          PC/INC 
+PC-INC          PC/INC | ALUC<-0  
 
 // Move incoming data to registers
 A<-MBR          MBR/OUT/CDATA | A/LD/CDATA
@@ -96,3 +96,4 @@ P/SRC-0        ZERO
 P/SRC-1        P/SRC/0
 P/SRC-ALU      P/SRC/1
 P/SRC-CDATA    P/SRC/1 | P/SRC/0
+
