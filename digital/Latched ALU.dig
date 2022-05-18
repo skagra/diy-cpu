@@ -220,14 +220,18 @@
           <string>Description</string>
           <string>ALU operation
 
-0 0 0 AND
-0 0 1 OR
-0 1 0 NOT
-0 1 1 XOR
-1 0 0 ADD
-1 0 1 SUB
-1 1 0 INC
-1 1 1 DEC</string>
+0 0 0 0 AND
+0 0 0 1 OR
+0 0 1 0 NOT
+0 0 1 1 XOR
+0 1 0 0 ADD
+0 1 0 1 SUB
+0 1 1 0 INC
+0 1 1 1 DEC
+1 0  0 0 SHIFT-R
+1 0 0 1 SHIFT-L
+1 0 1 0 ROT-R
+1 0 1 1 ROT-L</string>
         </entry>
       </elementAttributes>
       <pos x="100" y="80"/>
