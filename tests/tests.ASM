@@ -1,5520 +1,5515 @@
-; TTL-6502 program
+            PROCESSOR 6502
+
+; TTL-6502 PROGRAM
+
+Z10		= $10
+Z18		= $18
+Z19		= $19
+Z20		= $20
+Z30		= $30
+Z50		= $50
+ZF0		= $F0
+A0400	= $0400
+A0420	= $0420
+A0450	= $0450
+A04AA	= $04AA
 
 
-.eq Z10		= $10
-.eq Z18		= $18
-.eq Z19		= $19
-.eq Z20		= $20
-.eq Z30		= $30
-.eq Z50		= $50
-.eq ZF0		= $F0
-.eq A0400	= $0400
-.eq A0420	= $0420
-.eq A0450	= $0450
-.eq A04AA	= $04AA
+;**  LED DISPLAY ON 1541 BOARD
+POSTCODE	= $1801
+POSTCODE2	= $1400
+POSTCODE3	= $1401
+
+DDRB1	= $1802
+DDRA1	= $1803
+IFR1	= $180D
+IER1	= $180E
+
+PORTB2	= $1C00
+DDRB2	= $1C02
+DDRA2	= $1C03
+IFR2	= $1C0D
+IER2	= $1C0E
+
+	ORG $E000
+
+RESET
+		SEI
+		NOP
 
 
-;**  LED display on 1541 board
-.eq POSTcode	= $1801
-.eq POSTcode2	= $1400
-.eq POSTcode3	= $1401
+;***  1541 PART  ***
+		CLD
 
-.eq DDRB1	= $1802
-.eq DDRA1	= $1803
-.eq IFR1	= $180D
-.eq IER1	= $180E
+		LDA	#$7F		; CLEAR IRQS
+		STA	IER2
+		STA	IER1
 
-.eq PortB2	= $1C00
-.eq DDRB2	= $1C02
-.eq DDRA2	= $1C03
-.eq IFR2	= $1C0D
-.eq IER2	= $1C0E
+		LDA	IFR1
+		LDA	IFR2
 
+		LDA	#0
+		STA	DDRA1
 
+		LDA	#0
+		STA	DDRB1
 
-.ba $E000
+		LDA	#$00
+		STA	DDRA2		; PORT A = INPUT
 
-Reset
-		sei
-		nop
+		LDA	#$08		; LED ON
+		STA	DDRB2		; PORT TO OUTPUT
 
-
-;***  1541 part  ***
-		cld
-
-		lda	#$7F		; clear IRQs
-		sta	IER2
-		sta	IER1
-
-		lda	IFR1
-		lda	IFR2
-
-		lda	#0
-		sta	DDRA1
-
-		lda	#0
-		sta	DDRB1
-
-		lda	#$00
-		sta	DDRA2		; Port A = input
-
-		lda	#$08		; LED on
-		sta	DDRB2		; port to output
-
-		lda	#0		; turn LED off
-		sta	PortB2		; LED off
+		LDA	#0		; TURN LED OFF
+		STA	PORTB2		; LED OFF
 
 
-;**  Initialise debug displays
-		ldx	#$FF
+;**  INITIALISE DEBUG DISPLAYS
+		LDX	#$FF
 
-		stx	POSTcode+2	; init data direction
-		stx	POSTcode2+2	; init data direction
-		stx	POSTcode3+2	; init data direction
+		STX	POSTCODE+2	; INIT DATA DIRECTION
+		STX	POSTCODE2+2	; INIT DATA DIRECTION
+		STX	POSTCODE3+2	; INIT DATA DIRECTION
 
-		lda	#$00
-		sta	POSTcode	; output 12
-		lda	#$00
-		sta	POSTcode2	; output 34
-		lda	#$01
-		sta	POSTcode3	; output 56
+		LDA	#$00
+		STA	POSTCODE	; OUTPUT 12
+		LDA	#$00
+		STA	POSTCODE2	; OUTPUT 34
+		LDA	#$01
+		STA	POSTCODE3	; OUTPUT 56
 
 
-;**  Check if JMP works fine
-		lda	#0
-		sta	POSTcode
+;**  CHECK IF JMP WORKS FINE
+		LDA	#0
+		STA	POSTCODE
 
-		jmp	L999
+		JMP	L999
 
-;* Should not be executed at all
-		nop
-		sec
-L000c
-		bcs	L000c
+;* SHOULD NOT BE EXECUTED AT ALL
+		NOP
+		SEC
+L000C
+		BCS	L000C
 		
-		nop
+		NOP
 L000
-		jmp	M372
+		JMP	M372
 		
-		nop
-L000a
-		clc
-		lda	#0
-		rts
+		NOP
+L000A
+		CLC
+		LDA	#0
+		RTS
 		
-		nop
+		NOP
 
 		
-;**  Test branches with all flags set
+;**  TEST BRANCHES WITH ALL FLAGS SET
 L005
-		lda	#1
-		sta	POSTcode
+		LDA	#1
+		STA	POSTCODE
 
-		ldx	#$FF
-		txs
+		LDX	#$FF
+		TXS
 
-		lda	#$FF
-		pha
-		plp			; set all flags
+		LDA	#$FF
+		PHA
+		PLP			; SET ALL FLAGS
 
-;!! Remark: if an error occurs, don't forget that one of the above instructions
-;           could have been the cause instead.
+;!! REMARK: IF AN ERROR OCCURS, DON'T FORGET THAT ONE OF THE ABOVE INSTRUCTIONS
+;           COULD HAVE BEEN THE CAUSE INSTEAD.
 L001
-		bcc	L001
+		BCC	L001
 L002
-		bne	L002
+		BNE	L002
 L003
-		bvc	L003
+		BVC	L003
 L004
-		bpl	L004
+		BPL	L004
 
-		bmi	L006		; must branch, else error
-L004a
-		jmp	L004a		; error, ->
+		BMI	L006		; MUST BRANCH, ELSE ERROR
+L004A
+		JMP	L004A		; ERROR, ->
 L006
-		beq	L007		; must branch, else error
-L006a
-		jmp	L006a		; error, ->
+		BEQ	L007		; MUST BRANCH, ELSE ERROR
+L006A
+		JMP	L006A		; ERROR, ->
 L007
-		bvs	L008		; must branch, else error
-L007a
-		jmp	L007a		; error, ->
+		BVS	L008		; MUST BRANCH, ELSE ERROR
+L007A
+		JMP	L007A		; ERROR, ->
 L008
-		bcs	L010		; must branch, else error
-L008a
-		jmp	L008a		; error, ->
+		BCS	L010		; MUST BRANCH, ELSE ERROR
+L008A
+		JMP	L008A		; ERROR, ->
 
-;**  Test branches with all flags reset
+;**  TEST BRANCHES WITH ALL FLAGS RESET
 L010
-		lda	#2
-		sta	POSTcode
+		LDA	#2
+		STA	POSTCODE
 
-		lda	#0
-		pha
-		plp			; reset all flags
+		LDA	#0
+		PHA
+		PLP			; RESET ALL FLAGS
 L011
-		bcs	L011
+		BCS	L011
 L012
-		beq	L012
+		BEQ	L012
 L013
-		bvs	L013
+		BVS	L013
 L014
-		bmi	L014
+		BMI	L014
 
-		bcc	L015		; must branch, else error
-L014a
-		jmp	L014a		; error, ->
+		BCC	L015		; MUST BRANCH, ELSE ERROR
+L014A
+		JMP	L014A		; ERROR, ->
 L015
-		bne	L016		; must branch, else error
-L015a
-		jmp	L015a		; error, ->
+		BNE	L016		; MUST BRANCH, ELSE ERROR
+L015A
+		JMP	L015A		; ERROR, ->
 L016
-		bvc	L017		; must branch, else error
-L016a
-		jmp	L016a		; error, ->
+		BVC	L017		; MUST BRANCH, ELSE ERROR
+L016A
+		JMP	L016A		; ERROR, ->
 L017
-		bpl	L020		; must branch, else error
-L017a
-		jmp	L017a		; error, ->
+		BPL	L020		; MUST BRANCH, ELSE ERROR
+L017A
+		JMP	L017A		; ERROR, ->
 
 
-;**  Test SEC, CLC and CLV
+;**  TEST SEC, CLC AND CLV
 L020
-		lda	#3
-		sta	POSTcode
-L020c
-		beq	L020c		; must skip, else error
+		LDA	#3
+		STA	POSTCODE
+L020C
+		BEQ	L020C		; MUST SKIP, ELSE ERROR
 
-		bne	L020e		; must branch, else error
-L020d
-		jmp	L020d
-L020e
-		sec
-L020a
-		bcc	L020a		; error, ->
+		BNE	L020E		; MUST BRANCH, ELSE ERROR
+L020D
+		JMP	L020D
+L020E
+		SEC
+L020A
+		BCC	L020A		; ERROR, ->
 
-		bcs	L021		; must branch, else error
-L020b
-		jmp	L020b		; error, ->
+		BCS	L021		; MUST BRANCH, ELSE ERROR
+L020B
+		JMP	L020B		; ERROR, ->
 
 L021
-		clc
-L021a
-		bcs	L021a		; error, ->
+		CLC
+L021A
+		BCS	L021A		; ERROR, ->
 
-		bcc	L022		; must branch, else error
-L021b
-		jmp	L021b		; error, ->
+		BCC	L022		; MUST BRANCH, ELSE ERROR
+L021B
+		JMP	L021B		; ERROR, ->
 
 L022
-		clv
-L022a
-		bvs	L022a		; error, ->
+		CLV
+L022A
+		BVS	L022A		; ERROR, ->
 
-		bvc	L030		; must branch, else error
-L022b
-		jmp	L022b		; error, ->
+		BVC	L030		; MUST BRANCH, ELSE ERROR
+L022B
+		JMP	L022B		; ERROR, ->
 
 
-;**  Test LDA/X/Y #n, STA/X/Y $xx/$xxxx
+;**  TEST LDA/X/Y #N, STA/X/Y $XX/$XXXX
 L030
-		lda	#4
-		sta	POSTcode
+		LDA	#4
+		STA	POSTCODE
 
-		lda	#0
+		LDA	#0
 		
-; this just checks the ALU, not A
+; THIS JUST CHECKS THE ALU, NOT A
 L031
-		bne	L031		; error, ->
+		BNE	L031		; ERROR, ->
 L032
-		bmi	L032		; error, ->
+		BMI	L032		; ERROR, ->
 
-; test the content of A
-		cmp	#0
-L031a
-		bne	L031a		; error, ->
+; TEST THE CONTENT OF A
+		CMP	#0
+L031A
+		BNE	L031A		; ERROR, ->
 
-		sta	Z10
-		sta	A0400
+		STA	Z10
+		STA	A0400
 
-		lda	#$80
+		LDA	#$80
 
-; this just checks the ALU, not A
+; THIS JUST CHECKS THE ALU, NOT A
 L033
-		beq	L033		; error, ->
+		BEQ	L033		; ERROR, ->
 L034
-		bpl	L034		; error, ->
+		BPL	L034		; ERROR, ->
 
-; test the content of A
-		cmp	#$80
+; TEST THE CONTENT OF A
+		CMP	#$80
 L035
-		bne	L035		; error, ->
+		BNE	L035		; ERROR, ->
 
-		sta	Z10+1
-		sta	A0400+1
+		STA	Z10+1
+		STA	A0400+1
 
-		ldx	#0
-		cpx	#0
+		LDX	#0
+		CPX	#0
 L036
-		bne	L036		; error, ->
+		BNE	L036		; ERROR, ->
 
-		stx	Z10+2
-		stx	A0400+2
+		STX	Z10+2
+		STX	A0400+2
 
-;**  Test branch around page border  ==>
-		clc
-		bcc	L40m
+;**  TEST BRANCH AROUND PAGE BORDER  ==>
+		CLC
+		BCC	L40M
 
-L40b
-		sec
-		bcs	L40z
+L40B
+		SEC
+		BCS	L40Z
 		
-		nop
-		nop
+		NOP
+		NOP
 
-L40m
-		bcc	L40b
+L40M
+		BCC	L40B
 						
-L40z
+L40Z
 ; <==
 
 
-		ldx	#$80
-		cpx	#$80
+		LDX	#$80
+		CPX	#$80
 L037
-		bne	L037		; error, ->
+		BNE	L037		; ERROR, ->
 
-		stx	Z10+3
-		stx	A0400+3
+		STX	Z10+3
+		STX	A0400+3
 
-		ldy	#0
-		cpy	#0
+		LDY	#0
+		CPY	#0
 L038
-		bne	L038		; error, ->
+		BNE	L038		; ERROR, ->
 
-		sty	Z10+4
-		sty	A0400+4
+		STY	Z10+4
+		STY	A0400+4
 
-		ldy	#$80
-		cpy	#$80
+		LDY	#$80
+		CPY	#$80
 L039
-		bne	L039		; error, ->
+		BNE	L039		; ERROR, ->
 
-		sty	Z10+5
-		sty	A0400+5
-
-
-;**  Test LDA/X/Y $xx
-		lda	#5
-		sta	POSTcode
-
-		lda	Z10
-		cmp	#0
-L039e
-		bne	L039e		; error, ->
-
-		lda	#0
-		lda	Z10+1
-		cmp	#$80
-L039g
-		bne	L039g		; error, ->
+		STY	Z10+5
+		STY	A0400+5
 
 
-		ldx	#5
-		ldx	Z10
-		cpx	#0
-L039i
-		bne	L039i		; error, ->
+;**  TEST LDA/X/Y $XX
+		LDA	#5
+		STA	POSTCODE
+
+		LDA	Z10
+		CMP	#0
+L039E
+		BNE	L039E		; ERROR, ->
+
+		LDA	#0
+		LDA	Z10+1
+		CMP	#$80
+L039G
+		BNE	L039G		; ERROR, ->
 
 
-		ldx	#0
-		ldx	Z10+1
-		cpx	#$80
-L039k
-		bne	L039k		; error, ->
+		LDX	#5
+		LDX	Z10
+		CPX	#0
+L039I
+		BNE	L039I		; ERROR, ->
 
 
-		ldy	#5
-		ldy	Z10
-		cpy	#0
-L039m
-		bne	L039m		; error, ->
+		LDX	#0
+		LDX	Z10+1
+		CPX	#$80
+L039K
+		BNE	L039K		; ERROR, ->
 
 
-		ldy	#0
-		ldy	Z10+1
-		cpy	#$80
-L039o
-		bne	L039o		; error, ->
+		LDY	#5
+		LDY	Z10
+		CPY	#0
+L039M
+		BNE	L039M		; ERROR, ->
 
 
-;**  Test LDA/X/Y $xxxx
-		lda	#6
-		sta	POSTcode
+		LDY	#0
+		LDY	Z10+1
+		CPY	#$80
+L039O
+		BNE	L039O		; ERROR, ->
 
-		lda	A0400
-		cmp	#0
+
+;**  TEST LDA/X/Y $XXXX
+		LDA	#6
+		STA	POSTCODE
+
+		LDA	A0400
+		CMP	#0
 L041
-		bne	L041		; error, ->
+		BNE	L041		; ERROR, ->
 
 
-		lda	A0400+1
-		cmp	#$80
+		LDA	A0400+1
+		CMP	#$80
 L043
-		bne	L043		; error, ->
+		BNE	L043		; ERROR, ->
 
 
-		ldx	A0400
-		cpx	#0
+		LDX	A0400
+		CPX	#0
 L044
-		bne	L044		; error, ->
+		BNE	L044		; ERROR, ->
 
 
-		ldx	A0400+1
-		cpx	#$80
-L044c
-		bne	L044c		; error, ->
+		LDX	A0400+1
+		CPX	#$80
+L044C
+		BNE	L044C		; ERROR, ->
 
 
-		ldy	A0400
-		cpy	#0
-L044e
-		bne	L044e		; error, ->
+		LDY	A0400
+		CPY	#0
+L044E
+		BNE	L044E		; ERROR, ->
 
-		ldy	A0400+1
-		cpy	#$80
-L044g
-		bne	L044g		; error, ->
+		LDY	A0400+1
+		CPY	#$80
+L044G
+		BNE	L044G		; ERROR, ->
 
 
-;**  Test CMP/CPX/CPY
-;* register = value
-		ldx	#0
-		ldy	#0
-		lda	#7
-		sta	POSTcode
-		sta	Z10
-		sta	A0400
-		cmp	#7
+;**  TEST CMP/CPX/CPY
+;* REGISTER = VALUE
+		LDX	#0
+		LDY	#0
+		LDA	#7
+		STA	POSTCODE
+		STA	Z10
+		STA	A0400
+		CMP	#7
 L051
-		bne	L051		; error, ->
+		BNE	L051		; ERROR, ->
 L052
-		bcc	L052		; error, ->
+		BCC	L052		; ERROR, ->
 L053
-		bmi	L053		; error, ->
+		BMI	L053		; ERROR, ->
 
 
-		cmp	Z10
-L051a
-		bne	L051a		; error, ->
-L052a
-		bcc	L052a		; error, ->
-L053a
-		bmi	L053a		; error, ->
+		CMP	Z10
+L051A
+		BNE	L051A		; ERROR, ->
+L052A
+		BCC	L052A		; ERROR, ->
+L053A
+		BMI	L053A		; ERROR, ->
 
 
-		cmp	A0400
-L051b
-		bne	L051b		; error, ->
-L052b
-		bcc	L052b		; error, ->
-L053b
-		bmi	L053b		; error, ->
+		CMP	A0400
+L051B
+		BNE	L051B		; ERROR, ->
+L052B
+		BCC	L052B		; ERROR, ->
+L053B
+		BMI	L053B		; ERROR, ->
 
 
-		ldx	#7
-		cpx	#7
-L051c
-		bne	L051c		; error, ->
-L052c
-		bcc	L052c		; error, ->
-L053c
-		bmi	L053c		; error, ->
+		LDX	#7
+		CPX	#7
+L051C
+		BNE	L051C		; ERROR, ->
+L052C
+		BCC	L052C		; ERROR, ->
+L053C
+		BMI	L053C		; ERROR, ->
 
 
-		cpx	Z10
-L051d
-		bne	L051d		; error, ->
-L052d
-		bcc	L052d		; error, ->
-L053d
-		bmi	L053d		; error, ->
+		CPX	Z10
+L051D
+		BNE	L051D		; ERROR, ->
+L052D
+		BCC	L052D		; ERROR, ->
+L053D
+		BMI	L053D		; ERROR, ->
 
 
-		cpx	A0400
-L051e
-		bne	L051e		; error, ->
-L052e
-		bcc	L052e		; error, ->
-L053e
-		bmi	L053e		; error, ->
+		CPX	A0400
+L051E
+		BNE	L051E		; ERROR, ->
+L052E
+		BCC	L052E		; ERROR, ->
+L053E
+		BMI	L053E		; ERROR, ->
 
 
-		ldy	#7
-		cpy	#7
-L051f
-		bne	L051f		; error, ->
-L052f
-		bcc	L052f		; error, ->
-L053f
-		bmi	L053f		; error, ->
+		LDY	#7
+		CPY	#7
+L051F
+		BNE	L051F		; ERROR, ->
+L052F
+		BCC	L052F		; ERROR, ->
+L053F
+		BMI	L053F		; ERROR, ->
 
 
-		cpy	Z10
-L051g
-		bne	L051g		; error, ->
-L052g
-		bcc	L052g		; error, ->
-L053g
-		bmi	L053g		; error, ->
+		CPY	Z10
+L051G
+		BNE	L051G		; ERROR, ->
+L052G
+		BCC	L052G		; ERROR, ->
+L053G
+		BMI	L053G		; ERROR, ->
 
 
-		cpy	A0400
-L051h
-		bne	L051h		; error, ->
-L052h
-		bcc	L052h		; error, ->
-L053h
-		bmi	L053h		; error, ->
+		CPY	A0400
+L051H
+		BNE	L051H		; ERROR, ->
+L052H
+		BCC	L052H		; ERROR, ->
+L053H
+		BMI	L053H		; ERROR, ->
 
-;* register > memory
-		lda	#8
-		sta	POSTcode
+;* REGISTER > MEMORY
+		LDA	#8
+		STA	POSTCODE
 
-		cmp	#7
+		CMP	#7
 L061
-		beq	L061		; error, ->
+		BEQ	L061		; ERROR, ->
 L062
-		bcc	L062		; error, ->
+		BCC	L062		; ERROR, ->
 L063
-		bmi	L063		; error, ->
+		BMI	L063		; ERROR, ->
 
 
-		cmp	Z10
-L061a
-		beq	L061a		; error, ->
-L062a
-		bcc	L062a		; error, ->
-L063a
-		bmi	L063a		; error, ->
+		CMP	Z10
+L061A
+		BEQ	L061A		; ERROR, ->
+L062A
+		BCC	L062A		; ERROR, ->
+L063A
+		BMI	L063A		; ERROR, ->
 
 
-		cmp	A0400
-L061b
-		beq	L061b		; error, ->
-L062b
-		bcc	L062b		; error, ->
-L063b
-		bmi	L063b		; error, ->
+		CMP	A0400
+L061B
+		BEQ	L061B		; ERROR, ->
+L062B
+		BCC	L062B		; ERROR, ->
+L063B
+		BMI	L063B		; ERROR, ->
 
 
-		ldx	#8
-		cpx	#7
-L061c
-		beq	L061c		; error, ->
-L062c
-		bcc	L062c		; error, ->
-L063c
-		bmi	L063c		; error, ->
+		LDX	#8
+		CPX	#7
+L061C
+		BEQ	L061C		; ERROR, ->
+L062C
+		BCC	L062C		; ERROR, ->
+L063C
+		BMI	L063C		; ERROR, ->
 
 
-		cpx	Z10
-L061d
-		beq	L061d		; error, ->
-L062d
-		bcc	L062d		; error, ->
-L063d
-		bmi	L063d		; error, ->
+		CPX	Z10
+L061D
+		BEQ	L061D		; ERROR, ->
+L062D
+		BCC	L062D		; ERROR, ->
+L063D
+		BMI	L063D		; ERROR, ->
 
 
-		cpx	A0400
-L061e
-		beq	L061e		; error, ->
-L062e
-		bcc	L062e		; error, ->
-L063e
-		bmi	L063e		; error, ->
+		CPX	A0400
+L061E
+		BEQ	L061E		; ERROR, ->
+L062E
+		BCC	L062E		; ERROR, ->
+L063E
+		BMI	L063E		; ERROR, ->
 
 
-		ldy	#8
-		cpy	#7
-L061f
-		beq	L061f		; error, ->
-L062f
-		bcc	L062f		; error, ->
-L063f
-		bmi	L063f		; error, ->
+		LDY	#8
+		CPY	#7
+L061F
+		BEQ	L061F		; ERROR, ->
+L062F
+		BCC	L062F		; ERROR, ->
+L063F
+		BMI	L063F		; ERROR, ->
 
 
-		cpy	Z10
-L061g
-		beq	L061g		; error, ->
-L062g
-		bcc	L062g		; error, ->
-L063g
-		bmi	L063g		; error, ->
+		CPY	Z10
+L061G
+		BEQ	L061G		; ERROR, ->
+L062G
+		BCC	L062G		; ERROR, ->
+L063G
+		BMI	L063G		; ERROR, ->
 
 
-		cpy	A0400
-L061h
-		beq	L061h		; error, ->
-L062h
-		bcc	L062h		; error, ->
-L063h
-		bmi	L063h		; error, ->
+		CPY	A0400
+L061H
+		BEQ	L061H		; ERROR, ->
+L062H
+		BCC	L062H		; ERROR, ->
+L063H
+		BMI	L063H		; ERROR, ->
 
 
-;* register < memory
-		lda	#5
-		cmp	#7
+;* REGISTER < MEMORY
+		LDA	#5
+		CMP	#7
 L071
-		beq	L071		; error, ->
+		BEQ	L071		; ERROR, ->
 L072
-		bcs	L072		; error, ->
+		BCS	L072		; ERROR, ->
 L073
-		bpl	L073		; error, ->
+		BPL	L073		; ERROR, ->
 
 
-		cmp	Z10
-L071a
-		beq	L071a		; error, ->
-L072a
-		bcs	L072a		; error, ->
-L073a
-		bpl	L073a		; error, ->
+		CMP	Z10
+L071A
+		BEQ	L071A		; ERROR, ->
+L072A
+		BCS	L072A		; ERROR, ->
+L073A
+		BPL	L073A		; ERROR, ->
 
 
-		ldx	#5
-		cpx	#7
-L071b
-		beq	L071b		; error, ->
-L072b
-		bcs	L072b		; error, ->
-L073b
-		bpl	L073b		; error, ->
+		LDX	#5
+		CPX	#7
+L071B
+		BEQ	L071B		; ERROR, ->
+L072B
+		BCS	L072B		; ERROR, ->
+L073B
+		BPL	L073B		; ERROR, ->
 
 
-		cpx	Z10
-L071c
-		beq	L071c		; error, ->
-L072c
-		bcs	L072c		; error, ->
-L073c
-		bpl	L073c		; error, ->
+		CPX	Z10
+L071C
+		BEQ	L071C		; ERROR, ->
+L072C
+		BCS	L072C		; ERROR, ->
+L073C
+		BPL	L073C		; ERROR, ->
 
 
-		cpx	A0400
-L071d
-		beq	L071d		; error, ->
-L072d
-		bcs	L072d		; error, ->
-L073d
-		bpl	L073d		; error, ->
+		CPX	A0400
+L071D
+		BEQ	L071D		; ERROR, ->
+L072D
+		BCS	L072D		; ERROR, ->
+L073D
+		BPL	L073D		; ERROR, ->
 
 
-		ldy	#5
-		cpy	#7
-L071e
-		beq	L071e		; error, ->
-L072e
-		bcs	L072e		; error, ->
-L073e
-		bpl	L073e		; error, ->
+		LDY	#5
+		CPY	#7
+L071E
+		BEQ	L071E		; ERROR, ->
+L072E
+		BCS	L072E		; ERROR, ->
+L073E
+		BPL	L073E		; ERROR, ->
 
 
-		cpy	Z10
-L071f
-		beq	L071f		; error, ->
-L072f
-		bcs	L072f		; error, ->
-L073f
-		bpl	L073f		; error, ->
+		CPY	Z10
+L071F
+		BEQ	L071F		; ERROR, ->
+L072F
+		BCS	L072F		; ERROR, ->
+L073F
+		BPL	L073F		; ERROR, ->
 
 
-		cpy	A0400
-L071g
-		beq	L071g		; error, ->
-L072g
-		bcs	L072g		; error, ->
-L073g
-		bpl	L073g		; error, ->
+		CPY	A0400
+L071G
+		BEQ	L071G		; ERROR, ->
+L072G
+		BCS	L072G		; ERROR, ->
+L073G
+		BPL	L073G		; ERROR, ->
 
 
 ;**  TAX, TXA
-		lda	#9
-		sta	POSTcode
+		LDA	#9
+		STA	POSTCODE
 
-		ldx	#0
-		lda	#$AA
-		tax
+		LDX	#0
+		LDA	#$AA
+		TAX
 L081
-		bpl	L081		; error, ->
+		BPL	L081		; ERROR, ->
 L082
-		beq	L082		; error, ->
+		BEQ	L082		; ERROR, ->
 
-		cpx	#$AA
+		CPX	#$AA
 L083
-		bne	L083		; error, ->
+		BNE	L083		; ERROR, ->
 
 
-		lda	#$0A
-		sta	POSTcode
+		LDA	#$0A
+		STA	POSTCODE
 
-		txa
+		TXA
 L084
-		bpl	L084		; error, ->
+		BPL	L084		; ERROR, ->
 L085
-		beq	L085		; error, ->
+		BEQ	L085		; ERROR, ->
 
-		cmp	#$AA
+		CMP	#$AA
 L086
-		bne	L086		; error, ->
+		BNE	L086		; ERROR, ->
 
 
-		lda	#$0B
-		sta	POSTcode
+		LDA	#$0B
+		STA	POSTCODE
 
-		lda	#$55
-		tax
+		LDA	#$55
+		TAX
 L087
-		bmi	L087		; error, ->
+		BMI	L087		; ERROR, ->
 L088
-		beq	L088		; error, ->
+		BEQ	L088		; ERROR, ->
 
-		cpx	#$55
+		CPX	#$55
 L089
-		bne	L089		; error, ->
+		BNE	L089		; ERROR, ->
 
 
-		lda	#$0C
-		sta	POSTcode
+		LDA	#$0C
+		STA	POSTCODE
 
-		txa
-L089a
-		bmi	L089a		; error, ->
-L089b
-		beq	L089b		; error, ->
-
-
-		cmp	#$55
-L089c
-		bne	L089c		; error, ->
+		TXA
+L089A
+		BMI	L089A		; ERROR, ->
+L089B
+		BEQ	L089B		; ERROR, ->
 
 
-		lda	#$0D
-		sta	POSTcode
-
-		lda	#0
-		tax
-L089d
-		bmi	L089d		; error, ->
-L089e
-		bne	L089e		; error, ->
+		CMP	#$55
+L089C
+		BNE	L089C		; ERROR, ->
 
 
-		cpx	#0
-L089f
-		bne	L089f		; error, ->
+		LDA	#$0D
+		STA	POSTCODE
+
+		LDA	#0
+		TAX
+L089D
+		BMI	L089D		; ERROR, ->
+L089E
+		BNE	L089E		; ERROR, ->
 
 
-		lda	#$0E
-		sta	POSTcode
-
-		txa
-L089g
-		bmi	L089g		; error, ->
-L089h
-		bne	L089h		; error, ->
+		CPX	#0
+L089F
+		BNE	L089F		; ERROR, ->
 
 
-		cmp	#0
-L089i
-		bne	L089i		; error, ->
+		LDA	#$0E
+		STA	POSTCODE
+
+		TXA
+L089G
+		BMI	L089G		; ERROR, ->
+L089H
+		BNE	L089H		; ERROR, ->
+
+
+		CMP	#0
+L089I
+		BNE	L089I		; ERROR, ->
 
 
 ;**  TAY, TYA
-		lda	#$0F
-		sta	POSTcode
+		LDA	#$0F
+		STA	POSTCODE
 
-		ldy	#0
-		lda	#$AA
-		tay
+		LDY	#0
+		LDA	#$AA
+		TAY
 L091
-		bpl	L091		; error, ->
+		BPL	L091		; ERROR, ->
 L092
-		beq	L092		; error, ->
+		BEQ	L092		; ERROR, ->
 
 
-		cpy	#$AA
+		CPY	#$AA
 L093
-		bne	L093		; error, ->
+		BNE	L093		; ERROR, ->
 
 
-		lda	#$10
-		sta	POSTcode
+		LDA	#$10
+		STA	POSTCODE
 
-		tya
-L091a
-		bpl	L091a		; error, ->
-L092a
-		beq	L092a		; error, ->
-
-
-		cmp	#$AA
-L093a
-		bne	L093a		; error, ->
+		TYA
+L091A
+		BPL	L091A		; ERROR, ->
+L092A
+		BEQ	L092A		; ERROR, ->
 
 
-		lda	#$11
-		sta	POSTcode
-
-		lda	#$55
-		tay
-L091b
-		bmi	L091b		; error, ->
-L092b
-		beq	L092b		; error, ->
+		CMP	#$AA
+L093A
+		BNE	L093A		; ERROR, ->
 
 
-		cpy	#$55
-L093b
-		bne	L093b		; error, ->
+		LDA	#$11
+		STA	POSTCODE
+
+		LDA	#$55
+		TAY
+L091B
+		BMI	L091B		; ERROR, ->
+L092B
+		BEQ	L092B		; ERROR, ->
 
 
-		lda	#$12
-		sta	POSTcode
-
-		tya
-L091c
-		bmi	L091c		; error, ->
-L092c
-		beq	L092c		; error, ->
+		CPY	#$55
+L093B
+		BNE	L093B		; ERROR, ->
 
 
-		cmp	#$55
-L093c
-		bne	L093c		; error, ->
+		LDA	#$12
+		STA	POSTCODE
+
+		TYA
+L091C
+		BMI	L091C		; ERROR, ->
+L092C
+		BEQ	L092C		; ERROR, ->
 
 
-		lda	#$13
-		sta	POSTcode
-
-		lda	#0
-		tay
-L091d
-		bmi	L091d		; error, ->
-L092d
-		bne	L092d		; error, ->
+		CMP	#$55
+L093C
+		BNE	L093C		; ERROR, ->
 
 
-		cpy	#0
-L093d
-		bne	L093d		; error, ->
+		LDA	#$13
+		STA	POSTCODE
+
+		LDA	#0
+		TAY
+L091D
+		BMI	L091D		; ERROR, ->
+L092D
+		BNE	L092D		; ERROR, ->
 
 
-		lda	#$14
-		sta	POSTcode
-
-		tya
-L091e
-		bmi	L091		; error, ->
-L092e
-		bne	L092e		; error, ->
+		CPY	#0
+L093D
+		BNE	L093D		; ERROR, ->
 
 
-		cmp	#0
-L093e
-		bne	L093e		; error, ->
+		LDA	#$14
+		STA	POSTCODE
+
+		TYA
+L091E
+		BMI	L091		; ERROR, ->
+L092E
+		BNE	L092E		; ERROR, ->
+
+
+		CMP	#0
+L093E
+		BNE	L093E		; ERROR, ->
 
 
 ;**  TXS, TSX
-		lda	#$15
-		sta	POSTcode
+		LDA	#$15
+		STA	POSTCODE
 
-		ldx	#$AA
-		txs
+		LDX	#$AA
+		TXS
 L101
-		bpl	L101		; error, ->
+		BPL	L101		; ERROR, ->
 L102
-		beq	L102		; error, ->
+		BEQ	L102		; ERROR, ->
 
 
-		ldx	#0
-		tsx
+		LDX	#0
+		TSX
 L103
-		bpl	L103		; error, ->
+		BPL	L103		; ERROR, ->
 L104
-		beq	L104		; error, ->
+		BEQ	L104		; ERROR, ->
 
 
-		cpx	#$AA
+		CPX	#$AA
 L105
-		bne	L105		; error, ->
+		BNE	L105		; ERROR, ->
 
 
-		lda	#$16
-		sta	POSTcode
+		LDA	#$16
+		STA	POSTCODE
 
-		ldx	#$55
-		txs
-L103a
-		bmi	L103a		; error, ->
-L104a
-		beq	L104a		; error, ->
-
-
-		ldx	#0
-		tsx
-L103b
-		bmi	L103b		; error, ->
-L104b
-		beq	L104b		; error, ->
+		LDX	#$55
+		TXS
+L103A
+		BMI	L103A		; ERROR, ->
+L104A
+		BEQ	L104A		; ERROR, ->
 
 
-		cpx	#$55
-L105b
-		bne	L105b		; error, ->
+		LDX	#0
+		TSX
+L103B
+		BMI	L103B		; ERROR, ->
+L104B
+		BEQ	L104B		; ERROR, ->
 
 
-		lda	#$17
-		sta	POSTcode
-
-		ldx	#0
-		txs
-L103c
-		bmi	L103c		; error, ->
-L104c
-		bne	L104c		; error, ->
+		CPX	#$55
+L105B
+		BNE	L105B		; ERROR, ->
 
 
-		ldx	#$55
-		tsx
-L103d
-		bmi	L103d		; error, ->
-L104d
-		bne	L104d		; error, ->
+		LDA	#$17
+		STA	POSTCODE
+
+		LDX	#0
+		TXS
+L103C
+		BMI	L103C		; ERROR, ->
+L104C
+		BNE	L104C		; ERROR, ->
 
 
-		cpx	#0
-L105d
-		bne	L105d		; error, ->
+		LDX	#$55
+		TSX
+L103D
+		BMI	L103D		; ERROR, ->
+L104D
+		BNE	L104D		; ERROR, ->
+
+
+		CPX	#0
+L105D
+		BNE	L105D		; ERROR, ->
 
 
 ;**  PHA, PLA
-		lda	#$17
-		sta	POSTcode
+		LDA	#$17
+		STA	POSTCODE
 
-		lda	#$AA
-		pha
+		LDA	#$AA
+		PHA
 
-		lda	#0
-		pla
+		LDA	#0
+		PLA
 L111
-		beq	L111		; error, ->
+		BEQ	L111		; ERROR, ->
 L112
-		bpl	L112		; error, ->
+		BPL	L112		; ERROR, ->
 
-		cmp	#$AA
-L112b
-		bne	L112b		; error, ->
+		CMP	#$AA
+L112B
+		BNE	L112B		; ERROR, ->
 
 
-		lda	#$18
-		sta	POSTcode
+		LDA	#$18
+		STA	POSTCODE
 
-		lda	#$55
-		pha
+		LDA	#$55
+		PHA
 
-		lda	#0
-		pla
+		LDA	#0
+		PLA
 L113
-		beq	L113		; error, ->
+		BEQ	L113		; ERROR, ->
 L114
-		bmi	L114		; error, ->
+		BMI	L114		; ERROR, ->
 
-		cmp	#$55
-L114b
-		bne	L114b		; error, ->
+		CMP	#$55
+L114B
+		BNE	L114B		; ERROR, ->
 
 
-		lda	#$19
-		sta	POSTcode
+		LDA	#$19
+		STA	POSTCODE
 
-		lda	#0
-		pha
+		LDA	#0
+		PHA
 
-		lda	#$55
-		pla
+		LDA	#$55
+		PLA
 L115
-		bne	L115		; error, ->
+		BNE	L115		; ERROR, ->
 L116
-		bmi	L116		; error, ->
+		BMI	L116		; ERROR, ->
 
-		cmp	#0
-L116b
-		bne	L116b		; error, ->
+		CMP	#0
+L116B
+		BNE	L116B		; ERROR, ->
 
 
 ;**  DEX
-		lda	#$1A
-		sta	POSTcode
+		LDA	#$1A
+		STA	POSTCODE
 
-		ldx	#$81
-		dex
+		LDX	#$81
+		DEX
 L121
-		beq	L121		; error, ->
+		BEQ	L121		; ERROR, ->
 L122
-		bpl	L122		; error, ->
+		BPL	L122		; ERROR, ->
 
-		cpx	#$80
-L122z
-		bne	L122z		; error, ->
-
-
-		dex
-L121a
-		beq	L121a		; error, ->
-L122a
-		bmi	L122a		; error, ->
-
-		cpx	#$7F
-L122y
-		bne	L122y		; error, ->
+		CPX	#$80
+L122Z
+		BNE	L122Z		; ERROR, ->
 
 
-		lda	#$1B
-		sta	POSTcode
+		DEX
+L121A
+		BEQ	L121A		; ERROR, ->
+L122A
+		BMI	L122A		; ERROR, ->
 
-		ldx	#2
-		dex
-L121b
-		beq	L121b		; error, ->
-L122b
-		bmi	L122b		; error, ->
-
-		cpx	#1
-L122x
-		bne	L122x		; error, ->
+		CPX	#$7F
+L122Y
+		BNE	L122Y		; ERROR, ->
 
 
-		dex
-L121c
-		bne	L121c		; error, ->
-L122c
-		bmi	L122c		; error, ->
+		LDA	#$1B
+		STA	POSTCODE
 
-		cpx	#0
-L122w
-		bne	L122w		; error, ->
+		LDX	#2
+		DEX
+L121B
+		BEQ	L121B		; ERROR, ->
+L122B
+		BMI	L122B		; ERROR, ->
+
+		CPX	#1
+L122X
+		BNE	L122X		; ERROR, ->
 
 
-		dex
-L121d
-		beq	L121d		; error, ->
-L122d
-		bpl	L122d		; error, ->
+		DEX
+L121C
+		BNE	L121C		; ERROR, ->
+L122C
+		BMI	L122C		; ERROR, ->
 
-		cpx	#$FF
-L122v
-		bne	L122v		; error, ->
+		CPX	#0
+L122W
+		BNE	L122W		; ERROR, ->
+
+
+		DEX
+L121D
+		BEQ	L121D		; ERROR, ->
+L122D
+		BPL	L122D		; ERROR, ->
+
+		CPX	#$FF
+L122V
+		BNE	L122V		; ERROR, ->
 
 
 ;**  INX
-		lda	#$1C
-		sta	POSTcode
+		LDA	#$1C
+		STA	POSTCODE
 
-		ldx	#$FE
-		inx
-L121e
-		beq	L121e		; error, ->
-L122e
-		bpl	L122e		; error, ->
+		LDX	#$FE
+		INX
+L121E
+		BEQ	L121E		; ERROR, ->
+L122E
+		BPL	L122E		; ERROR, ->
 
-		cpx	#$FF
-L122u
-		bne	L122u		; error, ->
-
-
-		inx
-L121f
-		bne	L121f		; error, ->
-L122f
-		bmi	L122f		; error, ->
-
-		cpx	#0
-L122t
-		bne	L122t		; error, ->
+		CPX	#$FF
+L122U
+		BNE	L122U		; ERROR, ->
 
 
-		inx
-L121g
-		beq	L121g		; error, ->
-L122g
-		bmi	L122g		; error, ->
+		INX
+L121F
+		BNE	L121F		; ERROR, ->
+L122F
+		BMI	L122F		; ERROR, ->
 
-		cpx	#1
-L122s
-		bne	L122s		; error, ->
-
-
-		lda	#$1D
-		sta	POSTcode
-
-		ldx	#$7E
-		inx
-L121h
-		beq	L121h		; error, ->
-L122h
-		bmi	L122h		; error, ->
-
-		cpx	#$7F
-L122r
-		bne	L122r		; error, ->
+		CPX	#0
+L122T
+		BNE	L122T		; ERROR, ->
 
 
-		inx
-L121i
-		beq	L121i		; error, ->
-L122i
-		bpl	L122i		; error, ->
+		INX
+L121G
+		BEQ	L121G		; ERROR, ->
+L122G
+		BMI	L122G		; ERROR, ->
 
-		cpx	#$80
-L122q
-		bne	L122q		; error, ->
+		CPX	#1
+L122S
+		BNE	L122S		; ERROR, ->
+
+
+		LDA	#$1D
+		STA	POSTCODE
+
+		LDX	#$7E
+		INX
+L121H
+		BEQ	L121H		; ERROR, ->
+L122H
+		BMI	L122H		; ERROR, ->
+
+		CPX	#$7F
+L122R
+		BNE	L122R		; ERROR, ->
+
+
+		INX
+L121I
+		BEQ	L121I		; ERROR, ->
+L122I
+		BPL	L122I		; ERROR, ->
+
+		CPX	#$80
+L122Q
+		BNE	L122Q		; ERROR, ->
 
 
 ;**  DEY
-		lda	#$1E
-		sta	POSTcode
+		LDA	#$1E
+		STA	POSTCODE
 
-		ldy	#$81
-		dey
+		LDY	#$81
+		DEY
 L131
-		beq	L131		; error, ->
+		BEQ	L131		; ERROR, ->
 L132
-		bpl	L132		; error, ->
+		BPL	L132		; ERROR, ->
 
-		cpy	#$80
-L132z
-		bne	L132z		; error, ->
-
-
-		dey
-L131a
-		beq	L131a		; error, ->
-L132a
-		bmi	L132a		; error, ->
-
-		cpy	#$7F
-L132y
-		bne	L132y		; error, ->
+		CPY	#$80
+L132Z
+		BNE	L132Z		; ERROR, ->
 
 
-		lda	#$1F
-		sta	POSTcode
+		DEY
+L131A
+		BEQ	L131A		; ERROR, ->
+L132A
+		BMI	L132A		; ERROR, ->
 
-		ldy	#2
-		dey
-L131b
-		beq	L131b		; error, ->
-L132b
-		bmi	L132b		; error, ->
-
-		cpy	#1
-L132x
-		bne	L132x		; error, ->
+		CPY	#$7F
+L132Y
+		BNE	L132Y		; ERROR, ->
 
 
-		dey
-L131c
-		bne	L131c		; error, ->
-L132c
-		bmi	L132c		; error, ->
+		LDA	#$1F
+		STA	POSTCODE
 
-		cpy	#0
-L132w
-		bne	L132w		; error, ->
+		LDY	#2
+		DEY
+L131B
+		BEQ	L131B		; ERROR, ->
+L132B
+		BMI	L132B		; ERROR, ->
+
+		CPY	#1
+L132X
+		BNE	L132X		; ERROR, ->
 
 
-		dey
-L131d
-		beq	L131d		; error, ->
-L132d
-		bpl	L132d		; error, ->
+		DEY
+L131C
+		BNE	L131C		; ERROR, ->
+L132C
+		BMI	L132C		; ERROR, ->
 
-		cpy	#$FF
-L132v
-		bne	L132v		; error, ->
+		CPY	#0
+L132W
+		BNE	L132W		; ERROR, ->
+
+
+		DEY
+L131D
+		BEQ	L131D		; ERROR, ->
+L132D
+		BPL	L132D		; ERROR, ->
+
+		CPY	#$FF
+L132V
+		BNE	L132V		; ERROR, ->
 
 
 ;**  INY
-		lda	#$20
-		sta	POSTcode
+		LDA	#$20
+		STA	POSTCODE
 
-		ldy	#$FE
-		iny
-L131e
-		beq	L131e		; error, ->
-L132e
-		bpl	L132e		; error, ->
+		LDY	#$FE
+		INY
+L131E
+		BEQ	L131E		; ERROR, ->
+L132E
+		BPL	L132E		; ERROR, ->
 
-		cpy	#$FF
-L132u
-		bne	L132u		; error, ->
-
-
-		iny
-L131f
-		bne	L131f		; error, ->
-L132f
-		bmi	L132f		; error, ->
-
-		cpy	#0
-L132t
-		bne	L132t		; error, ->
+		CPY	#$FF
+L132U
+		BNE	L132U		; ERROR, ->
 
 
-		iny
-L131g
-		beq	L131g		; error, ->
-L132g
-		bmi	L132g		; error, ->
+		INY
+L131F
+		BNE	L131F		; ERROR, ->
+L132F
+		BMI	L132F		; ERROR, ->
 
-		cpy	#1
-L132s
-		bne	L132s		; error, ->
-
-
-		lda	#$21
-		sta	POSTcode
-
-		ldy	#$7E
-		iny
-L131h
-		beq	L131h		; error, ->
-L132h
-		bmi	L132h		; error, ->
-
-		cpy	#$7F
-L132r
-		bne	L132r		; error, ->
+		CPY	#0
+L132T
+		BNE	L132T		; ERROR, ->
 
 
-		iny
-L131i
-		beq	L131i		; error, ->
-L132i
-		bpl	L132i		; error, ->
+		INY
+L131G
+		BEQ	L131G		; ERROR, ->
+L132G
+		BMI	L132G		; ERROR, ->
 
-		cpy	#$80
-L132q
-		bne	L132q		; error, ->
+		CPY	#1
+L132S
+		BNE	L132S		; ERROR, ->
 
 
-;**  LDA indexed  (1)
-;* LDA $xx,X
-		lda	#$22
-		sta	POSTcode
+		LDA	#$21
+		STA	POSTCODE
 
-		lda	#$A3
-		sta	Z50
+		LDY	#$7E
+		INY
+L131H
+		BEQ	L131H		; ERROR, ->
+L132H
+		BMI	L132H		; ERROR, ->
 
-		ldx	#$30
-		lda	#0		; wipe original value/flags
-		lda	Z20,X
+		CPY	#$7F
+L132R
+		BNE	L132R		; ERROR, ->
+
+
+		INY
+L131I
+		BEQ	L131I		; ERROR, ->
+L132I
+		BPL	L132I		; ERROR, ->
+
+		CPY	#$80
+L132Q
+		BNE	L132Q		; ERROR, ->
+
+
+;**  LDA INDEXED  (1)
+;* LDA $XX,X
+		LDA	#$22
+		STA	POSTCODE
+
+		LDA	#$A3
+		STA	Z50
+
+		LDX	#$30
+		LDA	#0		; WIPE ORIGINAL VALUE/FLAGS
+		LDA	Z20,X
 L141
-		beq	L141		; error, ->
+		BEQ	L141		; ERROR, ->
 L142
-		bpl	L142		; error, ->
+		BPL	L142		; ERROR, ->
 
-		cmp	#$A3
+		CMP	#$A3
 L143
-		bne	L143		; error, ->
+		BNE	L143		; ERROR, ->
 
 
-		lda	#$23
-		sta	POSTcode
+		LDA	#$23
+		STA	POSTCODE
 
-		lda	#$A9
-		sta	Z20
+		LDA	#$A9
+		STA	Z20
 
-		ldx	#$30
-		lda	#0		; wipe original value/flags
-		lda	ZF0,X
-L141a
-		beq	L141a		; error, ->
-L142a
-		bpl	L142a		; error, ->
+		LDX	#$30
+		LDA	#0		; WIPE ORIGINAL VALUE/FLAGS
+		LDA	ZF0,X
+L141A
+		BEQ	L141A		; ERROR, ->
+L142A
+		BPL	L142A		; ERROR, ->
 
-		cmp	#$A9
-L143a
-		bne	L143a		; error, ->
-
-
-		lda	#$24
-		sta	POSTcode
-
-		lda	#$33
-		sta	Z50
-
-		ldx	#$30
-		lda	#0		; wipe original value/flags
-		lda	Z20,X
-L141b
-		beq	L141b		; error, ->
-L142b
-		bmi	L142b		; error, ->
-
-		cmp	#$33
-L143b
-		bne	L143b		; error, ->
+		CMP	#$A9
+L143A
+		BNE	L143A		; ERROR, ->
 
 
-		lda	#$25
-		sta	POSTcode
+		LDA	#$24
+		STA	POSTCODE
 
-		lda	#$35
-		sta	Z20
+		LDA	#$33
+		STA	Z50
 
-		ldx	#$30
-		lda	#0		; wipe original value/flags
-		lda	ZF0,X
-L141c
-		beq	L141c		; error, ->
-L142c
-		bmi	L142c		; error, ->
+		LDX	#$30
+		LDA	#0		; WIPE ORIGINAL VALUE/FLAGS
+		LDA	Z20,X
+L141B
+		BEQ	L141B		; ERROR, ->
+L142B
+		BMI	L142B		; ERROR, ->
 
-		cmp	#$35
-L143c
-		bne	L143c		; error, ->
-
-
-		lda	#$26
-		sta	POSTcode
-
-		lda	#0
-		sta	Z50
-
-		ldx	#$30
-		lda	#$FF		; wipe original value/flags
-		lda	Z20,X
-L141d
-		bne	L141d		; error, ->
-L142d
-		bmi	L142d		; error, ->
-
-		cmp	#0
-L143d
-		bne	L143d		; error, ->
+		CMP	#$33
+L143B
+		BNE	L143B		; ERROR, ->
 
 
-		lda	#$27
-		sta	POSTcode
+		LDA	#$25
+		STA	POSTCODE
 
-		lda	#0
-		sta	Z20
+		LDA	#$35
+		STA	Z20
 
-		ldx	#$30
-		lda	#$FF		; wipe original value/flags
-		lda	ZF0,X
-L141e
-		bne	L141e		; error, ->
-L142e
-		bmi	L142e		; error, ->
+		LDX	#$30
+		LDA	#0		; WIPE ORIGINAL VALUE/FLAGS
+		LDA	ZF0,X
+L141C
+		BEQ	L141C		; ERROR, ->
+L142C
+		BMI	L142C		; ERROR, ->
 
-		cmp	#0
-L143e
-		bne	L143e		; error, ->
+		CMP	#$35
+L143C
+		BNE	L143C		; ERROR, ->
 
 
-;* LDA $xxxx,X
-		lda	#$28
-		sta	POSTcode
+		LDA	#$26
+		STA	POSTCODE
 
-		lda	#$AA
-		sta	A0450
+		LDA	#0
+		STA	Z50
 
-		ldx	#$30
-		lda	#0		; wipe original value/flags
-		lda	A0420,X
+		LDX	#$30
+		LDA	#$FF		; WIPE ORIGINAL VALUE/FLAGS
+		LDA	Z20,X
+L141D
+		BNE	L141D		; ERROR, ->
+L142D
+		BMI	L142D		; ERROR, ->
+
+		CMP	#0
+L143D
+		BNE	L143D		; ERROR, ->
+
+
+		LDA	#$27
+		STA	POSTCODE
+
+		LDA	#0
+		STA	Z20
+
+		LDX	#$30
+		LDA	#$FF		; WIPE ORIGINAL VALUE/FLAGS
+		LDA	ZF0,X
+L141E
+		BNE	L141E		; ERROR, ->
+L142E
+		BMI	L142E		; ERROR, ->
+
+		CMP	#0
+L143E
+		BNE	L143E		; ERROR, ->
+
+
+;* LDA $XXXX,X
+		LDA	#$28
+		STA	POSTCODE
+
+		LDA	#$AA
+		STA	A0450
+
+		LDX	#$30
+		LDA	#0		; WIPE ORIGINAL VALUE/FLAGS
+		LDA	A0420,X
 L151
-		beq	L151		; error, ->
+		BEQ	L151		; ERROR, ->
 L152
-		bpl	L152		; error, ->
+		BPL	L152		; ERROR, ->
 
-		cmp	#$AA
+		CMP	#$AA
 L153
-		bne	L153		; error, ->
+		BNE	L153		; ERROR, ->
 
 
-		lda	#$29
-		sta	POSTcode
+		LDA	#$29
+		STA	POSTCODE
 
-		lda	#$33
-		sta	A0450
+		LDA	#$33
+		STA	A0450
 
-		ldx	#$30
-		lda	#0		; wipe original value/flags
-		lda	A0420,X
-L151a
-		beq	L151a		; error, ->
-L152a
-		bmi	L152a		; error, ->
+		LDX	#$30
+		LDA	#0		; WIPE ORIGINAL VALUE/FLAGS
+		LDA	A0420,X
+L151A
+		BEQ	L151A		; ERROR, ->
+L152A
+		BMI	L152A		; ERROR, ->
 
-		cmp	#$33
-L153a
-		bne	L153a		; error, ->
-
-
-		lda	#$2A
-		sta	POSTcode
-
-		lda	#0
-		sta	A0450
-
-		ldx	#$30
-		lda	#$FF		; wipe original value/flags
-		lda	A0420,X
-L151b
-		bne	L151b		; error, ->
-L152b
-		bmi	L152b		; error, ->
-
-		cmp	#0
-L153b
-		bne	L153b		; error, ->
+		CMP	#$33
+L153A
+		BNE	L153A		; ERROR, ->
 
 
-;* LDA $xxxx,Y
-		lda	#$2B
-		sta	POSTcode
+		LDA	#$2A
+		STA	POSTCODE
 
-		lda	#$AA
-		sta	A0450
+		LDA	#0
+		STA	A0450
 
-		ldy	#$30
-		lda	#0		; wipe original value/flags
-		lda	A0420,Y
+		LDX	#$30
+		LDA	#$FF		; WIPE ORIGINAL VALUE/FLAGS
+		LDA	A0420,X
+L151B
+		BNE	L151B		; ERROR, ->
+L152B
+		BMI	L152B		; ERROR, ->
+
+		CMP	#0
+L153B
+		BNE	L153B		; ERROR, ->
+
+
+;* LDA $XXXX,Y
+		LDA	#$2B
+		STA	POSTCODE
+
+		LDA	#$AA
+		STA	A0450
+
+		LDY	#$30
+		LDA	#0		; WIPE ORIGINAL VALUE/FLAGS
+		LDA	A0420,Y
 L161
-		beq	L161		; error, ->
+		BEQ	L161		; ERROR, ->
 L162
-		bpl	L162		; error, ->
+		BPL	L162		; ERROR, ->
 
-		cmp	#$AA
+		CMP	#$AA
 L163
-		bne	L163		; error, ->
+		BNE	L163		; ERROR, ->
 
 
-		lda	#$2C
-		sta	POSTcode
+		LDA	#$2C
+		STA	POSTCODE
 
-		lda	#$33
-		sta	A0450
+		LDA	#$33
+		STA	A0450
 
-		ldy	#$30
-		lda	#0		; wipe original value/flags
-		lda	A0420,Y
-L161a
-		beq	L161a		; error, ->
-L162a
-		bmi	L162a		; error, ->
+		LDY	#$30
+		LDA	#0		; WIPE ORIGINAL VALUE/FLAGS
+		LDA	A0420,Y
+L161A
+		BEQ	L161A		; ERROR, ->
+L162A
+		BMI	L162A		; ERROR, ->
 
-		cmp	#$33
-L163a
- 		bne	L163a		; error, ->
+		CMP	#$33
+L163A
+ 		BNE	L163A		; ERROR, ->
 
 
-		lda	#$2D
-		sta	POSTcode
+		LDA	#$2D
+		STA	POSTCODE
 
-		lda	#0
-		sta	A0450
+		LDA	#0
+		STA	A0450
 
-		ldy	#$30
-		lda	#$FF		; wipe original value/flags
-		lda	A0420,Y
-L161b
-		bne	L161b		; error, ->
-L162b
-		bmi	L162b		; error, ->
+		LDY	#$30
+		LDA	#$FF		; WIPE ORIGINAL VALUE/FLAGS
+		LDA	A0420,Y
+L161B
+		BNE	L161B		; ERROR, ->
+L162B
+		BMI	L162B		; ERROR, ->
 
-		cmp	#0
-L163b
-		bne	L163b		; error, ->
+		CMP	#0
+L163B
+		BNE	L163B		; ERROR, ->
 
 			
-;**  STA indexed  (1)
-;* STA $xx,X
-		lda	#$2E
-		sta	POSTcode
-		sta	Z50
-		sta	Z20
+;**  STA INDEXED  (1)
+;* STA $XX,X
+		LDA	#$2E
+		STA	POSTCODE
+		STA	Z50
+		STA	Z20
 
-		ldx	#$30
-		lda	#$CA
-		sta	Z20,X
+		LDX	#$30
+		LDA	#$CA
+		STA	Z20,X
 
-		lda	#0		; wipe original value/flags
-		lda	Z50
-		cmp	#$CA
+		LDA	#0		; WIPE ORIGINAL VALUE/FLAGS
+		LDA	Z50
+		CMP	#$CA
 L171
-		bne	L171		; error, ->
+		BNE	L171		; ERROR, ->
 
 
-		lda	#$2F
-		sta	POSTcode
+		LDA	#$2F
+		STA	POSTCODE
 
-		ldx	#$30
-		lda	#$AC
-		sta	ZF0,X
+		LDX	#$30
+		LDA	#$AC
+		STA	ZF0,X
 
-		lda	#0		; wipe original value/flags
-		lda	Z20
-		cmp	#$AC
+		LDA	#0		; WIPE ORIGINAL VALUE/FLAGS
+		LDA	Z20
+		CMP	#$AC
 L172
-		bne	L172		; error, ->
+		BNE	L172		; ERROR, ->
 
 
-		lda	#$30
-		sta	POSTcode
+		LDA	#$30
+		STA	POSTCODE
 
-		ldx	#$30
-		lda	#$5A
-		sta	Z20,X
+		LDX	#$30
+		LDA	#$5A
+		STA	Z20,X
 
-		lda	#0		; wipe original value/flags
-		lda	Z50
-		cmp	#$5A
+		LDA	#0		; WIPE ORIGINAL VALUE/FLAGS
+		LDA	Z50
+		CMP	#$5A
 L173
-		bne	L173		; error, ->
+		BNE	L173		; ERROR, ->
 
 
-		lda	#$31
-		sta	POSTcode
+		LDA	#$31
+		STA	POSTCODE
 
-		ldx	#$30
-		lda	#$5C
-		sta	ZF0,X
+		LDX	#$30
+		LDA	#$5C
+		STA	ZF0,X
 
-		lda	#0		; wipe original value/flags
-		lda	Z20
-		cmp	#$5C
+		LDA	#0		; WIPE ORIGINAL VALUE/FLAGS
+		LDA	Z20
+		CMP	#$5C
 L174
-		bne	L174		; error, ->
+		BNE	L174		; ERROR, ->
 
 
-		lda	#$32
-		sta	POSTcode
+		LDA	#$32
+		STA	POSTCODE
 
-		ldx	#$30
-		lda	#0
-		sta	Z20,X
+		LDX	#$30
+		LDA	#0
+		STA	Z20,X
 
-		lda	#$FF		; wipe original value/flags
-		lda	Z50
+		LDA	#$FF		; WIPE ORIGINAL VALUE/FLAGS
+		LDA	Z50
 L175
-		bne	L175		; error, ->
+		BNE	L175		; ERROR, ->
 
 
-		lda	#$33
-		sta	POSTcode
+		LDA	#$33
+		STA	POSTCODE
 
-		ldx	#$30
-		lda	#0
-		sta	ZF0,X
+		LDX	#$30
+		LDA	#0
+		STA	ZF0,X
 
-		lda	#$FF		; wipe original value/flags
-		lda	Z20
+		LDA	#$FF		; WIPE ORIGINAL VALUE/FLAGS
+		LDA	Z20
 L176
-		bne	L176		; error, ->
+		BNE	L176		; ERROR, ->
 
 
-;* STA $xxxx,X
-		lda	#$34
-		sta	POSTcode
-		sta	A0450
+;* STA $XXXX,X
+		LDA	#$34
+		STA	POSTCODE
+		STA	A0450
 
-		ldx	#$30
-		lda	#$AA
-		sta	A0420,X
+		LDX	#$30
+		LDA	#$AA
+		STA	A0420,X
 
-		lda	#0		; wipe original value/flags
-		lda	A0450
-		cmp	#$AA
+		LDA	#0		; WIPE ORIGINAL VALUE/FLAGS
+		LDA	A0450
+		CMP	#$AA
 L177
-		bne	L177		; error, ->
+		BNE	L177		; ERROR, ->
 
 
-		lda	#$35
-		sta	POSTcode
-		sta	A0450
+		LDA	#$35
+		STA	POSTCODE
+		STA	A0450
 
-		ldx	#$30
-		lda	#$55
-		sta	A0420,X
+		LDX	#$30
+		LDA	#$55
+		STA	A0420,X
 
-		lda	#0		; wipe original value/flags
-		lda	A0450
-		cmp	#$55
+		LDA	#0		; WIPE ORIGINAL VALUE/FLAGS
+		LDA	A0450
+		CMP	#$55
 L178
-		bne	L178		; error, ->
+		BNE	L178		; ERROR, ->
 
 
-		lda	#$36
-		sta	POSTcode
-		sta	A0450
+		LDA	#$36
+		STA	POSTCODE
+		STA	A0450
 
-		ldx	#$30
-		lda	#0
-		sta	A0420,X
+		LDX	#$30
+		LDA	#0
+		STA	A0420,X
 
-		lda	#$FF		; wipe original value/flags
-		lda	A0450
+		LDA	#$FF		; WIPE ORIGINAL VALUE/FLAGS
+		LDA	A0450
 L179
-		bne	L179		; error, ->
+		BNE	L179		; ERROR, ->
 
 
-;* STA $xxxx,Y
-		lda	#$37
-		sta	POSTcode
-		sta	A0450
+;* STA $XXXX,Y
+		LDA	#$37
+		STA	POSTCODE
+		STA	A0450
 
-		ldy	#$30
-		lda	#$AA
-		sta	A0420,Y
+		LDY	#$30
+		LDA	#$AA
+		STA	A0420,Y
 
-		lda	#0		; wipe original value/flags
-		lda	A0450
-		cmp	#$AA
-L179a
-		bne	L179a		; error, ->
-
-
-		lda	#$38
-		sta	POSTcode
-		sta	A0450
-
-		ldy	#$30
-		lda	#$55
-		sta	A0420,Y
-
-		lda	#0		; wipe original value/flags
-		lda	A0450
-		cmp	#$55
-L179b
-		bne	L179b		; error, ->
+		LDA	#0		; WIPE ORIGINAL VALUE/FLAGS
+		LDA	A0450
+		CMP	#$AA
+L179A
+		BNE	L179A		; ERROR, ->
 
 
-		lda	#$39
-		sta	POSTcode
-		sta	A0450
+		LDA	#$38
+		STA	POSTCODE
+		STA	A0450
 
-		ldy	#$30
-		lda	#0
-		sta	A0420,Y
+		LDY	#$30
+		LDA	#$55
+		STA	A0420,Y
 
-		lda	#$FF		; wipe original value/flags
-		lda	A0450
-L179c
-		bne	L179c		; error, ->
+		LDA	#0		; WIPE ORIGINAL VALUE/FLAGS
+		LDA	A0450
+		CMP	#$55
+L179B
+		BNE	L179B		; ERROR, ->
 
 
-;**  LDA indexed  (2)
-;* LDA ($xx,X)
-		lda	#$3A
-		sta	POSTcode
+		LDA	#$39
+		STA	POSTCODE
+		STA	A0450
 
-		lda	#<(A04AA)
-		sta	Z50
-		sta	A04AA
+		LDY	#$30
+		LDA	#0
+		STA	A0420,Y
 
-		lda	#>(A04AA)
-		sta	Z50+1
+		LDA	#$FF		; WIPE ORIGINAL VALUE/FLAGS
+		LDA	A0450
+L179C
+		BNE	L179C		; ERROR, ->
 
-		ldx	#$30
-		lda	#0		; wipe original value/flags
-		lda	(Z20,X)
+
+;**  LDA INDEXED  (2)
+;* LDA ($XX,X)
+		LDA	#$3A
+		STA	POSTCODE
+
+		LDA	#<(A04AA)
+		STA	Z50
+		STA	A04AA
+
+		LDA	#>(A04AA)
+		STA	Z50+1
+
+		LDX	#$30
+		LDA	#0		; WIPE ORIGINAL VALUE/FLAGS
+		LDA	(Z20,X)
 L181
-		beq	L181		; error, ->
+		BEQ	L181		; ERROR, ->
 L182
-		bpl	L182		; error, ->
+		BPL	L182		; ERROR, ->
 
-		cmp	#$AA
+		CMP	#$AA
 L183
-		bne	L183		; error, ->
+		BNE	L183		; ERROR, ->
 
 
-		lda	#$3B
-		sta	POSTcode
+		LDA	#$3B
+		STA	POSTCODE
 
-		lda	#<(A04AA)
-		sta	Z20
+		LDA	#<(A04AA)
+		STA	Z20
 
-		lda	#>(A04AA)
-		sta	Z20+1
+		LDA	#>(A04AA)
+		STA	Z20+1
 
-		ldx	#$30
-		lda	#0		; wipe original value/flags
-		lda	(ZF0,X)
-L181a
-		beq	L181a		; error, ->
-L182a
-		bpl	L182a		; error, ->
+		LDX	#$30
+		LDA	#0		; WIPE ORIGINAL VALUE/FLAGS
+		LDA	(ZF0,X)
+L181A
+		BEQ	L181A		; ERROR, ->
+L182A
+		BPL	L182A		; ERROR, ->
 
-		cmp	#$AA
-L183a
-		bne	L183a		; error, ->
-
-
-		lda	#$3C
-		sta	POSTcode
-
-		lda	#$33
-		sta	A04AA
-
-		ldx	#$30
-		lda	#0		; wipe original value/flags
-		lda	(Z20,X)
-L181b
-		beq	L181b		; error, ->
-L182b
-		bmi	L182b		; error, ->
-
-		cmp	#$33
-L183b
-		bne	L183b		; error, ->
+		CMP	#$AA
+L183A
+		BNE	L183A		; ERROR, ->
 
 
-		lda	#$3D
-		sta	POSTcode
+		LDA	#$3C
+		STA	POSTCODE
 
-		lda	#$33
-		sta	A04AA
+		LDA	#$33
+		STA	A04AA
 
-		ldx	#$30
-		lda	#0		; wipe original value/flags
-		lda	(ZF0,X)
-L181c
-		beq	L181c		; error, ->
-L182c
-		bmi	L182c		; error, ->
+		LDX	#$30
+		LDA	#0		; WIPE ORIGINAL VALUE/FLAGS
+		LDA	(Z20,X)
+L181B
+		BEQ	L181B		; ERROR, ->
+L182B
+		BMI	L182B		; ERROR, ->
 
-		cmp	#$33
-L183c
-		bne	L183c		; error, ->
-
-
-		lda	#$3E
-		sta	POSTcode
-
-		lda	#0
-		sta	A04AA
-
-		ldx	#$30
-		lda	#$FF		; wipe original value/flags
-		lda	(Z20,X)
-L181d
-		bne	L181d		; error, ->
-L182d
-		bmi	L182d		; error, ->
-
-		cmp	#0
-L183d
-		bne	L183d		; error, ->
+		CMP	#$33
+L183B
+		BNE	L183B		; ERROR, ->
 
 
-		lda	#$3F
-		sta	POSTcode
+		LDA	#$3D
+		STA	POSTCODE
 
-		lda	#0
-		sta	A04AA
+		LDA	#$33
+		STA	A04AA
 
-		ldx	#$30
-		lda	#$FF		; wipe original value/flags
-		lda	(ZF0,X)
-L181e
-		bne	L181e		; error, ->
-L182e
-		bmi	L182e		; error, ->
+		LDX	#$30
+		LDA	#0		; WIPE ORIGINAL VALUE/FLAGS
+		LDA	(ZF0,X)
+L181C
+		BEQ	L181C		; ERROR, ->
+L182C
+		BMI	L182C		; ERROR, ->
 
-		cmp	#0
-L183e
-		bne	L183e		; error, ->
+		CMP	#$33
+L183C
+		BNE	L183C		; ERROR, ->
 
 
-;* LDA ($xx),Y
-		lda	#$40
-		sta	POSTcode
+		LDA	#$3E
+		STA	POSTCODE
 
-		lda	#$AA
-		sta	A04AA
+		LDA	#0
+		STA	A04AA
 
-		lda	#0
-		sta	Z50
+		LDX	#$30
+		LDA	#$FF		; WIPE ORIGINAL VALUE/FLAGS
+		LDA	(Z20,X)
+L181D
+		BNE	L181D		; ERROR, ->
+L182D
+		BMI	L182D		; ERROR, ->
 
-		lda	#>(A04AA)
-		sta	Z50+1
+		CMP	#0
+L183D
+		BNE	L183D		; ERROR, ->
 
-		ldy	#<(A04AA)
-		lda	#0		; wipe original value/flags
-		lda	(Z50),Y
+
+		LDA	#$3F
+		STA	POSTCODE
+
+		LDA	#0
+		STA	A04AA
+
+		LDX	#$30
+		LDA	#$FF		; WIPE ORIGINAL VALUE/FLAGS
+		LDA	(ZF0,X)
+L181E
+		BNE	L181E		; ERROR, ->
+L182E
+		BMI	L182E		; ERROR, ->
+
+		CMP	#0
+L183E
+		BNE	L183E		; ERROR, ->
+
+
+;* LDA ($XX),Y
+		LDA	#$40
+		STA	POSTCODE
+
+		LDA	#$AA
+		STA	A04AA
+
+		LDA	#0
+		STA	Z50
+
+		LDA	#>(A04AA)
+		STA	Z50+1
+
+		LDY	#<(A04AA)
+		LDA	#0		; WIPE ORIGINAL VALUE/FLAGS
+		LDA	(Z50),Y
 L191
-		beq	L191		; error, ->
+		BEQ	L191		; ERROR, ->
 L192
-		bpl	L192		; error, ->
+		BPL	L192		; ERROR, ->
 
-		cmp	#$AA
+		CMP	#$AA
 L193
-		bne	L193		; error, ->
+		BNE	L193		; ERROR, ->
 
 
-		lda	#$41
-		sta	POSTcode
+		LDA	#$41
+		STA	POSTCODE
 
-		lda	#$55
-		sta	A04AA
+		LDA	#$55
+		STA	A04AA
 
-		ldy	#<(A04AA)
-		lda	#0		; wipe original value/flags
-		lda	(Z50),Y
+		LDY	#<(A04AA)
+		LDA	#0		; WIPE ORIGINAL VALUE/FLAGS
+		LDA	(Z50),Y
 L194
-		beq	L194		; error, ->
+		BEQ	L194		; ERROR, ->
 L195
-		bmi	L195		; error, ->
+		BMI	L195		; ERROR, ->
 
 
-		cmp	#$55
+		CMP	#$55
 L196
-		bne	L196		; error, ->
+		BNE	L196		; ERROR, ->
 
 
-		lda	#$42
-		sta	POSTcode
+		LDA	#$42
+		STA	POSTCODE
 
-		lda	#0
-		sta	A04AA
+		LDA	#0
+		STA	A04AA
 
-		ldy	#<(A04AA)
-		lda	#$FF		; wipe original value/flags
-		lda	(Z50),Y
+		LDY	#<(A04AA)
+		LDA	#$FF		; WIPE ORIGINAL VALUE/FLAGS
+		LDA	(Z50),Y
 L197
-		bne	L197		; error, ->
+		BNE	L197		; ERROR, ->
 L198
-		bmi	L198		; error, ->
+		BMI	L198		; ERROR, ->
 
-		cmp	#0
+		CMP	#0
 L199
-		bne	L199		; error, ->
+		BNE	L199		; ERROR, ->
 
 
-;**  STA indexed  (2)
-;* STA ($xx,X)
-		lda	#$43
-		sta	POSTcode
-		sta	A04AA
+;**  STA INDEXED  (2)
+;* STA ($XX,X)
+		LDA	#$43
+		STA	POSTCODE
+		STA	A04AA
 
-		lda	#>(A04AA)
-		sta	Z50+1
+		LDA	#>(A04AA)
+		STA	Z50+1
 
-		lda	#<(A04AA)
-		sta	Z50
+		LDA	#<(A04AA)
+		STA	Z50
 
-		ldx	#$30
-		sta	(Z20,X)
+		LDX	#$30
+		STA	(Z20,X)
 
-		lda	#0		; wipe original value/flags
-		lda	A04AA
-		cmp	#$AA
+		LDA	#0		; WIPE ORIGINAL VALUE/FLAGS
+		LDA	A04AA
+		CMP	#$AA
 L201
-		bne	L201		; error, ->
+		BNE	L201		; ERROR, ->
 
 
-		lda	#$44
-		sta	POSTcode
-		sta	A04AA
+		LDA	#$44
+		STA	POSTCODE
+		STA	A04AA
 
-		lda	#$AA
-		sta	Z20
+		LDA	#$AA
+		STA	Z20
 
-		lda	#>(A0400)
-		sta	Z20+1
+		LDA	#>(A0400)
+		STA	Z20+1
 
-		ldx	#$30
-		lda	#$AA
-		sta	(ZF0,X)
+		LDX	#$30
+		LDA	#$AA
+		STA	(ZF0,X)
 
-		lda	#0		; wipe original value/flags
-		lda	A04AA
-		cmp	#$AA
+		LDA	#0		; WIPE ORIGINAL VALUE/FLAGS
+		LDA	A04AA
+		CMP	#$AA
 L202
-		bne	L202		; error, ->
+		BNE	L202		; ERROR, ->
 
 
-		lda	#$45
-		sta	POSTcode
-		sta	A04AA
+		LDA	#$45
+		STA	POSTCODE
+		STA	A04AA
 
-		ldx	#$30
-		lda	#$55
-		sta	(Z20,X)
+		LDX	#$30
+		LDA	#$55
+		STA	(Z20,X)
 
-		lda	#0		; wipe original value/flags
-		lda	A04AA
-		cmp	#$55
+		LDA	#0		; WIPE ORIGINAL VALUE/FLAGS
+		LDA	A04AA
+		CMP	#$55
 L203
-		bne	L203		; error, ->
+		BNE	L203		; ERROR, ->
 
 
-		lda	#$46
-		sta	POSTcode
-		sta	A04AA
+		LDA	#$46
+		STA	POSTCODE
+		STA	A04AA
 
-		ldx	#$30
-		lda	#$55
-		sta	(ZF0,X)
+		LDX	#$30
+		LDA	#$55
+		STA	(ZF0,X)
 
-		lda	#0		; wipe original value/flags
-		lda	A04AA
-		cmp	#$55
+		LDA	#0		; WIPE ORIGINAL VALUE/FLAGS
+		LDA	A04AA
+		CMP	#$55
 L204
-		bne	L204		; error, ->
+		BNE	L204		; ERROR, ->
 
 
-		lda	#$47
-		sta	POSTcode
-		sta	A04AA
+		LDA	#$47
+		STA	POSTCODE
+		STA	A04AA
 
-		ldx	#$30
-		lda	#0
-		sta	(Z20,X)
+		LDX	#$30
+		LDA	#0
+		STA	(Z20,X)
 
-		lda	#$FF		; wipe original value/flags
-		lda	A04AA
-		cmp	#0
+		LDA	#$FF		; WIPE ORIGINAL VALUE/FLAGS
+		LDA	A04AA
+		CMP	#0
 L205
-		bne	L205		; error, ->
+		BNE	L205		; ERROR, ->
 
 
-		lda	#$47
-		sta	POSTcode
-		sta	A04AA
+		LDA	#$47
+		STA	POSTCODE
+		STA	A04AA
 
-		lda	#0
-		sta	(ZF0,X)
+		LDA	#0
+		STA	(ZF0,X)
 
-		lda	#$FF		; wipe original value/flags
-		lda	A04AA
+		LDA	#$FF		; WIPE ORIGINAL VALUE/FLAGS
+		LDA	A04AA
 L206
-		bne	L206		; error, ->
+		BNE	L206		; ERROR, ->
 
 
-;* STA ($xx),Y
-		lda	#$49
-		sta	POSTcode
-		sta	A04AA
+;* STA ($XX),Y
+		LDA	#$49
+		STA	POSTCODE
+		STA	A04AA
 
-		lda	#>(A04AA)
-		sta	Z19
+		LDA	#>(A04AA)
+		STA	Z19
 
-		lda	#0
-		sta	Z18
+		LDA	#0
+		STA	Z18
 
-		ldy	#<(A04AA)
-		lda	#$AA
-		sta	(Z18),Y
+		LDY	#<(A04AA)
+		LDA	#$AA
+		STA	(Z18),Y
 
-		lda	#0		; wipe original value/flags
-		lda	A04AA
-		cmp	#$AA
+		LDA	#0		; WIPE ORIGINAL VALUE/FLAGS
+		LDA	A04AA
+		CMP	#$AA
 L211
-		bne	L211		; error, ->
+		BNE	L211		; ERROR, ->
 
 
-		lda	#$4A
-		sta	POSTcode
-		sta	A04AA
+		LDA	#$4A
+		STA	POSTCODE
+		STA	A04AA
  
-		ldy	#<(A04AA)
-		lda	#$55
-		sta	(Z18),Y
+		LDY	#<(A04AA)
+		LDA	#$55
+		STA	(Z18),Y
 
-		lda	#0		; wipe original value/flags
-		lda	A04AA
-		cmp	#$55
+		LDA	#0		; WIPE ORIGINAL VALUE/FLAGS
+		LDA	A04AA
+		CMP	#$55
 L212
-		bne	L212		; error, ->
+		BNE	L212		; ERROR, ->
 
-		lda	#$56 ;4B
-		sta	POSTcode
-		sta	A04AA
+		LDA	#$56 ;4B
+		STA	POSTCODE
+		STA	A04AA
 
-		ldy	#<(A04AA)
-		lda	#0
-		sta	(Z18),Y
+		LDY	#<(A04AA)
+		LDA	#0
+		STA	(Z18),Y
 
-		lda	#$FF		; wipe original value/flags
-		lda	A04AA
+		LDA	#$FF		; WIPE ORIGINAL VALUE/FLAGS
+		LDA	A04AA
 L213
-		bne	L213		; error, ->
+		BNE	L213		; ERROR, ->
 
 
 ;**  ADC  (1)
-;  CLC 		; $30 + $30 = $60, returns C = 0, returns V = 0
+;  CLC 		; $30 + $30 = $60, RETURNS C = 0, RETURNS V = 0
 ;  LDA #$30
 ;  ADC #$30
 
-		lda	#$4C
-		sta	POSTcode
+		LDA	#$4C
+		STA	POSTCODE
 		
-		cld
+		CLD
 
-		lda	#$30
-		sta	Z10
-		sta	A0400
+		LDA	#$30
+		STA	Z10
+		STA	A0400
 
-		clc
-		adc	#$30
+		CLC
+		ADC	#$30
 L221
-		bcs	L221		; error, ->
+		BCS	L221		; ERROR, ->
 L222
-		bvs	L222		; error, ->
+		BVS	L222		; ERROR, ->
 L223
-		beq	L223		; error, ->
+		BEQ	L223		; ERROR, ->
 L224
-		bmi	L224		; error, ->
+		BMI	L224		; ERROR, ->
 
-		cmp	#$60
+		CMP	#$60
 L225
-		bne	L225		; error, ->
+		BNE	L225		; ERROR, ->
 
 
-		lda	#$4D
-		sta	POSTcode
+		LDA	#$4D
+		STA	POSTCODE
 
-		clc
-		lda	#$30
-		adc	Z10
-L221a
-		bcs	L221a		; error, ->
-L222a
-		bvs	L222a		; error, ->
-L223a
-		beq	L223a		; error, ->
-L224a
-		bmi	L224a		; error, ->
+		CLC
+		LDA	#$30
+		ADC	Z10
+L221A
+		BCS	L221A		; ERROR, ->
+L222A
+		BVS	L222A		; ERROR, ->
+L223A
+		BEQ	L223A		; ERROR, ->
+L224A
+		BMI	L224A		; ERROR, ->
 
-		cmp	#$60
-L225a
-		bne	L225a		; error, ->
-
-
-		lda	#$4E
-		sta	POSTcode
-
-		clc
-		lda	#$30
-		adc	A0400
-L221b
-		bcs	L221b		; error, ->
-L222b
-		bvs	L222b		; error, ->
-L223b
-		beq	L223b		; error, ->
-L224b
-		bmi	L224b		; error, ->
-
-		cmp	#$60
-L225b
-		bne	L225b		; error, ->
+		CMP	#$60
+L225A
+		BNE	L225A		; ERROR, ->
 
 
-		lda	#$4F
-		sta	POSTcode
+		LDA	#$4E
+		STA	POSTCODE
 
-		lda	#$30
-		tax
-		sta	Z30,X
+		CLC
+		LDA	#$30
+		ADC	A0400
+L221B
+		BCS	L221B		; ERROR, ->
+L222B
+		BVS	L222B		; ERROR, ->
+L223B
+		BEQ	L223B		; ERROR, ->
+L224B
+		BMI	L224B		; ERROR, ->
 
-		clc
-		adc	Z30,X
-L221c
-		bcs	L221c		; error, ->
-L222c
-		bvs	L222c		; error, ->
-L223c
-		beq	L223c		; error, ->
-L224c
-		bmi	L224c		; error, ->
-
-		cmp	#$60
-L225c
-		bne	L225c		; error, ->
+		CMP	#$60
+L225B
+		BNE	L225B		; ERROR, ->
 
 
-		lda	#$50
-		sta	POSTcode
+		LDA	#$4F
+		STA	POSTCODE
 
-		lda	#$30
-		tax
-		sta	A0400,X
+		LDA	#$30
+		TAX
+		STA	Z30,X
 
-		clc
-		adc	A0400,X
-L221d
-		bcs	L221d		; error, ->
-L222d
-		bvs	L222d		; error, ->
-L223d
-		beq	L223d		; error, ->
-L224d
-		bmi	L224d		; error, ->
+		CLC
+		ADC	Z30,X
+L221C
+		BCS	L221C		; ERROR, ->
+L222C
+		BVS	L222C		; ERROR, ->
+L223C
+		BEQ	L223C		; ERROR, ->
+L224C
+		BMI	L224C		; ERROR, ->
 
-		cmp	#$60
-L225d
-		bne	L225d		; error, ->
-
-
-		lda	#$51
-		sta	POSTcode
-
-		lda	#$30
-		tay
-		sta	A0400,Y
-
-		clc
-		adc	A0400,Y
-L221e
-		bcs	L221e		; error, ->
-L222e
-		bvs	L222e		; error, ->
-L223e
-		beq	L223e		; error, ->
-L224e
-		bmi	L224e		; error, ->
-
-		cmp	#$60
-L225e
-		bne	L225e		; error, ->
+		CMP	#$60
+L225C
+		BNE	L225C		; ERROR, ->
 
 
-		lda	#$52
-		sta	POSTcode
+		LDA	#$50
+		STA	POSTCODE
 
-		lda	#>(A04AA)
-		sta	Z50+1
-		sta	Z20+1
+		LDA	#$30
+		TAX
+		STA	A0400,X
 
-		lda	#<(A04AA)
-		sta	Z50
-		sta	Z20
+		CLC
+		ADC	A0400,X
+L221D
+		BCS	L221D		; ERROR, ->
+L222D
+		BVS	L222D		; ERROR, ->
+L223D
+		BEQ	L223D		; ERROR, ->
+L224D
+		BMI	L224D		; ERROR, ->
 
-		ldx	#$30
-		txa
-		sta	(Z20,X)
-
-		clc
-		adc	(Z20,X)
-L221f
-		bcs	L221f		; error, ->
-L222f
-		bvs	L222f		; error, ->
-L223f
-		beq	L223f		; error, ->
-L224f
-		bmi	L224f		; error, ->
-
-		cmp	#$60
-L225f
-		bne	L225f		; error, ->
+		CMP	#$60
+L225D
+		BNE	L225D		; ERROR, ->
 
 
-		lda	#$53
-		sta	POSTcode
+		LDA	#$51
+		STA	POSTCODE
 
-		ldx	#$30
-		lda	#$30
-		sta	(ZF0,X)
+		LDA	#$30
+		TAY
+		STA	A0400,Y
 
-		clc
-		adc	(ZF0,X)
-L221g
-		bcs	L221g		; error, ->
-L222g
-		bvs	L222g		; error, ->
-L223g
-		beq	L223g		; error, ->
-L224g
-		bmi	L224g		; error, ->
+		CLC
+		ADC	A0400,Y
+L221E
+		BCS	L221E		; ERROR, ->
+L222E
+		BVS	L222E		; ERROR, ->
+L223E
+		BEQ	L223E		; ERROR, ->
+L224E
+		BMI	L224E		; ERROR, ->
 
-		cmp	#$60
-L225g
-		bne	L225g		; error, ->
+		CMP	#$60
+L225E
+		BNE	L225E		; ERROR, ->
 
 
-;  CLC 		; $30 + $D0 = $00, returns C = 1, returns V = 0
+		LDA	#$52
+		STA	POSTCODE
+
+		LDA	#>(A04AA)
+		STA	Z50+1
+		STA	Z20+1
+
+		LDA	#<(A04AA)
+		STA	Z50
+		STA	Z20
+
+		LDX	#$30
+		TXA
+		STA	(Z20,X)
+
+		CLC
+		ADC	(Z20,X)
+L221F
+		BCS	L221F		; ERROR, ->
+L222F
+		BVS	L222F		; ERROR, ->
+L223F
+		BEQ	L223F		; ERROR, ->
+L224F
+		BMI	L224F		; ERROR, ->
+
+		CMP	#$60
+L225F
+		BNE	L225F		; ERROR, ->
+
+
+		LDA	#$53
+		STA	POSTCODE
+
+		LDX	#$30
+		LDA	#$30
+		STA	(ZF0,X)
+
+		CLC
+		ADC	(ZF0,X)
+L221G
+		BCS	L221G		; ERROR, ->
+L222G
+		BVS	L222G		; ERROR, ->
+L223G
+		BEQ	L223G		; ERROR, ->
+L224G
+		BMI	L224G		; ERROR, ->
+
+		CMP	#$60
+L225G
+		BNE	L225G		; ERROR, ->
+
+
+;  CLC 		; $30 + $D0 = $00, RETURNS C = 1, RETURNS V = 0
 ;  LDA #$30
 ;  ADC #$D0
 
-		lda	#$54
-		sta	POSTcode
+		LDA	#$54
+		STA	POSTCODE
 
-		lda	#$D0
-		sta	Z10
-		sta	A0400
+		LDA	#$D0
+		STA	Z10
+		STA	A0400
 
-		clc
-		lda	#$30
-		adc	#$D0
+		CLC
+		LDA	#$30
+		ADC	#$D0
 L231
-		bcc	L231		; error, ->
+		BCC	L231		; ERROR, ->
 L232
-		bvs	L232		; error, ->
+		BVS	L232		; ERROR, ->
 L233
-		bne	L233		; error, ->
+		BNE	L233		; ERROR, ->
 L234
-		bmi	L234		; error, ->
+		BMI	L234		; ERROR, ->
 
-		cmp	#0
+		CMP	#0
 L235
-		bne	L235		; error, ->
+		BNE	L235		; ERROR, ->
 
 
-		lda	#$55
-		sta	POSTcode
+		LDA	#$55
+		STA	POSTCODE
 
-		clc
-		lda	#$30
-		adc	Z10
-L231a
-		bcc	L231a		; error, ->
-L232a
-		bvs	L232a		; error, ->
-L233a
-		bne	L233a		; error, ->
-L234a
-		bmi	L234a		; error, ->
+		CLC
+		LDA	#$30
+		ADC	Z10
+L231A
+		BCC	L231A		; ERROR, ->
+L232A
+		BVS	L232A		; ERROR, ->
+L233A
+		BNE	L233A		; ERROR, ->
+L234A
+		BMI	L234A		; ERROR, ->
 
-		cmp	#0
-L235a
-		bne	L235a		; error, ->
-
-
-		lda	#$56
-		sta	POSTcode
-
-		clc
-		lda	#$30
-		adc	A0400
-L231b
-		bcc	L231b		; error, ->
-L232b
-		bvs	L232b		; error, ->
-L233b
-		bne	L233b		; error, ->
-L234b
-		bmi	L234b		; error, ->
-
-		cmp	#0
-L235b
-		bne	L235b		; error, ->
+		CMP	#0
+L235A
+		BNE	L235A		; ERROR, ->
 
 
-		lda	#$57
-		sta	POSTcode
+		LDA	#$56
+		STA	POSTCODE
 
-		ldx	#$30
-		lda	#$D0
-		sta	Z30,X
+		CLC
+		LDA	#$30
+		ADC	A0400
+L231B
+		BCC	L231B		; ERROR, ->
+L232B
+		BVS	L232B		; ERROR, ->
+L233B
+		BNE	L233B		; ERROR, ->
+L234B
+		BMI	L234B		; ERROR, ->
 
-		clc
-		lda	#$30
-		adc	Z30,X
-L231c
-		bcc	L231c		; error, ->
-L232c
-		bvs	L232c		; error, ->
-L233c
-		bne	L233c		; error, ->
-L234c
-		bmi	L234c		; error, ->
-
-		cmp	#0
-L235c
-		bne	L235c		; error, ->
+		CMP	#0
+L235B
+		BNE	L235B		; ERROR, ->
 
 
-		lda	#$58
-		sta	POSTcode
+		LDA	#$57
+		STA	POSTCODE
 
-		ldx	#$30
-		lda	#$D0
-		sta	A0400,X
+		LDX	#$30
+		LDA	#$D0
+		STA	Z30,X
 
-		clc
-		lda	#$30
-		adc	A0400,X
-L231d
-		bcc	L231d		; error, ->
-L232d
-		bvs	L232d		; error, ->
-L233d
-		bne	L233d		; error, ->
-L234d
-		bmi	L234d		; error, ->
+		CLC
+		LDA	#$30
+		ADC	Z30,X
+L231C
+		BCC	L231C		; ERROR, ->
+L232C
+		BVS	L232C		; ERROR, ->
+L233C
+		BNE	L233C		; ERROR, ->
+L234C
+		BMI	L234C		; ERROR, ->
 
-		cmp	#0
-L235d
-		bne	L235d		; error, ->
-
-
-		lda	#$59
-		sta	POSTcode
-
-		ldy	#$30
-		lda	#$D0
-		sta	A0400,Y
-
-		clc
-		lda	#$30
-		adc	A0400,Y
-L231e
-		bcc	L231e		; error, ->
-L232e
-		bvs	L232e		; error, ->
-L233e
-		bne	L233e		; error, ->
-L234e
-		bmi	L234e		; error, ->
-
-		cmp	#0
-L235e
-		bne	L235e		; error, ->
+		CMP	#0
+L235C
+		BNE	L235C		; ERROR, ->
 
 
-		lda	#$5A
-		sta	POSTcode
+		LDA	#$58
+		STA	POSTCODE
 
-		lda	#>(A04AA)
-		sta	Z50+1
-		sta	Z20+1
+		LDX	#$30
+		LDA	#$D0
+		STA	A0400,X
 
-		lda	#<(A04AA)
-		sta	Z50
-		sta	Z20
+		CLC
+		LDA	#$30
+		ADC	A0400,X
+L231D
+		BCC	L231D		; ERROR, ->
+L232D
+		BVS	L232D		; ERROR, ->
+L233D
+		BNE	L233D		; ERROR, ->
+L234D
+		BMI	L234D		; ERROR, ->
 
-		ldx	#$30
-		lda	#$D0
-		sta	(Z20,X)
-
-		clc
-		lda	#$30
-		adc	(Z20,X)
-L231f
-		bcc	L231f		; error, ->
-L232f
-		bvs	L232f		; error, ->
-L233f
-		bne	L233f		; error, ->
-L234f
-		bmi	L234f		; error, ->
-
-		cmp	#0
-L235f
-		bne	L235f		; error, ->
+		CMP	#0
+L235D
+		BNE	L235D		; ERROR, ->
 
 
-		lda	#$5B
-		sta	POSTcode
+		LDA	#$59
+		STA	POSTCODE
 
-		ldx	#$30
-		lda	#$D0
-		sta	(ZF0,X)
+		LDY	#$30
+		LDA	#$D0
+		STA	A0400,Y
 
-		clc
-		lda	#$30
-		adc	(ZF0,X)
-L231g
-		bcc	L231g		; error, ->
-L232g
-		bvs	L232g		; error, ->
-L233g
-		bne	L233g		; error, ->
-L234g
-		bmi	L234g		; error, ->
+		CLC
+		LDA	#$30
+		ADC	A0400,Y
+L231E
+		BCC	L231E		; ERROR, ->
+L232E
+		BVS	L232E		; ERROR, ->
+L233E
+		BNE	L233E		; ERROR, ->
+L234E
+		BMI	L234E		; ERROR, ->
 
-		cmp	#0
-L235g
-		bne	L235g		; error, ->
+		CMP	#0
+L235E
+		BNE	L235E		; ERROR, ->
 
 
-;  CLC 		; $30 + $50 = $80, returns C = 0, returns V = 1
+		LDA	#$5A
+		STA	POSTCODE
+
+		LDA	#>(A04AA)
+		STA	Z50+1
+		STA	Z20+1
+
+		LDA	#<(A04AA)
+		STA	Z50
+		STA	Z20
+
+		LDX	#$30
+		LDA	#$D0
+		STA	(Z20,X)
+
+		CLC
+		LDA	#$30
+		ADC	(Z20,X)
+L231F
+		BCC	L231F		; ERROR, ->
+L232F
+		BVS	L232F		; ERROR, ->
+L233F
+		BNE	L233F		; ERROR, ->
+L234F
+		BMI	L234F		; ERROR, ->
+
+		CMP	#0
+L235F
+		BNE	L235F		; ERROR, ->
+
+
+		LDA	#$5B
+		STA	POSTCODE
+
+		LDX	#$30
+		LDA	#$D0
+		STA	(ZF0,X)
+
+		CLC
+		LDA	#$30
+		ADC	(ZF0,X)
+L231G
+		BCC	L231G		; ERROR, ->
+L232G
+		BVS	L232G		; ERROR, ->
+L233G
+		BNE	L233G		; ERROR, ->
+L234G
+		BMI	L234G		; ERROR, ->
+
+		CMP	#0
+L235G
+		BNE	L235G		; ERROR, ->
+
+
+;  CLC 		; $30 + $50 = $80, RETURNS C = 0, RETURNS V = 1
 ;  LDA #$30
 ;  ADC #$50
 
-		lda	#$5C
-		sta	POSTcode
+		LDA	#$5C
+		STA	POSTCODE
 
-		lda	#$50
-		sta	Z10
-		sta	A0400
+		LDA	#$50
+		STA	Z10
+		STA	A0400
 
-		clc
-		lda	#$30
-		adc	#$50
+		CLC
+		LDA	#$30
+		ADC	#$50
 L241
-		bcs	L241		; error, ->
+		BCS	L241		; ERROR, ->
 L242
-		bvc	L242		; error, ->
+		BVC	L242		; ERROR, ->
 L243
-		beq	L243		; error, ->
+		BEQ	L243		; ERROR, ->
 L244
-		bpl	L244		; error, ->
+		BPL	L244		; ERROR, ->
 
-		cmp	#$80
+		CMP	#$80
 L245
-		bne	L245		; error, ->
+		BNE	L245		; ERROR, ->
 
 
-		lda	#$5D
-		sta	POSTcode
+		LDA	#$5D
+		STA	POSTCODE
 
-		clc
-		lda	#$30
-		adc	Z10
-L241a
-		bcs	L241a		; error, ->
-L242a
-		bvc	L242a		; error, ->
-L243a
-		beq	L243a		; error, ->
-L244a
-		bpl	L244a		; error, ->
+		CLC
+		LDA	#$30
+		ADC	Z10
+L241A
+		BCS	L241A		; ERROR, ->
+L242A
+		BVC	L242A		; ERROR, ->
+L243A
+		BEQ	L243A		; ERROR, ->
+L244A
+		BPL	L244A		; ERROR, ->
 
-		cmp	#$80
-L245a
-		bne	L245a		; error, ->
-
-
-		lda	#$5E
-		sta	POSTcode
-
-		clc
-		lda	#$30
-		adc	A0400
-L241b
-		bcs	L241b		; error, ->
-L242b
-		bvc	L242b		; error, ->
-L243b
-		beq	L243b		; error, ->
-L244b
-		bpl	L244b		; error, ->
-
-		cmp	#$80
-L245b
-		bne	L245b		; error, ->
+		CMP	#$80
+L245A
+		BNE	L245A		; ERROR, ->
 
 
-		lda	#$5F
-		sta	POSTcode
+		LDA	#$5E
+		STA	POSTCODE
 
-		ldx	#$30
-		lda	#$50
-		sta	Z30,X
+		CLC
+		LDA	#$30
+		ADC	A0400
+L241B
+		BCS	L241B		; ERROR, ->
+L242B
+		BVC	L242B		; ERROR, ->
+L243B
+		BEQ	L243B		; ERROR, ->
+L244B
+		BPL	L244B		; ERROR, ->
 
-		clc
-		lda	#$30
-		adc	Z30,X
-L241c
-		bcs	L241c		; error, ->
-L242c
-		bvc	L242c		; error, ->
-L243c
-		beq	L243c		; error, ->
-L244c
-		bpl	L244c		; error, ->
-
-		cmp	#$80
-L245c
-		bne	L245c		; error, ->
+		CMP	#$80
+L245B
+		BNE	L245B		; ERROR, ->
 
 
-		lda	#$60
-		sta	POSTcode
+		LDA	#$5F
+		STA	POSTCODE
 
-		ldx	#$30
-		lda	#$50
-		sta	A0400,X
+		LDX	#$30
+		LDA	#$50
+		STA	Z30,X
 
-		clc
-		lda	#$30
-		adc	A0400,X
-L241d
-		bcs	L241d		; error, ->
-L242d
-		bvc	L242d		; error, ->
-L243d
-		beq	L243d		; error, ->
-L244d
-		bpl	L244d		; error, ->
+		CLC
+		LDA	#$30
+		ADC	Z30,X
+L241C
+		BCS	L241C		; ERROR, ->
+L242C
+		BVC	L242C		; ERROR, ->
+L243C
+		BEQ	L243C		; ERROR, ->
+L244C
+		BPL	L244C		; ERROR, ->
 
-		cmp	#$80
-L245d
-		bne	L245d		; error, ->
-
-
-		lda	#$61
-		sta	POSTcode
-
-		ldy	#$30
-		lda	#$50
-		sta	A0400,Y
-
-		clc
-		lda	#$30
-		adc	A0400,Y
-L241e
-		bcs	L241e		; error, ->
-L242e
-		bvc	L242e		; error, ->
-L243e
-		beq	L243e		; error, ->
-L244e
-		bpl	L244e		; error, ->
-
-		cmp	#$80
-L245e
-		bne	L245e		; error, ->
+		CMP	#$80
+L245C
+		BNE	L245C		; ERROR, ->
 
 
-		lda	#$62
-		sta	POSTcode
+		LDA	#$60
+		STA	POSTCODE
 
-		lda	#>(A04AA)
-		sta	Z50+1
-		sta	Z20+1
+		LDX	#$30
+		LDA	#$50
+		STA	A0400,X
 
-		lda	#<(A04AA)
-		sta	Z50
-		sta	Z20
+		CLC
+		LDA	#$30
+		ADC	A0400,X
+L241D
+		BCS	L241D		; ERROR, ->
+L242D
+		BVC	L242D		; ERROR, ->
+L243D
+		BEQ	L243D		; ERROR, ->
+L244D
+		BPL	L244D		; ERROR, ->
 
-		ldx	#$30
-		lda	#$50
-		sta	(Z20,X)
-
-		clc
-		lda	#$30
-		adc	(Z20,X)
-L241f
-		bcs	L241f		; error, ->
-L242f
-		bvc	L242f		; error, ->
-L243f
-		beq	L243f		; error, ->
-L244f
-		bpl	L244f		; error, ->
-
-		cmp	#$80
-L245f
-		bne	L245f		; error, ->
+		CMP	#$80
+L245D
+		BNE	L245D		; ERROR, ->
 
 
-		lda	#$63
-		sta	POSTcode
+		LDA	#$61
+		STA	POSTCODE
 
-		ldx	#$30
-		lda	#$50
-		sta	(ZF0,X)
+		LDY	#$30
+		LDA	#$50
+		STA	A0400,Y
 
-		clc
-		lda	#$30
-		adc	(ZF0,X)
-L241g
-		bcs	L241g		; error, ->
-L242g
-		bvc	L242g		; error, ->
-L243g
-		beq	L243g		; error, ->
-L244g
-		bpl	L244g		; error, ->
+		CLC
+		LDA	#$30
+		ADC	A0400,Y
+L241E
+		BCS	L241E		; ERROR, ->
+L242E
+		BVC	L242E		; ERROR, ->
+L243E
+		BEQ	L243E		; ERROR, ->
+L244E
+		BPL	L244E		; ERROR, ->
 
-		cmp	#$80
-L245g
-		bne	L245g		; error, ->
+		CMP	#$80
+L245E
+		BNE	L245E		; ERROR, ->
 
 
-;  CLC 		; $80 + $FF = $7F, returns C = 1, returns V = 1
+		LDA	#$62
+		STA	POSTCODE
+
+		LDA	#>(A04AA)
+		STA	Z50+1
+		STA	Z20+1
+
+		LDA	#<(A04AA)
+		STA	Z50
+		STA	Z20
+
+		LDX	#$30
+		LDA	#$50
+		STA	(Z20,X)
+
+		CLC
+		LDA	#$30
+		ADC	(Z20,X)
+L241F
+		BCS	L241F		; ERROR, ->
+L242F
+		BVC	L242F		; ERROR, ->
+L243F
+		BEQ	L243F		; ERROR, ->
+L244F
+		BPL	L244F		; ERROR, ->
+
+		CMP	#$80
+L245F
+		BNE	L245F		; ERROR, ->
+
+
+		LDA	#$63
+		STA	POSTCODE
+
+		LDX	#$30
+		LDA	#$50
+		STA	(ZF0,X)
+
+		CLC
+		LDA	#$30
+		ADC	(ZF0,X)
+L241G
+		BCS	L241G		; ERROR, ->
+L242G
+		BVC	L242G		; ERROR, ->
+L243G
+		BEQ	L243G		; ERROR, ->
+L244G
+		BPL	L244G		; ERROR, ->
+
+		CMP	#$80
+L245G
+		BNE	L245G		; ERROR, ->
+
+
+;  CLC 		; $80 + $FF = $7F, RETURNS C = 1, RETURNS V = 1
 ;  LDA #$80
 ;  ADC #$FF
 
-		lda	#$64
-		sta	POSTcode
+		LDA	#$64
+		STA	POSTCODE
 
-		lda	#$FF
-		sta	Z10
-		sta	A0400
+		LDA	#$FF
+		STA	Z10
+		STA	A0400
 
-		clc
-		lda	#$80
-		adc	#$FF
+		CLC
+		LDA	#$80
+		ADC	#$FF
 L251
-		bcc	L251		; error, ->
+		BCC	L251		; ERROR, ->
 L252
-		bvc	L252		; error, ->
+		BVC	L252		; ERROR, ->
 L253
-		beq	L253		; error, ->
+		BEQ	L253		; ERROR, ->
 L254
-		bmi	L254		; error, ->
+		BMI	L254		; ERROR, ->
 
-		cmp	#$7F
+		CMP	#$7F
 L255
-		bne	L255		; error, ->
+		BNE	L255		; ERROR, ->
 
 
-		lda	#$65
-		sta	POSTcode
+		LDA	#$65
+		STA	POSTCODE
 
-		clc
-		lda	#$80
-		adc	Z10
-L251a
-		bcc	L251a		; error, ->
-L252a
-		bvc	L252a		; error, ->
-L253a
-		beq	L253a		; error, ->
-L254a
-		bmi	L254a		; error, ->
+		CLC
+		LDA	#$80
+		ADC	Z10
+L251A
+		BCC	L251A		; ERROR, ->
+L252A
+		BVC	L252A		; ERROR, ->
+L253A
+		BEQ	L253A		; ERROR, ->
+L254A
+		BMI	L254A		; ERROR, ->
 
-		cmp	#$7F
-L255a
-		bne	L255a		; error, ->
-
-
-		lda	#$66
-		sta	POSTcode
-
-		clc
-		lda	#$80
-		adc	A0400
-L251b
-		bcc	L251b		; error, ->
-L252b
-		bvc	L252b		; error, ->
-L253b
-		beq	L253b		; error, ->
-L254b
-		bmi	L254b		; error, ->
-
-		cmp	#$7F
-L255b
-		bne	L255b		; error, ->
+		CMP	#$7F
+L255A
+		BNE	L255A		; ERROR, ->
 
 
-		lda	#$67
-		sta	POSTcode
+		LDA	#$66
+		STA	POSTCODE
 
-		ldx	#$80
-		lda	#$FF
-		sta	Z30,X
+		CLC
+		LDA	#$80
+		ADC	A0400
+L251B
+		BCC	L251B		; ERROR, ->
+L252B
+		BVC	L252B		; ERROR, ->
+L253B
+		BEQ	L253B		; ERROR, ->
+L254B
+		BMI	L254B		; ERROR, ->
 
-		clc
-		lda	#$80
-		adc	Z30,X
-L251c
-		bcc	L251c		; error, ->
-L252c
-		bvc	L252c		; error, ->
-L253c
-		beq	L253c		; error, ->
-L254c
-		bmi	L254c		; error, ->
-
-		cmp	#$7F
-L255c
-		bne	L255c		; error, ->
+		CMP	#$7F
+L255B
+		BNE	L255B		; ERROR, ->
 
 
-		lda	#$68
-		sta	POSTcode
+		LDA	#$67
+		STA	POSTCODE
 
-		ldx	#$30
-		lda	#$FF
-		sta	A0400,X
+		LDX	#$80
+		LDA	#$FF
+		STA	Z30,X
 
-		clc
-		lda	#$80
-		adc	A0400,X
-L251d
-		bcc	L251d		; error, ->
-L252d
-		bvc	L252d		; error, ->
-L253d
-		beq	L253d		; error, ->
-L254d
-		bmi	L254d		; error, ->
+		CLC
+		LDA	#$80
+		ADC	Z30,X
+L251C
+		BCC	L251C		; ERROR, ->
+L252C
+		BVC	L252C		; ERROR, ->
+L253C
+		BEQ	L253C		; ERROR, ->
+L254C
+		BMI	L254C		; ERROR, ->
 
-		cmp	#$7F
-L255d
-		bne	L255d		; error, ->
-
-
-		lda	#$69
-		sta	POSTcode
-
-		ldy	#$80
-		lda	#$FF
-		sta	A0400,Y
-
-		clc
-		lda	#$80
-		adc	A0400,Y
-L251e
-		bcc	L251e		; error, ->
-L252e
-		bvc	L252e		; error, ->
-L253e
-		beq	L253e		; error, ->
-L254e
-		bmi	L254e		; error, ->
-
-		cmp	#$7F
-L255e
-		bne	L255e		; error, ->
+		CMP	#$7F
+L255C
+		BNE	L255C		; ERROR, ->
 
 
-		lda	#$6A
-		sta	POSTcode
+		LDA	#$68
+		STA	POSTCODE
 
-		lda	#>(A04AA)
-		sta	Z50+1
-		sta	Z20+1
+		LDX	#$30
+		LDA	#$FF
+		STA	A0400,X
 
-		lda	#<(A04AA)
-		sta	Z50
-		sta	Z20
+		CLC
+		LDA	#$80
+		ADC	A0400,X
+L251D
+		BCC	L251D		; ERROR, ->
+L252D
+		BVC	L252D		; ERROR, ->
+L253D
+		BEQ	L253D		; ERROR, ->
+L254D
+		BMI	L254D		; ERROR, ->
 
-		ldx	#$30
-		lda	#$FF
-		sta	(Z20,X)
-
-		clc
-		lda	#$80
-		adc	(Z20,X)
-L251f
-		bcc	L251f		; error, ->
-L252f
-		bvc	L252f		; error, ->
-L253f
-		beq	L253f		; error, ->
-L254f
-		bmi	L254f		; error, ->
-
-		cmp	#$7F
-L255f
-		bne	L255f		; error, ->
+		CMP	#$7F
+L255D
+		BNE	L255D		; ERROR, ->
 
 
-		lda	#$6B
-		sta	POSTcode
+		LDA	#$69
+		STA	POSTCODE
 
-		ldx	#$30
-		lda	#$FF
-		sta	(ZF0,X)
+		LDY	#$80
+		LDA	#$FF
+		STA	A0400,Y
 
-		clc
-		lda	#$80
-		adc	(ZF0,X)
-L251g
-		bcc	L251g		; error, ->
-L252g
-		bvc	L252g		; error, ->
-L253g
-		beq	L253g		; error, ->
-L254g
-		bmi	L254g		; error, ->
+		CLC
+		LDA	#$80
+		ADC	A0400,Y
+L251E
+		BCC	L251E		; ERROR, ->
+L252E
+		BVC	L252E		; ERROR, ->
+L253E
+		BEQ	L253E		; ERROR, ->
+L254E
+		BMI	L254E		; ERROR, ->
 
-		cmp	#$7F
-L255g
-		bne	L255g		; error, ->
+		CMP	#$7F
+L255E
+		BNE	L255E		; ERROR, ->
+
+
+		LDA	#$6A
+		STA	POSTCODE
+
+		LDA	#>(A04AA)
+		STA	Z50+1
+		STA	Z20+1
+
+		LDA	#<(A04AA)
+		STA	Z50
+		STA	Z20
+
+		LDX	#$30
+		LDA	#$FF
+		STA	(Z20,X)
+
+		CLC
+		LDA	#$80
+		ADC	(Z20,X)
+L251F
+		BCC	L251F		; ERROR, ->
+L252F
+		BVC	L252F		; ERROR, ->
+L253F
+		BEQ	L253F		; ERROR, ->
+L254F
+		BMI	L254F		; ERROR, ->
+
+		CMP	#$7F
+L255F
+		BNE	L255F		; ERROR, ->
+
+
+		LDA	#$6B
+		STA	POSTCODE
+
+		LDX	#$30
+		LDA	#$FF
+		STA	(ZF0,X)
+
+		CLC
+		LDA	#$80
+		ADC	(ZF0,X)
+L251G
+		BCC	L251G		; ERROR, ->
+L252G
+		BVC	L252G		; ERROR, ->
+L253G
+		BEQ	L253G		; ERROR, ->
+L254G
+		BMI	L254G		; ERROR, ->
+
+		CMP	#$7F
+L255G
+		BNE	L255G		; ERROR, ->
 
 
 ;**  SBC  (1)
-;  SEC 		; $30 - $30 = $00, returns C = 1, returns V = 0
+;  SEC 		; $30 - $30 = $00, RETURNS C = 1, RETURNS V = 0
 ;  LDA #$30
 ;  SBC #$30
 
-		lda	#$6C
-		sta	POSTcode
+		LDA	#$6C
+		STA	POSTCODE
 
-		lda	#$30
-		sta	Z10
-		sta	A0400
+		LDA	#$30
+		STA	Z10
+		STA	A0400
 
-		sec
-		sbc	#$30
+		SEC
+		SBC	#$30
 L261
-		bcc	L261		; error, ->
+		BCC	L261		; ERROR, ->
 L262
-		bvs	L262		; error, ->
+		BVS	L262		; ERROR, ->
 L263
-		bne	L263		; error, ->
+		BNE	L263		; ERROR, ->
 L264
-		bmi	L264		; error, ->
+		BMI	L264		; ERROR, ->
 
-		cmp	#0
+		CMP	#0
 L265
-		bne	L265		; error, ->
+		BNE	L265		; ERROR, ->
 
 
-		lda	#$6D
-		sta	POSTcode
+		LDA	#$6D
+		STA	POSTCODE
 
-		sec
-		lda	#$30
-		sbc	Z10
-L261a
-		bcc	L261a		; error, ->
-L262a
-		bvs	L262a		; error, ->
-L263a
-		bne	L263a		; error, ->
-L264a
-		bmi	L264a		; error, ->
+		SEC
+		LDA	#$30
+		SBC	Z10
+L261A
+		BCC	L261A		; ERROR, ->
+L262A
+		BVS	L262A		; ERROR, ->
+L263A
+		BNE	L263A		; ERROR, ->
+L264A
+		BMI	L264A		; ERROR, ->
 
-		cmp	#0
-L265a
-		bne	L265a		; error, ->
-
-
-		lda	#$6E
-		sta	POSTcode
-
-		sec
-		lda	#$30
-		sbc	A0400
-L261b
-		bcc	L261b		; error, ->
-L262b
-		bvs	L262b		; error, ->
-L263b
-		bne	L263b		; error, ->
-L264b
-		bmi	L264b		; error, ->
-
-		cmp	#0
-L265b
-		bne	L265b		; error, ->
+		CMP	#0
+L265A
+		BNE	L265A		; ERROR, ->
 
 
-		lda	#$6F
-		sta	POSTcode
+		LDA	#$6E
+		STA	POSTCODE
 
-		lda	#$30
-		tax
-		sta	Z30,X
+		SEC
+		LDA	#$30
+		SBC	A0400
+L261B
+		BCC	L261B		; ERROR, ->
+L262B
+		BVS	L262B		; ERROR, ->
+L263B
+		BNE	L263B		; ERROR, ->
+L264B
+		BMI	L264B		; ERROR, ->
 
-		sec
-		sbc	Z30,X
-L261c
-		bcc	L261c		; error, ->
-L262c
-		bvs	L262c		; error, ->
-L263c
-		bne	L263c		; error, ->
-L264c
-		bmi	L264c		; error, ->
-
-		cmp	#0
-L265c
-		bne	L265c		; error, ->
+		CMP	#0
+L265B
+		BNE	L265B		; ERROR, ->
 
 
-		lda	#$70
-		sta	POSTcode
+		LDA	#$6F
+		STA	POSTCODE
 
-		ldx	#$30
-		lda	#$30
-		sta	A0400,X
+		LDA	#$30
+		TAX
+		STA	Z30,X
 
-		sec
-		sbc	A0400,X
-L261d
-		bcc	L261d		; error, ->
-L262d
-		bvs	L262d		; error, ->
-L263d
-		bne	L263d		; error, ->
-L264d
-		bmi	L264d		; error, ->
+		SEC
+		SBC	Z30,X
+L261C
+		BCC	L261C		; ERROR, ->
+L262C
+		BVS	L262C		; ERROR, ->
+L263C
+		BNE	L263C		; ERROR, ->
+L264C
+		BMI	L264C		; ERROR, ->
 
-		cmp	#0
-L265d
-		bne	L265d		; error, ->
-
-
-		lda	#$71
-		sta	POSTcode
-
-		lda	#$30
-		tay
-		sta	A0400,Y
-
-		sec
-		sbc	A0400,Y
-L261e
-		bcc	L261e		; error, ->
-L262e
-		bvs	L262e		; error, ->
-L263e
-		bne	L263e		; error, ->
-L264e
-		bmi	L264e		; error, ->
-
-		cmp	#0
-L265e
-		bne	L265e		; error, ->
+		CMP	#0
+L265C
+		BNE	L265C		; ERROR, ->
 
 
-		lda	#$72
-		sta	POSTcode
+		LDA	#$70
+		STA	POSTCODE
 
-		lda	#>(A04AA)
-		sta	Z50+1
-		sta	Z20+1
+		LDX	#$30
+		LDA	#$30
+		STA	A0400,X
 
-		lda	#<(A04AA)
-		sta	Z50
-		sta	Z20
+		SEC
+		SBC	A0400,X
+L261D
+		BCC	L261D		; ERROR, ->
+L262D
+		BVS	L262D		; ERROR, ->
+L263D
+		BNE	L263D		; ERROR, ->
+L264D
+		BMI	L264D		; ERROR, ->
 
-		ldx	#$30
-		txa
-		sta	(Z20,X)
-
-		sec
-		sbc	(Z20,X)
-L261f
-		bcc	L261f		; error, ->
-L262f
-		bvs	L262f		; error, ->
-L263f
-		bne	L263f		; error, ->
-L264f
-		bmi	L264f		; error, ->
-
-		cmp	#0
-L265f
-		bne	L265f		; error, ->
+		CMP	#0
+L265D
+		BNE	L265D		; ERROR, ->
 
 
-		lda	#$73
-		sta	POSTcode
+		LDA	#$71
+		STA	POSTCODE
 
-		lda	#$30
-		tax
-		sta	(ZF0,X)
+		LDA	#$30
+		TAY
+		STA	A0400,Y
 
-		sec
-		sbc	(ZF0,X)
-L261g
-		bcc	L261g		; error, ->
-L262g
-		bvs	L262g		; error, ->
-L263g
-		bne	L263g		; error, ->
-L264g
-		bmi	L264g		; error, ->
+		SEC
+		SBC	A0400,Y
+L261E
+		BCC	L261E		; ERROR, ->
+L262E
+		BVS	L262E		; ERROR, ->
+L263E
+		BNE	L263E		; ERROR, ->
+L264E
+		BMI	L264E		; ERROR, ->
 
-		cmp	#0
-L265g
-		bne	L265g		; error, ->
+		CMP	#0
+L265E
+		BNE	L265E		; ERROR, ->
 
 
-;  SEC 		; $30 - $50 = $20, returns C = 0, returns V = 0
+		LDA	#$72
+		STA	POSTCODE
+
+		LDA	#>(A04AA)
+		STA	Z50+1
+		STA	Z20+1
+
+		LDA	#<(A04AA)
+		STA	Z50
+		STA	Z20
+
+		LDX	#$30
+		TXA
+		STA	(Z20,X)
+
+		SEC
+		SBC	(Z20,X)
+L261F
+		BCC	L261F		; ERROR, ->
+L262F
+		BVS	L262F		; ERROR, ->
+L263F
+		BNE	L263F		; ERROR, ->
+L264F
+		BMI	L264F		; ERROR, ->
+
+		CMP	#0
+L265F
+		BNE	L265F		; ERROR, ->
+
+
+		LDA	#$73
+		STA	POSTCODE
+
+		LDA	#$30
+		TAX
+		STA	(ZF0,X)
+
+		SEC
+		SBC	(ZF0,X)
+L261G
+		BCC	L261G		; ERROR, ->
+L262G
+		BVS	L262G		; ERROR, ->
+L263G
+		BNE	L263G		; ERROR, ->
+L264G
+		BMI	L264G		; ERROR, ->
+
+		CMP	#0
+L265G
+		BNE	L265G		; ERROR, ->
+
+
+;  SEC 		; $30 - $50 = $20, RETURNS C = 0, RETURNS V = 0
 ;  LDA #$30
 ;  SBC #$50
 
-		lda	#$74
-		sta	POSTcode
+		LDA	#$74
+		STA	POSTCODE
 
-		lda	#$50
-		sta	Z10
-		sta	A0400
+		LDA	#$50
+		STA	Z10
+		STA	A0400
 
-		sec
-		lda	#$30
-		sbc	#$50
+		SEC
+		LDA	#$30
+		SBC	#$50
 L271
-		bcs	L271		; error, ->
+		BCS	L271		; ERROR, ->
 L272
-		bvs	L272		; error, ->
+		BVS	L272		; ERROR, ->
 L273
-		beq	L273		; error, ->
+		BEQ	L273		; ERROR, ->
 L274
-		bpl	L274		; error, ->
+		BPL	L274		; ERROR, ->
 
-		cmp	#$E0
+		CMP	#$E0
 L275
-		bne	L275		; error, ->
+		BNE	L275		; ERROR, ->
 
 
-		lda	#$75
-		sta	POSTcode
+		LDA	#$75
+		STA	POSTCODE
 
-		sec
-		lda	#$30
-		sbc	Z10
-L271a
-		bcs	L271a		; error, ->
-L272a
-		bvs	L272a		; error, ->
-L273a
-		beq	L273a		; error, ->
-L274a
-		bpl	L274a		; error, ->
+		SEC
+		LDA	#$30
+		SBC	Z10
+L271A
+		BCS	L271A		; ERROR, ->
+L272A
+		BVS	L272A		; ERROR, ->
+L273A
+		BEQ	L273A		; ERROR, ->
+L274A
+		BPL	L274A		; ERROR, ->
 
-		cmp	#$E0
-L275a
-		bne	L275a		; error, ->
-
-
-		lda	#$76
-		sta	POSTcode
-
-		sec
-		lda	#$30
-		sbc	A0400
-L271b
-		bcs	L271b		; error, ->
-L272b
-		bvs	L272b		; error, ->
-L273b
-		beq	L273b		; error, ->
-L274b
-		bpl	L274b		; error, ->
-
-		cmp	#$E0
-L275b
-		bne	L275b		; error, ->
+		CMP	#$E0
+L275A
+		BNE	L275A		; ERROR, ->
 
 
-		lda	#$77
-		sta	POSTcode
+		LDA	#$76
+		STA	POSTCODE
 
-		ldx	#$30
-		lda	#$50
-		sta	Z30,X
+		SEC
+		LDA	#$30
+		SBC	A0400
+L271B
+		BCS	L271B		; ERROR, ->
+L272B
+		BVS	L272B		; ERROR, ->
+L273B
+		BEQ	L273B		; ERROR, ->
+L274B
+		BPL	L274B		; ERROR, ->
 
-		sec
-		lda	#$30
-		sbc	Z30,X
-L271c
-		bcs	L271c		; error, ->
-L272c
-		bvs	L272c		; error, ->
-L273c
-		beq	L273c		; error, ->
-L274c
-		bpl	L274c		; error, ->
-
-		cmp	#$E0
-L275c
-		bne	L275c		; error, ->
+		CMP	#$E0
+L275B
+		BNE	L275B		; ERROR, ->
 
 
-		lda	#$78
-		sta	POSTcode
+		LDA	#$77
+		STA	POSTCODE
 
-		ldx	#$30
-		lda	#$50
-		sta	A0400,X
+		LDX	#$30
+		LDA	#$50
+		STA	Z30,X
 
-		sec
-		lda	#$30
-		sbc	A0400,X
-L271d
-		bcs	L271d		; error, ->
-L272d
-		bvs	L272d		; error, ->
-L273d
-		beq	L273d		; error, ->
-L274d
-		bpl	L274d		; error, ->
+		SEC
+		LDA	#$30
+		SBC	Z30,X
+L271C
+		BCS	L271C		; ERROR, ->
+L272C
+		BVS	L272C		; ERROR, ->
+L273C
+		BEQ	L273C		; ERROR, ->
+L274C
+		BPL	L274C		; ERROR, ->
 
-		cmp	#$E0
-L275d
-		bne	L275d		; error, ->
-
-
-		lda	#$79
-		sta	POSTcode
-
-		ldy	#$30
-		lda	#$50
-		sta	A0400,Y
-
-		sec
-		lda	#$30
-		sbc	A0400,Y
-L271e
-		bcs	L271e		; error, ->
-L272e
-		bvs	L272e		; error, ->
-L273e
-		beq	L273e		; error, ->
-L274e
-		bpl	L274e		; error, ->
-
-		cmp	#$E0
-L275e
-		bne	L275e		; error, ->
+		CMP	#$E0
+L275C
+		BNE	L275C		; ERROR, ->
 
 
-		lda	#$7A
-		sta	POSTcode
+		LDA	#$78
+		STA	POSTCODE
 
-		lda	#>(A04AA)
-		sta	Z50+1
-		sta	Z20+1
+		LDX	#$30
+		LDA	#$50
+		STA	A0400,X
 
-		lda	#<(A04AA)
-		sta	Z50
-		sta	Z20
+		SEC
+		LDA	#$30
+		SBC	A0400,X
+L271D
+		BCS	L271D		; ERROR, ->
+L272D
+		BVS	L272D		; ERROR, ->
+L273D
+		BEQ	L273D		; ERROR, ->
+L274D
+		BPL	L274D		; ERROR, ->
 
-		ldx	#$30
-		lda	#$50
-		sta	(Z20,X)
-
-		sec
-		lda	#$30
-		sbc	(Z20,X)
-L271f
-		bcs	L271f		; error, ->
-L272f
-		bvs	L272f		; error, ->
-L273f
-		beq	L273f		; error, ->
-L274f
-		bpl	L274f		; error, ->
-
-		cmp	#$E0
-L275f
-		bne	L275f		; error, ->
+		CMP	#$E0
+L275D
+		BNE	L275D		; ERROR, ->
 
 
-		lda	#$7B
-		sta	POSTcode
+		LDA	#$79
+		STA	POSTCODE
 
-		ldx	#$30
-		lda	#$50
-		sta	(ZF0,X)
+		LDY	#$30
+		LDA	#$50
+		STA	A0400,Y
 
-		sec
-		lda	#$30
-		sbc	(ZF0,X)
-L271g
-		bcs	L271g		; error, ->
-L272g
-		bvs	L272g		; error, ->
-L273g
-		beq	L273g		; error, ->
-L274g
-		bpl	L274g		; error, ->
+		SEC
+		LDA	#$30
+		SBC	A0400,Y
+L271E
+		BCS	L271E		; ERROR, ->
+L272E
+		BVS	L272E		; ERROR, ->
+L273E
+		BEQ	L273E		; ERROR, ->
+L274E
+		BPL	L274E		; ERROR, ->
 
-		cmp	#$E0
-L275g
-		bne	L275g		; error, ->
+		CMP	#$E0
+L275E
+		BNE	L275E		; ERROR, ->
 
 
-;  SEC 		; $80 - $01 = $7F, returns C = 1, returns V = 1
+		LDA	#$7A
+		STA	POSTCODE
+
+		LDA	#>(A04AA)
+		STA	Z50+1
+		STA	Z20+1
+
+		LDA	#<(A04AA)
+		STA	Z50
+		STA	Z20
+
+		LDX	#$30
+		LDA	#$50
+		STA	(Z20,X)
+
+		SEC
+		LDA	#$30
+		SBC	(Z20,X)
+L271F
+		BCS	L271F		; ERROR, ->
+L272F
+		BVS	L272F		; ERROR, ->
+L273F
+		BEQ	L273F		; ERROR, ->
+L274F
+		BPL	L274F		; ERROR, ->
+
+		CMP	#$E0
+L275F
+		BNE	L275F		; ERROR, ->
+
+
+		LDA	#$7B
+		STA	POSTCODE
+
+		LDX	#$30
+		LDA	#$50
+		STA	(ZF0,X)
+
+		SEC
+		LDA	#$30
+		SBC	(ZF0,X)
+L271G
+		BCS	L271G		; ERROR, ->
+L272G
+		BVS	L272G		; ERROR, ->
+L273G
+		BEQ	L273G		; ERROR, ->
+L274G
+		BPL	L274G		; ERROR, ->
+
+		CMP	#$E0
+L275G
+		BNE	L275G		; ERROR, ->
+
+
+;  SEC 		; $80 - $01 = $7F, RETURNS C = 1, RETURNS V = 1
 ;  LDA #$80
 ;  SBC #$01
 
-		lda	#$7C
-		sta	POSTcode
+		LDA	#$7C
+		STA	POSTCODE
 
-		lda	#1
-		sta	Z10
-		sta	A0400
+		LDA	#1
+		STA	Z10
+		STA	A0400
 
-		sec
-		lda	#$80
-		sbc	#1
+		SEC
+		LDA	#$80
+		SBC	#1
 L281
-		bcc	L281		; error, ->
+		BCC	L281		; ERROR, ->
 L282
-		bvc	L282		; error, ->
+		BVC	L282		; ERROR, ->
 L283
-		beq	L283		; error, ->
+		BEQ	L283		; ERROR, ->
 L284
-		bmi	L284		; error, ->
+		BMI	L284		; ERROR, ->
 
-		cmp	#$7F
+		CMP	#$7F
 L285
-		bne	L285		; error, ->
+		BNE	L285		; ERROR, ->
 
 
-		lda	#$7D
-		sta	POSTcode
+		LDA	#$7D
+		STA	POSTCODE
 
-		sec
-		lda	#$80
-		sbc	Z10
-L281a
-		bcc	L281a		; error, ->
-L282a
-		bvc	L282a		; error, ->
-L283a
-		beq	L283a		; error, ->
-L284a
-		bmi	L284a		; error, ->
+		SEC
+		LDA	#$80
+		SBC	Z10
+L281A
+		BCC	L281A		; ERROR, ->
+L282A
+		BVC	L282A		; ERROR, ->
+L283A
+		BEQ	L283A		; ERROR, ->
+L284A
+		BMI	L284A		; ERROR, ->
 
-		cmp	#$7F
-L285a
-		bne	L285a		; error, ->
-
-
-		lda	#$7E
-		sta	POSTcode
-
-		sec
-		lda	#$80
-		sbc	A0400
-L281b
-		bcc	L281b		; error, ->
-L282b
-		bvc	L282b		; error, ->
-L283b
-		beq	L283b		; error, ->
-L284b
-		bmi	L284b		; error, ->
-
-		cmp	#$7F
-L285b
-		bne	L285b		; error, ->
+		CMP	#$7F
+L285A
+		BNE	L285A		; ERROR, ->
 
 
-		lda	#$7F
-		sta	POSTcode
+		LDA	#$7E
+		STA	POSTCODE
 
-		ldx	#$30
-		lda	#1
-		sta	Z30,X
+		SEC
+		LDA	#$80
+		SBC	A0400
+L281B
+		BCC	L281B		; ERROR, ->
+L282B
+		BVC	L282B		; ERROR, ->
+L283B
+		BEQ	L283B		; ERROR, ->
+L284B
+		BMI	L284B		; ERROR, ->
 
-		sec
-		lda	#$80
-		sbc	Z30,X
-L281c
-		bcc	L281c		; error, ->
-L282c
-		bvc	L282c		; error, ->
-L283c
-		beq	L283c		; error, ->
-L284c
-		bmi	L284c		; error, ->
-
-		cmp	#$7F
-L285c
-		bne	L285c		; error, ->
+		CMP	#$7F
+L285B
+		BNE	L285B		; ERROR, ->
 
 
-		lda	#$80
-		sta	POSTcode
+		LDA	#$7F
+		STA	POSTCODE
 
-		ldx	#$30
-		lda	#1
-		sta	A0400,X
+		LDX	#$30
+		LDA	#1
+		STA	Z30,X
 
-		sec
-		lda	#$80
-		sbc	A0400,X
-L281d
-		bcc	L281d		; error, ->
-L282d
-		bvc	L282d		; error, ->
-L283d
-		beq	L283d		; error, ->
-L284d
-		bmi	L284d		; error, ->
+		SEC
+		LDA	#$80
+		SBC	Z30,X
+L281C
+		BCC	L281C		; ERROR, ->
+L282C
+		BVC	L282C		; ERROR, ->
+L283C
+		BEQ	L283C		; ERROR, ->
+L284C
+		BMI	L284C		; ERROR, ->
 
-		cmp	#$7F
-L285d
-		bne	L285d		; error, ->
-
-
-		lda	#$81
-		sta	POSTcode
-
-		ldy	#$30
-		lda	#1
-		sta	A0400,Y
-
-		sec
-		lda	#$80
-		sbc	A0400,Y
-L281e
-		bcc	L281e		; error, ->
-L282e
-		bvc	L282e		; error, ->
-L283e
-		beq	L283e		; error, ->
-L284e
-		bmi	L284e		; error, ->
-
-		cmp	#$7F
-L285e
-		bne	L285e		; error, ->
+		CMP	#$7F
+L285C
+		BNE	L285C		; ERROR, ->
 
 
-		lda	#$82
-		sta	POSTcode
+		LDA	#$80
+		STA	POSTCODE
 
-		lda	#>(A04AA)
-		sta	Z50+1
-		sta	Z20+1
+		LDX	#$30
+		LDA	#1
+		STA	A0400,X
 
-		lda	#<(A04AA)
-		sta	Z50
-		sta	Z20
+		SEC
+		LDA	#$80
+		SBC	A0400,X
+L281D
+		BCC	L281D		; ERROR, ->
+L282D
+		BVC	L282D		; ERROR, ->
+L283D
+		BEQ	L283D		; ERROR, ->
+L284D
+		BMI	L284D		; ERROR, ->
 
-		ldx	#$30
-		lda	#1
-		sta	(Z20,X)
-
-		sec
-		lda	#$80
-		sbc	(Z20,X)
-L281f
-		bcc	L281f		; error, ->
-L282f
-		bvc	L282f		; error, ->
-L283f
-		beq	L283f		; error, ->
-L284f
-		bmi	L284f		; error, ->
-
-		cmp	#$7F
-L285f
-		bne	L285f		; error, ->
+		CMP	#$7F
+L285D
+		BNE	L285D		; ERROR, ->
 
 
-		lda	#$83
-		sta	POSTcode
+		LDA	#$81
+		STA	POSTCODE
 
-		ldx	#$30
-		lda	#1
-		sta	(ZF0,X)
+		LDY	#$30
+		LDA	#1
+		STA	A0400,Y
 
-		sec
-		lda	#$80
-		sbc	(ZF0,X)
-L281g
-		bcc	L281g		; error, ->
-L282g
-		bvc	L282g		; error, ->
-L283g
-		beq	L283g		; error, ->
-L284g
-		bmi	L284g		; error, ->
+		SEC
+		LDA	#$80
+		SBC	A0400,Y
+L281E
+		BCC	L281E		; ERROR, ->
+L282E
+		BVC	L282E		; ERROR, ->
+L283E
+		BEQ	L283E		; ERROR, ->
+L284E
+		BMI	L284E		; ERROR, ->
 
-		cmp	#$7F
-L285g
-		bne	L285g		; error, ->
+		CMP	#$7F
+L285E
+		BNE	L285E		; ERROR, ->
 
 
-;  SEC 		; $70 - $E0 = $90, returns C = 0, returns V = 1
+		LDA	#$82
+		STA	POSTCODE
+
+		LDA	#>(A04AA)
+		STA	Z50+1
+		STA	Z20+1
+
+		LDA	#<(A04AA)
+		STA	Z50
+		STA	Z20
+
+		LDX	#$30
+		LDA	#1
+		STA	(Z20,X)
+
+		SEC
+		LDA	#$80
+		SBC	(Z20,X)
+L281F
+		BCC	L281F		; ERROR, ->
+L282F
+		BVC	L282F		; ERROR, ->
+L283F
+		BEQ	L283F		; ERROR, ->
+L284F
+		BMI	L284F		; ERROR, ->
+
+		CMP	#$7F
+L285F
+		BNE	L285F		; ERROR, ->
+
+
+		LDA	#$83
+		STA	POSTCODE
+
+		LDX	#$30
+		LDA	#1
+		STA	(ZF0,X)
+
+		SEC
+		LDA	#$80
+		SBC	(ZF0,X)
+L281G
+		BCC	L281G		; ERROR, ->
+L282G
+		BVC	L282G		; ERROR, ->
+L283G
+		BEQ	L283G		; ERROR, ->
+L284G
+		BMI	L284G		; ERROR, ->
+
+		CMP	#$7F
+L285G
+		BNE	L285G		; ERROR, ->
+
+
+;  SEC 		; $70 - $E0 = $90, RETURNS C = 0, RETURNS V = 1
 ;  LDA #$70
 ;  SBC #$E0
 
-		lda	#$84
-		sta	POSTcode
+		LDA	#$84
+		STA	POSTCODE
 
-		lda	#$E0
-		sta	Z10
-		sta	A0400
+		LDA	#$E0
+		STA	Z10
+		STA	A0400
 
-		sec
-		lda	#$70
-		sbc	#$E0
+		SEC
+		LDA	#$70
+		SBC	#$E0
 L291
-		bcs	L291		; error, ->
+		BCS	L291		; ERROR, ->
 L292
-		bvc	L292		; error, ->
+		BVC	L292		; ERROR, ->
 L293
-		beq	L293		; error, ->
+		BEQ	L293		; ERROR, ->
 L294
-		bpl	L294		; error, ->
+		BPL	L294		; ERROR, ->
 
-		cmp	#$90
+		CMP	#$90
 L295
-		bne	L295		; error, ->
+		BNE	L295		; ERROR, ->
 
 
-		lda	#$85
-		sta	POSTcode
+		LDA	#$85
+		STA	POSTCODE
 
-		sec
-		lda	#$70
-		sbc	Z10
-L291a
-		bcs	L291a		; error, ->
-L292a
-		bvc	L292a		; error, ->
-L293a
-		beq	L293a		; error, ->
-L294a
-		bpl	L294a		; error, ->
+		SEC
+		LDA	#$70
+		SBC	Z10
+L291A
+		BCS	L291A		; ERROR, ->
+L292A
+		BVC	L292A		; ERROR, ->
+L293A
+		BEQ	L293A		; ERROR, ->
+L294A
+		BPL	L294A		; ERROR, ->
 
-		cmp	#$90
-L295a
-		bne	L295a		; error, ->
-
-
-		lda	#$86
-		sta	POSTcode
-
-		sec
-		lda	#$70
-		sbc	A0400
-L291b
-		bcs	L291b		; error, ->
-L292b
-		bvc	L292b		; error, ->
-L293b
-		beq	L293b		; error, ->
-L294b
-		bpl	L294b		; error, ->
-
-		cmp	#$90
-L295b
-		bne	L295b		; error, ->
+		CMP	#$90
+L295A
+		BNE	L295A		; ERROR, ->
 
 
-		lda	#$87
-		sta	POSTcode
+		LDA	#$86
+		STA	POSTCODE
 
-		ldx	#$70
-		lda	#$E0
-		sta	Z30,X
+		SEC
+		LDA	#$70
+		SBC	A0400
+L291B
+		BCS	L291B		; ERROR, ->
+L292B
+		BVC	L292B		; ERROR, ->
+L293B
+		BEQ	L293B		; ERROR, ->
+L294B
+		BPL	L294B		; ERROR, ->
 
-		sec
-		lda	#$70
-		sbc	Z30,X
-L291c
-		bcs	L291c		; error, ->
-L292c
-		bvc	L292c		; error, ->
-L293c
-		beq	L293c		; error, ->
-L294c
-		bpl	L294c		; error, ->
-
-		cmp	#$90
-L295c
-		bne	L295c		; error, ->
+		CMP	#$90
+L295B
+		BNE	L295B		; ERROR, ->
 
 
-		lda	#$88
-		sta	POSTcode
+		LDA	#$87
+		STA	POSTCODE
 
-		ldx	#$30
-		lda	#$E0
-		sta	A0400,X
+		LDX	#$70
+		LDA	#$E0
+		STA	Z30,X
 
-		sec
-		lda	#$70
-		sbc	A0400,X
-L291d
-		bcs	L291d		; error, ->
-L292d
-		bvc	L292d		; error, ->
-L293d
-		beq	L293d		; error, ->
-L294d
-		bpl	L294d		; error, ->
+		SEC
+		LDA	#$70
+		SBC	Z30,X
+L291C
+		BCS	L291C		; ERROR, ->
+L292C
+		BVC	L292C		; ERROR, ->
+L293C
+		BEQ	L293C		; ERROR, ->
+L294C
+		BPL	L294C		; ERROR, ->
 
-		cmp	#$90
-L295d
-		bne	L295d		; error, ->
-
-
-		lda	#$89
-		sta	POSTcode
-
-		ldy	#$70
-		lda	#$E0
-		sta	A0400,Y
-
-		sec
-		lda	#$70
-		sbc	A0400,Y
-L291e
-		bcs	L291e		; error, ->
-L292e
-		bvc	L292e		; error, ->
-L293e
-		beq	L293e		; error, ->
-L294e
-		bpl	L294e		; error, ->
-
-		cmp	#$90
-L295e
-		bne	L295e		; error, ->
+		CMP	#$90
+L295C
+		BNE	L295C		; ERROR, ->
 
 
-		lda	#$8A
-		sta	POSTcode
+		LDA	#$88
+		STA	POSTCODE
 
-		lda	#>(A04AA)
-		sta	Z50+1
-		sta	Z20+1
+		LDX	#$30
+		LDA	#$E0
+		STA	A0400,X
 
-		lda	#<(A04AA)
-		sta	Z50
-		sta	Z20
+		SEC
+		LDA	#$70
+		SBC	A0400,X
+L291D
+		BCS	L291D		; ERROR, ->
+L292D
+		BVC	L292D		; ERROR, ->
+L293D
+		BEQ	L293D		; ERROR, ->
+L294D
+		BPL	L294D		; ERROR, ->
 
-		ldx	#$30
-		lda	#$E0
-		sta	(Z20,X)
-
-		sec
-		lda	#$70
-		sbc	(Z20,X)
-L291f
-		bcs	L291f		; error, ->
-L292f
-		bvc	L292f		; error, ->
-L293f
-		beq	L293f		; error, ->
-L294f
-		bpl	L294f		; error, ->
-
-		cmp	#$90
-L295f
-		bne	L295f		; error, ->
+		CMP	#$90
+L295D
+		BNE	L295D		; ERROR, ->
 
 
-		lda	#$8B
-		sta	POSTcode
+		LDA	#$89
+		STA	POSTCODE
 
-		ldx	#$30
-		lda	#$E0
-		sta	(ZF0,X)
+		LDY	#$70
+		LDA	#$E0
+		STA	A0400,Y
 
-		sec
-		lda	#$70
-		sbc	(ZF0,X)
-L291g
-		bcs	L291g		; error, ->
-L292g
-		bvc	L292g		; error, ->
-L293g
-		beq	L293g		; error, ->
-L294g
-		bpl	L294g		; error, ->
+		SEC
+		LDA	#$70
+		SBC	A0400,Y
+L291E
+		BCS	L291E		; ERROR, ->
+L292E
+		BVC	L292E		; ERROR, ->
+L293E
+		BEQ	L293E		; ERROR, ->
+L294E
+		BPL	L294E		; ERROR, ->
 
-		cmp	#$90
-L295g
-		bne	L295g		; error, ->
+		CMP	#$90
+L295E
+		BNE	L295E		; ERROR, ->
 
 
-;**  ADC  (2)             	Test ADC in combination with SEC
-		lda	#$8C
-		sta	POSTcode
+		LDA	#$8A
+		STA	POSTCODE
 
-		sec
-		lda	#1
-		adc	#4
+		LDA	#>(A04AA)
+		STA	Z50+1
+		STA	Z20+1
+
+		LDA	#<(A04AA)
+		STA	Z50
+		STA	Z20
+
+		LDX	#$30
+		LDA	#$E0
+		STA	(Z20,X)
+
+		SEC
+		LDA	#$70
+		SBC	(Z20,X)
+L291F
+		BCS	L291F		; ERROR, ->
+L292F
+		BVC	L292F		; ERROR, ->
+L293F
+		BEQ	L293F		; ERROR, ->
+L294F
+		BPL	L294F		; ERROR, ->
+
+		CMP	#$90
+L295F
+		BNE	L295F		; ERROR, ->
+
+
+		LDA	#$8B
+		STA	POSTCODE
+
+		LDX	#$30
+		LDA	#$E0
+		STA	(ZF0,X)
+
+		SEC
+		LDA	#$70
+		SBC	(ZF0,X)
+L291G
+		BCS	L291G		; ERROR, ->
+L292G
+		BVC	L292G		; ERROR, ->
+L293G
+		BEQ	L293G		; ERROR, ->
+L294G
+		BPL	L294G		; ERROR, ->
+
+		CMP	#$90
+L295G
+		BNE	L295G		; ERROR, ->
+
+
+;**  ADC  (2)             	TEST ADC IN COMBINATION WITH SEC
+		LDA	#$8C
+		STA	POSTCODE
+
+		SEC
+		LDA	#1
+		ADC	#4
 L301
-		bcs	L301		; Carry must have been cleared
+		BCS	L301		; CARRY MUST HAVE BEEN CLEARED
 
-		cmp	#6
+		CMP	#6
 L302
-		bne	L302
+		BNE	L302
 
 
-		lda	#$8D
-		sta	POSTcode
+		LDA	#$8D
+		STA	POSTCODE
 
-		sec
-		lda	#$7F
-		adc	#$80
+		SEC
+		LDA	#$7F
+		ADC	#$80
 L303
-		bne	L303
+		BNE	L303
 L304
-		bcc	L302		; Carry still must be set
+		BCC	L302		; CARRY STILL MUST BE SET
 
 
-;**  SBC  (2)             	Test SBC in combination with CLC
-		lda	#$8E
-		sta	POSTcode
+;**  SBC  (2)             	TEST SBC IN COMBINATION WITH CLC
+		LDA	#$8E
+		STA	POSTCODE
 
-		clc
-		lda	#6
-		sbc	#4
+		CLC
+		LDA	#6
+		SBC	#4
 L311
-		bcc	L311		; Carry must have been set
+		BCC	L311		; CARRY MUST HAVE BEEN SET
 
-		cmp	#1
+		CMP	#1
 L312
-		bne	L312
+		BNE	L312
 
 
-		lda	#$8F
-		sta	POSTcode
+		LDA	#$8F
+		STA	POSTCODE
 
-		sec
-		lda	#$7F
-		adc	#$7F
+		SEC
+		LDA	#$7F
+		ADC	#$7F
 L313
-		bcs	L313		; Carry still must be cleared
+		BCS	L313		; CARRY STILL MUST BE CLEARED
 
-		cmp	#$FF
+		CMP	#$FF
 L314
-		bne	L314
+		BNE	L314
 
 
-		lda	#$9F
-		sta	POSTcode
+		LDA	#$9F
+		STA	POSTCODE
 
-		sec
-		lda	#$7F
-		adc	#$80
+		SEC
+		LDA	#$7F
+		ADC	#$80
 L315
-		bcc	L313		; Carry still must be set
+		BCC	L313		; CARRY STILL MUST BE SET
 L316
-		bne	L316
+		BNE	L316
 
 
 ;**  AND
-		lda	#$A0
-		sta	POSTcode
+		LDA	#$A0
+		STA	POSTCODE
 
 
-		lda	#>(A0400)
-		sta	Z10+6
-		sta	Z10+4
+		LDA	#>(A0400)
+		STA	Z10+6
+		STA	Z10+4
 		
-		lda	#$10
-		sta	Z10+5
+		LDA	#$10
+		STA	Z10+5
 
-		lda	#0
-		sta	Z10+3
-		sta	A0400+$10
-		sta	A0400+9
+		LDA	#0
+		STA	Z10+3
+		STA	A0400+$10
+		STA	A0400+9
 		  
-		lda	#$AA
-		ldx	#5
-		sta	(Z10,X)		; = ($15) = $0410
+		LDA	#$AA
+		LDX	#5
+		STA	(Z10,X)		; = ($15) = $0410
 
-		ldy	#9
-		sta	(Z10+3),Y		; = $0400 + 9
+		LDY	#9
+		STA	(Z10+3),Y		; = $0400 + 9
 
-		cmp	A0400+$10
-L320a
-		bne	L320a
+		CMP	A0400+$10
+L320A
+		BNE	L320A
 
-		cmp	A0400+9
+		CMP	A0400+9
 
-L320b		bne	L320b
+L320B		BNE	L320B
 
 
-;* A = $FF, memory = 0
-		lda	#$A1
-		sta	POSTcode
+;* A = $FF, MEMORY = 0
+		LDA	#$A1
+		STA	POSTCODE
 
-		ldx	#5
-		lda	#0
-		sta	Z10
-		sta	A0400
-		sta	Z10,X
-		sta	A0400,X
-		sta	A0400,Y
-		sta	(Z10,X)
+		LDX	#5
+		LDA	#0
+		STA	Z10
+		STA	A0400
+		STA	Z10,X
+		STA	A0400,X
+		STA	A0400,Y
+		STA	(Z10,X)
 
-		ldy	#5
-		sta	(Z10+4),Y
+		LDY	#5
+		STA	(Z10+4),Y
 
-		lda	#$FF
-		and	#$0
+		LDA	#$FF
+		AND	#$0
 L321
-		bne	L321		; error, ->
+		BNE	L321		; ERROR, ->
 L322
-		bmi	L322		; error, ->
+		BMI	L322		; ERROR, ->
 
-		lda	#$A2
-		sta	POSTcode
+		LDA	#$A2
+		STA	POSTCODE
 
-		lda	#$FF
-		and	Z10
+		LDA	#$FF
+		AND	Z10
 L331
-		bne	L331		; error, ->
+		BNE	L331		; ERROR, ->
 L332
-		bmi	L332		; error, ->
+		BMI	L332		; ERROR, ->
 
 
-		lda	#$A3
-		sta	POSTcode
+		LDA	#$A3
+		STA	POSTCODE
 
-		lda	#$FF
-		and	A0400
+		LDA	#$FF
+		AND	A0400
 L341
-		bne	L341		; error, ->
+		BNE	L341		; ERROR, ->
 L342
-		bmi	L342		; error, ->
+		BMI	L342		; ERROR, ->
 
 
-		lda	#$A4
-		sta	POSTcode
+		LDA	#$A4
+		STA	POSTCODE
 
-		ldx	#5
-		lda	#$FF
-		and	Z10,X
+		LDX	#5
+		LDA	#$FF
+		AND	Z10,X
 L351
-		bne	L351		; error, ->
+		BNE	L351		; ERROR, ->
 L352
-		bmi	L352		; error, ->
+		BMI	L352		; ERROR, ->
 
 
-		lda	#$A5
-		sta	POSTcode
+		LDA	#$A5
+		STA	POSTCODE
 
-		ldx	#5
-		lda	#$FF
-		and	A0400,X
+		LDX	#5
+		LDA	#$FF
+		AND	A0400,X
 L361
-		bne	L361		; error, ->
+		BNE	L361		; ERROR, ->
 L362
-		bmi	L362		; error, ->
+		BMI	L362		; ERROR, ->
 
 
-		lda	#$A6
-		sta	POSTcode
+		LDA	#$A6
+		STA	POSTCODE
 
-		ldy	#5
-		lda	#$FF
-		and	A0400,Y
+		LDY	#5
+		LDA	#$FF
+		AND	A0400,Y
 L371
-		bne	L371		; error, ->
+		BNE	L371		; ERROR, ->
 L372
-		bmi	L372		; error, ->
+		BMI	L372		; ERROR, ->
 
 
-		lda	#$A7
-		sta	POSTcode
+		LDA	#$A7
+		STA	POSTCODE
 
-		ldx	#5
-		lda	#$FF
-		and	(Z10,X)
+		LDX	#5
+		LDA	#$FF
+		AND	(Z10,X)
 L381
-		bne	L381		; error, ->
+		BNE	L381		; ERROR, ->
 L382
-		bmi	L382		; error, ->
+		BMI	L382		; ERROR, ->
 
 
-		lda	#$A8
-		sta	POSTcode
+		LDA	#$A8
+		STA	POSTCODE
 
-		ldy	#5
-		lda	#$FF
-		and	(Z10+4),Y
+		LDY	#5
+		LDA	#$FF
+		AND	(Z10+4),Y
 L391
-		bne	L391		; error, ->
+		BNE	L391		; ERROR, ->
 L392
-		bmi	L392		; error, ->
+		BMI	L392		; ERROR, ->
 
 
-;* A = 0, memory = $FF
-		lda	#$A9
-		sta	POSTcode
+;* A = 0, MEMORY = $FF
+		LDA	#$A9
+		STA	POSTCODE
 
-		ldx	#5
-		lda	#$FF
-		sta	Z10
-		sta	A0400
-		sta	Z10,X
-		sta	A0400,X
-		sta	A0400,Y
-		sta	(Z10,X)
+		LDX	#5
+		LDA	#$FF
+		STA	Z10
+		STA	A0400
+		STA	Z10,X
+		STA	A0400,X
+		STA	A0400,Y
+		STA	(Z10,X)
 
-		ldy	#5
-		sta	A0400,Y
-		sta	(Z10+4),Y
+		LDY	#5
+		STA	A0400,Y
+		STA	(Z10+4),Y
 
-		lda	#0
-		and	#$FF
+		LDA	#0
+		AND	#$FF
 L421
-		bne	L421		; error, ->
+		BNE	L421		; ERROR, ->
 L422
-		bmi	L422		; error, ->
+		BMI	L422		; ERROR, ->
 
 
-		lda	#$AA
-		sta	POSTcode
+		LDA	#$AA
+		STA	POSTCODE
 
-		lda	#0
-		and	Z10
+		LDA	#0
+		AND	Z10
 L431
-		bne	L431		; error, ->
+		BNE	L431		; ERROR, ->
 L432
-		bmi	L432		; error, ->
+		BMI	L432		; ERROR, ->
 
 
-		lda	#$AB
-		sta	POSTcode
+		LDA	#$AB
+		STA	POSTCODE
 
-		lda	#0
-		and	A0400
+		LDA	#0
+		AND	A0400
 L441
-		bne	L441		; error, ->
+		BNE	L441		; ERROR, ->
 L442
-		bmi	L442		; error, ->
+		BMI	L442		; ERROR, ->
 
 
-		lda	#$AC
-		sta	POSTcode
+		LDA	#$AC
+		STA	POSTCODE
 
-		ldx	#5
-		lda	#0
-		and	Z10,X
+		LDX	#5
+		LDA	#0
+		AND	Z10,X
 L451
-		bne	L451		; error, ->
+		BNE	L451		; ERROR, ->
 L452
-		bmi	L452		; error, ->
+		BMI	L452		; ERROR, ->
 
 
-		lda	#$AD
-		sta	POSTcode
+		LDA	#$AD
+		STA	POSTCODE
 
-		ldx	#5
-		lda	#0
-		and	A0400,X
+		LDX	#5
+		LDA	#0
+		AND	A0400,X
 L461
-		bne	L461		; error, ->
+		BNE	L461		; ERROR, ->
 L462
-		bmi	L462		; error, ->
+		BMI	L462		; ERROR, ->
 
 
-		lda	#$AE
-		sta	POSTcode
+		LDA	#$AE
+		STA	POSTCODE
 
-		ldy	#5
-		lda	#0
-		and	A0400,Y
+		LDY	#5
+		LDA	#0
+		AND	A0400,Y
 L471
-		bne	L471		; error, ->
+		BNE	L471		; ERROR, ->
 L472
-		bmi	L472		; error, ->
+		BMI	L472		; ERROR, ->
 
 
-		lda	#$AF
-		sta	POSTcode
+		LDA	#$AF
+		STA	POSTCODE
 
-		ldx	#5
-		lda	#0
-		and	(Z10,X)
+		LDX	#5
+		LDA	#0
+		AND	(Z10,X)
 L481
-		bne	L481		; error, ->
+		BNE	L481		; ERROR, ->
 L482
-		bmi	L482		; error, ->
+		BMI	L482		; ERROR, ->
 
 
-		lda	#$B0
-		sta	POSTcode
+		LDA	#$B0
+		STA	POSTCODE
 
-		ldy	#5
-		lda	#0
-		and	(Z10+4),Y
+		LDY	#5
+		LDA	#0
+		AND	(Z10+4),Y
 L491
-		bne	L491		; error, ->
+		BNE	L491		; ERROR, ->
 L492
-		bmi	L492		; error, ->
+		BMI	L492		; ERROR, ->
 
 
-;* A = $AA, memory = $55
-		lda	#$B1
-		sta	POSTcode
+;* A = $AA, MEMORY = $55
+		LDA	#$B1
+		STA	POSTCODE
 
-		ldx	#5
-		lda	#$55
-		sta	Z10
-		sta	A0400
-		sta	Z10,X
-		sta	A0400,X
-		sta	(Z10,X)
+		LDX	#5
+		LDA	#$55
+		STA	Z10
+		STA	A0400
+		STA	Z10,X
+		STA	A0400,X
+		STA	(Z10,X)
 
-		ldy	#5
-		sta	A0400,Y
-		sta	(Z10+4),Y
+		LDY	#5
+		STA	A0400,Y
+		STA	(Z10+4),Y
 
-		lda	#$AA
-		and	#$55
+		LDA	#$AA
+		AND	#$55
 L521
-		bne	L521		; error, ->
+		BNE	L521		; ERROR, ->
 L522
-		bmi	L522		; error, ->
+		BMI	L522		; ERROR, ->
 
 
-		lda	#$B2
-		sta	POSTcode
+		LDA	#$B2
+		STA	POSTCODE
 
-		lda	#$AA
-		and	Z10
+		LDA	#$AA
+		AND	Z10
 L531
-		bne	L531		; error, ->
+		BNE	L531		; ERROR, ->
 L532
-		bmi	L532		; error, ->
+		BMI	L532		; ERROR, ->
 
 
-		lda	#$B3
-		sta	POSTcode
+		LDA	#$B3
+		STA	POSTCODE
 
-		lda	#$AA
-		and	A0400
+		LDA	#$AA
+		AND	A0400
 L541
-		bne	L541		; error, ->
+		BNE	L541		; ERROR, ->
 L542
-		bmi	L542		; error, ->
+		BMI	L542		; ERROR, ->
 
 
-		lda	#$B4
-		sta	POSTcode
+		LDA	#$B4
+		STA	POSTCODE
 
-		ldx	#5
-		lda	#$AA
-		and	Z10,X
+		LDX	#5
+		LDA	#$AA
+		AND	Z10,X
 L551
-		bne	L551		; error, ->
+		BNE	L551		; ERROR, ->
 L552
-		bmi	L552		; error, ->
+		BMI	L552		; ERROR, ->
 
 
-		lda	#$B5
-		sta	POSTcode
+		LDA	#$B5
+		STA	POSTCODE
 
-		ldx	#5
-		lda	#$AA
-		and	A0400,X
+		LDX	#5
+		LDA	#$AA
+		AND	A0400,X
 L561
-		bne	L561		; error, ->
+		BNE	L561		; ERROR, ->
 L562
-		bmi	L562		; error, ->
+		BMI	L562		; ERROR, ->
 
 
-		lda	#$B6
-		sta	POSTcode
+		LDA	#$B6
+		STA	POSTCODE
 
-		ldy	#5
-		lda	#$AA
-		and	A0400,Y
+		LDY	#5
+		LDA	#$AA
+		AND	A0400,Y
 L571
-		bne	L571		; error, ->
+		BNE	L571		; ERROR, ->
 L572
-		bmi	L572		; error, ->
+		BMI	L572		; ERROR, ->
 
 
-		lda	#$B7
-		sta	POSTcode
+		LDA	#$B7
+		STA	POSTCODE
 
-		ldx	#5
-		lda	#$AA
-		and	(Z10,X)
+		LDX	#5
+		LDA	#$AA
+		AND	(Z10,X)
 L581
-		bne	L581		; error, ->
+		BNE	L581		; ERROR, ->
 L582
-		bmi	L582		; error, ->
+		BMI	L582		; ERROR, ->
 
 
-		lda	#$B8
-		sta	POSTcode
+		LDA	#$B8
+		STA	POSTCODE
 
-		ldy	#5
-		lda	#$AA
-		and	(Z10+4),Y
+		LDY	#5
+		LDA	#$AA
+		AND	(Z10+4),Y
 L591
-		bne	L591		; error, ->
+		BNE	L591		; ERROR, ->
 L592
-		bmi	L592		; error, ->
+		BMI	L592		; ERROR, ->
 
 
-;* A = $FF, memory = $FF
-		lda	#$B9
-		sta	POSTcode
+;* A = $FF, MEMORY = $FF
+		LDA	#$B9
+		STA	POSTCODE
 
-		ldx	#5
-		lda	#$FF
-		sta	Z10
-		sta	A0400
-		sta	Z10,X
-		sta	A0400,X
-		sta	(Z10,X)
+		LDX	#5
+		LDA	#$FF
+		STA	Z10
+		STA	A0400
+		STA	Z10,X
+		STA	A0400,X
+		STA	(Z10,X)
 
-		ldy	#5
-		sta	A0400,Y
-		sta	(Z10+4),Y
+		LDY	#5
+		STA	A0400,Y
+		STA	(Z10+4),Y
 
-		lda	#$FF
-		and	#$FF
+		LDA	#$FF
+		AND	#$FF
 L622
-		bpl	L622		; error, ->
+		BPL	L622		; ERROR, ->
 
-		cmp	#$FF
+		CMP	#$FF
 L621
-		bne	L621		; error, ->
+		BNE	L621		; ERROR, ->
 
 
-		lda	#$BA
-		sta	POSTcode
+		LDA	#$BA
+		STA	POSTCODE
 
-		lda	#$FF
-		and	Z10
+		LDA	#$FF
+		AND	Z10
 L632
-		bpl	L632		; error, ->
+		BPL	L632		; ERROR, ->
 
-		cmp	#$FF
+		CMP	#$FF
 L631
-		bne	L631		; error, ->
+		BNE	L631		; ERROR, ->
 
 
-		lda	#$BB
-		sta	POSTcode
+		LDA	#$BB
+		STA	POSTCODE
 
-		lda	#$FF
-		and	A0400
+		LDA	#$FF
+		AND	A0400
 L642
-		bpl	L642		; error, ->
+		BPL	L642		; ERROR, ->
 
-		cmp	#$FF
+		CMP	#$FF
 L641
-		bne	L641		; error, ->
+		BNE	L641		; ERROR, ->
 
 
-		lda	#$BC
-		sta	POSTcode
+		LDA	#$BC
+		STA	POSTCODE
 
-		ldx	#5
-		lda	#$FF
-		and	Z10,X
+		LDX	#5
+		LDA	#$FF
+		AND	Z10,X
 L652
-		bpl	L652		; error, ->
+		BPL	L652		; ERROR, ->
 
-		cmp	#$FF
+		CMP	#$FF
 L651
-		bne	L651		; error, ->
+		BNE	L651		; ERROR, ->
 
 
-		lda	#$BD
-		sta	POSTcode
+		LDA	#$BD
+		STA	POSTCODE
 
-		ldx	#5
-		lda	#$FF
-		and	A0400,X
+		LDX	#5
+		LDA	#$FF
+		AND	A0400,X
 L662
-		bpl	L662		; error, ->
+		BPL	L662		; ERROR, ->
 
-		cmp	#$FF
+		CMP	#$FF
 L661
-		bne	L661		; error, ->
+		BNE	L661		; ERROR, ->
 
 
-		lda	#$BE
-		sta	POSTcode
+		LDA	#$BE
+		STA	POSTCODE
 
-		ldy	#5
-		lda	#$FF
-		and	A0400,Y
+		LDY	#5
+		LDA	#$FF
+		AND	A0400,Y
 L672
-		bpl	L672		; error, ->
+		BPL	L672		; ERROR, ->
 
-		cmp	#$FF
+		CMP	#$FF
 L671
-		bne	L671		; error, ->
+		BNE	L671		; ERROR, ->
 
 
-		lda	#$BF
-		sta	POSTcode
+		LDA	#$BF
+		STA	POSTCODE
 
-		ldx	#5
-		lda	#$FF
-		and	(Z10,X)
+		LDX	#5
+		LDA	#$FF
+		AND	(Z10,X)
 L682
-		bpl	L682		; error, ->
+		BPL	L682		; ERROR, ->
 
-		cmp	#$FF
+		CMP	#$FF
 L681
-		bne	L681		; error, ->
+		BNE	L681		; ERROR, ->
 
 
-		lda	#$C0
-		sta	POSTcode
+		LDA	#$C0
+		STA	POSTCODE
 
-		ldy	#5
-		lda	#$FF
-		and	(Z10+4),Y
+		LDY	#5
+		LDA	#$FF
+		AND	(Z10+4),Y
 L692
-		bpl	L692		; error, ->
+		BPL	L692		; ERROR, ->
 
-		cmp	#$FF
+		CMP	#$FF
 L691
-		bne	L691		; error, ->
+		BNE	L691		; ERROR, ->
 
 
 ;**  ORA
-;* A = $FF, memory = 0
-		lda	#$C1
-		sta	POSTcode
+;* A = $FF, MEMORY = 0
+		LDA	#$C1
+		STA	POSTCODE
 
-		ldx	#5
-		lda	#0
-		sta	Z10
-		sta	A0400
-		sta	Z10,X
-		sta	A0400,X
-		sta	(Z10,X)
+		LDX	#5
+		LDA	#0
+		STA	Z10
+		STA	A0400
+		STA	Z10,X
+		STA	A0400,X
+		STA	(Z10,X)
 
-		ldy	#5
-		sta	A0400,Y
-		sta	(Z10+4),Y
+		LDY	#5
+		STA	A0400,Y
+		STA	(Z10+4),Y
 
-		lda	#$FF
-		ora	#0
+		LDA	#$FF
+		ORA	#0
 L722
-		bpl	L722		; error, ->
+		BPL	L722		; ERROR, ->
 
-		cmp	#$FF
+		CMP	#$FF
 L721
-		bne	L721		; error, ->
+		BNE	L721		; ERROR, ->
 
 
-		lda	#$C2
-		sta	POSTcode
+		LDA	#$C2
+		STA	POSTCODE
 
-		lda	#$FF
-		ora	Z10
+		LDA	#$FF
+		ORA	Z10
 L732
-		bpl	L732		; error, ->
+		BPL	L732		; ERROR, ->
 
-		cmp	#$FF
+		CMP	#$FF
 L731
-		bne	L731		; error, ->
+		BNE	L731		; ERROR, ->
 
 
-		lda	#$C3
-		sta	POSTcode
+		LDA	#$C3
+		STA	POSTCODE
 
-		lda	#$FF
-		ora	A0400
+		LDA	#$FF
+		ORA	A0400
 L742
-		bpl	L742		; error, ->
+		BPL	L742		; ERROR, ->
 
-		cmp	#$FF
+		CMP	#$FF
 L741
-		bne	L741		; error, ->
+		BNE	L741		; ERROR, ->
 
 
-		lda	#$C4
-		sta	POSTcode
+		LDA	#$C4
+		STA	POSTCODE
 
-		ldx	#5
-		lda	#$FF
-		ora	Z10,X
+		LDX	#5
+		LDA	#$FF
+		ORA	Z10,X
 L752
-		bpl	L752		; error, ->
+		BPL	L752		; ERROR, ->
 
-		cmp	#$FF
+		CMP	#$FF
 L751
-		bne	L751		; error, ->
+		BNE	L751		; ERROR, ->
 
 
-		lda	#$C5
-		sta	POSTcode
+		LDA	#$C5
+		STA	POSTCODE
 
-		ldx	#5
-		lda	#$FF
-		ora	A0400,X
+		LDX	#5
+		LDA	#$FF
+		ORA	A0400,X
 L762
-		bpl	L762		; error, ->
+		BPL	L762		; ERROR, ->
 
-		cmp	#$FF
+		CMP	#$FF
 L761
-		bne	L761		; error, ->
+		BNE	L761		; ERROR, ->
 
 
-		lda	#$C6
-		sta	POSTcode
+		LDA	#$C6
+		STA	POSTCODE
 
-		ldy	#5
-		lda	#$FF
-		ora	A0400,Y
+		LDY	#5
+		LDA	#$FF
+		ORA	A0400,Y
 L772
-		bpl	L772		; error, ->
+		BPL	L772		; ERROR, ->
 
-		cmp	#$FF
+		CMP	#$FF
 L771
-		bne	L771		; error, ->
+		BNE	L771		; ERROR, ->
 
 
-		lda	#$C7
-		sta	POSTcode
+		LDA	#$C7
+		STA	POSTCODE
 
-		ldx	#5
-		lda	#$FF
-		ora	(Z10,X)
+		LDX	#5
+		LDA	#$FF
+		ORA	(Z10,X)
 L782
-		bpl	L782		; error, ->
+		BPL	L782		; ERROR, ->
 
-		cmp	#$FF
+		CMP	#$FF
 L781
-		bne	L781		; error, ->
+		BNE	L781		; ERROR, ->
 
 
-		lda	#$C8
-		sta	POSTcode
+		LDA	#$C8
+		STA	POSTCODE
 
-		ldy	#5
-		lda	#$FF
-		ora	(Z10+4),Y
+		LDY	#5
+		LDA	#$FF
+		ORA	(Z10+4),Y
 L792
-		bpl	L792		; error, ->
+		BPL	L792		; ERROR, ->
 
-		cmp	#$FF
+		CMP	#$FF
 L791
-		bne	L791		; error, ->
+		BNE	L791		; ERROR, ->
 
 
-;* A = 0, memory = $FF
-		lda	#$C9
-		sta	POSTcode
+;* A = 0, MEMORY = $FF
+		LDA	#$C9
+		STA	POSTCODE
 
-		ldx	#5
-		lda	#$FF
-		sta	Z10
-		sta	A0400
-		sta	Z10,X
-		sta	A0400,X
-		sta	(Z10,X)
+		LDX	#5
+		LDA	#$FF
+		STA	Z10
+		STA	A0400
+		STA	Z10,X
+		STA	A0400,X
+		STA	(Z10,X)
 
-		ldy	#5
-		sta	A0400,Y
-		sta	(Z10+4),Y
+		LDY	#5
+		STA	A0400,Y
+		STA	(Z10+4),Y
 
-		lda	#0
-		ora	#$FF
+		LDA	#0
+		ORA	#$FF
 L822
-		bpl	L822		; error, ->
+		BPL	L822		; ERROR, ->
 
-		cmp	#$FF
+		CMP	#$FF
 L821
-		bne	L821		; error, ->
+		BNE	L821		; ERROR, ->
 
 
-		lda	#$CA
-		sta	POSTcode
+		LDA	#$CA
+		STA	POSTCODE
 
-		lda	#0
-		ora	Z10
+		LDA	#0
+		ORA	Z10
 L832
-		bpl	L832		; error, ->
+		BPL	L832		; ERROR, ->
 
-		cmp	#$FF
+		CMP	#$FF
 L831
-		bne	L831		; error, ->
+		BNE	L831		; ERROR, ->
 
 
-		lda	#$CB
-		sta	POSTcode
+		LDA	#$CB
+		STA	POSTCODE
 
-		lda	#0
-		ora	A0400
+		LDA	#0
+		ORA	A0400
 L842
-		bpl	L842		; error, ->
+		BPL	L842		; ERROR, ->
 
-		cmp	#$FF
+		CMP	#$FF
 L841
-		bne	L841		; error, ->
+		BNE	L841		; ERROR, ->
 
 
-		lda	#$CC
-		sta	POSTcode
+		LDA	#$CC
+		STA	POSTCODE
 
-		ldx	#5
-		lda	#0
-		ora	Z10,X
+		LDX	#5
+		LDA	#0
+		ORA	Z10,X
 L852
-		bpl	L852		; error, ->
+		BPL	L852		; ERROR, ->
 
-		cmp	#$FF
+		CMP	#$FF
 L851
-		bne	L851		; error, ->
+		BNE	L851		; ERROR, ->
 
 
-		lda	#$CD
-		sta	POSTcode
+		LDA	#$CD
+		STA	POSTCODE
 
-		ldx	#5
-		lda	#0
-		ora	A0400,X
+		LDX	#5
+		LDA	#0
+		ORA	A0400,X
 L862
-		bpl	L862		; error, ->
+		BPL	L862		; ERROR, ->
 
-		cmp	#$FF
+		CMP	#$FF
 L861
-		bne	L861		; error, ->
+		BNE	L861		; ERROR, ->
 
 
-		lda	#$CE
-		sta	POSTcode
+		LDA	#$CE
+		STA	POSTCODE
 
-		ldy	#5
-		lda	#0
-		ora	A0400,Y
+		LDY	#5
+		LDA	#0
+		ORA	A0400,Y
 L872
-		bpl	L872		; error, ->
+		BPL	L872		; ERROR, ->
 
-		cmp	#$FF
+		CMP	#$FF
 L871
-		bne	L871		; error, ->
+		BNE	L871		; ERROR, ->
 
 
-		lda	#$CF
-		sta	POSTcode
+		LDA	#$CF
+		STA	POSTCODE
 
-		ldx	#5
-		lda	#0
-		ora	(Z10,X)
+		LDX	#5
+		LDA	#0
+		ORA	(Z10,X)
 L882
-		bpl	L882		; error, ->
+		BPL	L882		; ERROR, ->
 
-		cmp	#$FF
+		CMP	#$FF
 L881
-		bne	L881		; error, ->
+		BNE	L881		; ERROR, ->
 
 
-		lda	#$D0
-		sta	POSTcode
+		LDA	#$D0
+		STA	POSTCODE
 
-		ldy	#5
-		lda	#0
-		ora	(Z10+4),Y
+		LDY	#5
+		LDA	#0
+		ORA	(Z10+4),Y
 L892
-		bpl	L892		; error, ->
+		BPL	L892		; ERROR, ->
 
-		cmp	#$FF
+		CMP	#$FF
 L891
-		bne	L891		; error, ->
+		BNE	L891		; ERROR, ->
 
 
-;* A = 0, memory = 0
-		lda	#$D1
-		sta	POSTcode
+;* A = 0, MEMORY = 0
+		LDA	#$D1
+		STA	POSTCODE
 
-		ldx	#5
-		lda	#0
-		sta	Z10
-		sta	A0400
-		sta	Z10,X
-		sta	A0400,X
-		sta	(Z10,X)
+		LDX	#5
+		LDA	#0
+		STA	Z10
+		STA	A0400
+		STA	Z10,X
+		STA	A0400,X
+		STA	(Z10,X)
 
-		ldy	#5
-		sta	A0400,Y
-		sta	(Z10+4),Y
+		LDY	#5
+		STA	A0400,Y
+		STA	(Z10+4),Y
 
-		lda	#0
-		ora	#0
+		LDA	#0
+		ORA	#0
 L922
-		bmi	L922		; error, ->
+		BMI	L922		; ERROR, ->
 L921
-		bne	L921		; error, ->
+		BNE	L921		; ERROR, ->
 
 
-		lda	#$CA
-		sta	POSTcode
+		LDA	#$CA
+		STA	POSTCODE
 
-		lda	#0
-		ora	Z10
+		LDA	#0
+		ORA	Z10
 L932
-		bmi	L932		; error, ->
+		BMI	L932		; ERROR, ->
 L931
-		bne	L931		; error, ->
+		BNE	L931		; ERROR, ->
 
 
-		lda	#$CB
-		sta	POSTcode
+		LDA	#$CB
+		STA	POSTCODE
 
-		lda	#0
-		ora	A0400
+		LDA	#0
+		ORA	A0400
 L942
-		bmi	L942		; error, ->
+		BMI	L942		; ERROR, ->
 L941
-		bne	L941		; error, ->
+		BNE	L941		; ERROR, ->
 
 
-		lda	#$CC
-		sta	POSTcode
+		LDA	#$CC
+		STA	POSTCODE
 
-		ldx	#5
-		lda	#0
-		ora	Z10,X
+		LDX	#5
+		LDA	#0
+		ORA	Z10,X
 L952
-		bmi	L952		; error, ->
+		BMI	L952		; ERROR, ->
 L951
-		bne	L951		; error, ->
+		BNE	L951		; ERROR, ->
 
 
-		lda	#$CD
-		sta	POSTcode
+		LDA	#$CD
+		STA	POSTCODE
 
-		ldx	#5
-		lda	#0
-		ora	A0400,X
+		LDX	#5
+		LDA	#0
+		ORA	A0400,X
 L962
-		bmi	L962		; error, ->
+		BMI	L962		; ERROR, ->
 L961
-		bne	L961		; error, ->
+		BNE	L961		; ERROR, ->
 
 
-		lda	#$CE
-		sta	POSTcode
+		LDA	#$CE
+		STA	POSTCODE
 
-		ldy	#5
-		lda	#0
-		ora	A0400,Y
+		LDY	#5
+		LDA	#0
+		ORA	A0400,Y
 L972
-		bmi	L972		; error, ->
+		BMI	L972		; ERROR, ->
 L971
-		bne	L971		; error, ->
+		BNE	L971		; ERROR, ->
 
 
-		lda	#$CF
-		sta	POSTcode
+		LDA	#$CF
+		STA	POSTCODE
 
-		ldx	#5
-		lda	#0
-		ora	(Z10,X)
+		LDX	#5
+		LDA	#0
+		ORA	(Z10,X)
 L982
-		bmi	L982		; error, ->
+		BMI	L982		; ERROR, ->
 L981
-		bne	L981		; error, ->
+		BNE	L981		; ERROR, ->
 
 
-		lda	#$D0
-		sta	POSTcode
+		LDA	#$D0
+		STA	POSTCODE
 
-		ldy	#5
-		lda	#0
-		ora	(Z10+4),Y
+		LDY	#5
+		LDA	#0
+		ORA	(Z10+4),Y
 L992
-		bmi	L992		; error, ->
+		BMI	L992		; ERROR, ->
 L991
-		bne	L991		; error, ->
+		BNE	L991		; ERROR, ->
 
 
 ;**  ASL
 ;* ASL A
-		lda	#$D1
-		sta	POSTcode
+		LDA	#$D1
+		STA	POSTCODE
 
-		lda	#1
-		sec
-		asl
+		LDA	#1
+		SEC
+		ASL
 M001
-		bcs	M001
+		BCS	M001
 M002
-		bmi	M003
+		BMI	M003
 
-		cmp	#2
+		CMP	#2
 M003
-		bne	M003
+		BNE	M003
 
 
-		sec
-		asl
+		SEC
+		ASL
 M004
-		bcs	M004
+		BCS	M004
 M005
-		bmi	M005
+		BMI	M005
 
-		cmp	#4
+		CMP	#4
 M006
-		bne	M006
+		BNE	M006
 
 
-		sec
-		asl
+		SEC
+		ASL
 M007
-		bcs	M007
+		BCS	M007
 M008
-		bmi	M008
+		BMI	M008
 
-		cmp	#8
+		CMP	#8
 M009
-		bne	M009
+		BNE	M009
 
 
-		sec
-		asl
+		SEC
+		ASL
 M010
-		bcs	M010
+		BCS	M010
 M011
-		bmi	M011
+		BMI	M011
 
-		cmp	#$10
+		CMP	#$10
 M012
-		bne	M012
+		BNE	M012
 
 
-		sec
-		asl
+		SEC
+		ASL
 M013
-		bcs	M013
+		BCS	M013
 M014
-		bmi	M014
+		BMI	M014
 
-		cmp	#$20
+		CMP	#$20
 M015
-		bne	M015
+		BNE	M015
 
 
-		sec
-		asl
+		SEC
+		ASL
 M016
-		bcs	M016
+		BCS	M016
 M017
-		bmi	M017
+		BMI	M017
 
-		cmp	#$40
+		CMP	#$40
 M018
-		bne	M018
+		BNE	M018
 
 
-		sec
-		asl
+		SEC
+		ASL
 M019
-		bcs	M019
+		BCS	M019
 M020
-		bpl	M020
+		BPL	M020
 
-		cmp	#$80
+		CMP	#$80
 M021
-		bne	M021
+		BNE	M021
 
-		asl
+		ASL
 M022
-		bcc	M022
+		BCC	M022
 M023
-		bmi	M023
+		BMI	M023
 M024
-		bne	M024
+		BNE	M024
 
 
-;* Rest of possible ASL opcodes. Only read/write has to be tested because
-;   the shifting itself doesn't have to be tested anymore.  
-		lda	#$D2
-		sta	POSTcode
+;* REST OF POSSIBLE ASL OPCODES. ONLY READ/WRITE HAS TO BE TESTED BECAUSE
+;   THE SHIFTING ITSELF DOESN'T HAVE TO BE TESTED ANYMORE.  
+		LDA	#$D2
+		STA	POSTCODE
 
-		ldx	#$30
-		lda	#$55
-		sta	Z10
-		sta	A0400
-		sta	Z10,X
-		sta	A0400,X
+		LDX	#$30
+		LDA	#$55
+		STA	Z10
+		STA	A0400
+		STA	Z10,X
+		STA	A0400,X
 
-		asl	Z10
-		lda	Z10
-		cmp	#$AA
+		ASL	Z10
+		LDA	Z10
+		CMP	#$AA
 M025		
-		bne	M025
+		BNE	M025
 
 
-		lda	#$D3
-		sta	POSTcode
+		LDA	#$D3
+		STA	POSTCODE
 
-		asl	A0400
-		lda	A0400
-		cmp	#$AA
+		ASL	A0400
+		LDA	A0400
+		CMP	#$AA
 M026		
-		bne	M026
+		BNE	M026
 
 
-		lda	#$D4
-		sta	POSTcode
+		LDA	#$D4
+		STA	POSTCODE
 
-		ldx	#$30
-		asl	Z10,X
-		lda	Z10,X
-		cmp	#$AA
+		LDX	#$30
+		ASL	Z10,X
+		LDA	Z10,X
+		CMP	#$AA
 M027		
-		bne	M027
+		BNE	M027
 
 
-		lda	#$D5
-		sta	POSTcode
+		LDA	#$D5
+		STA	POSTCODE
 
-		ldx	#$30
-		asl	A0400,X
-		lda	A0400,X
-		cmp	#$AA
+		LDX	#$30
+		ASL	A0400,X
+		LDA	A0400,X
+		CMP	#$AA
 M028		
-		bne	M028
+		BNE	M028
 
 
 ;**  LSR
-		lda	#$D6
-		sta	POSTcode
+		LDA	#$D6
+		STA	POSTCODE
 
-		lda	#$80
-		sec
-		lsr
+		LDA	#$80
+		SEC
+		LSR
 M031
-		bcs	M031
+		BCS	M031
 M032
-		bmi	M032
+		BMI	M032
 
-		cmp	#$40
+		CMP	#$40
 M033
-		bne	M033
+		BNE	M033
 
 
-		sec
-		lsr
+		SEC
+		LSR
 M034
-		bcs	M034
+		BCS	M034
 M035
-		bmi	M035
+		BMI	M035
 
-		cmp	#$20
+		CMP	#$20
 M036
-		bne	M036
+		BNE	M036
 
 
-		sec
-		lsr
+		SEC
+		LSR
 M037
-		bcs	M037
+		BCS	M037
 M038
-		bmi	M038
+		BMI	M038
 
-		cmp	#$10
+		CMP	#$10
 M039
-		bne	M039
+		BNE	M039
 
 
-		sec
-		lsr
+		SEC
+		LSR
 M041
-		bcs	M041
+		BCS	M041
 M042
-		bmi	M043
+		BMI	M043
 
-		cmp	#8
+		CMP	#8
 M043
-		bne	M043
+		BNE	M043
 
 
-		sec
-		lsr
+		SEC
+		LSR
 M044
-		bcs	M044
+		BCS	M044
 M045
-		bmi	M045
+		BMI	M045
 
-		cmp	#4
+		CMP	#4
 M046
-		bne	M046
+		BNE	M046
 
 
-		sec
-		lsr
+		SEC
+		LSR
 M047
-		bcs	M047
+		BCS	M047
 M048
-		bmi	M048
+		BMI	M048
 
-		cmp	#2
+		CMP	#2
 M049
-		bne	M049
+		BNE	M049
 
 
-		sec
-		lsr
+		SEC
+		LSR
 M051
-		bcs	M051
+		BCS	M051
 M052
-		bmi	M053
+		BMI	M053
 
-		cmp	#1
+		CMP	#1
 M053
-		bne	M053
+		BNE	M053
 
 
-		lsr
+		LSR
 M054
-		bcc	M054
+		BCC	M054
 M055
-		bmi	M055
+		BMI	M055
 M056
-		bne	M056
+		BNE	M056
 
 
-;* Rest of possible LSR opcodes. Only read/write has to be tested because
-;   the shifting itself doesn't have to be tested anymore.  
-		ldx	#$30
-		lda	#$AA
-		sta	Z10
-		sta	A0400
-		sta	Z10,X
-		sta	A0400,X
+;* REST OF POSSIBLE LSR OPCODES. ONLY READ/WRITE HAS TO BE TESTED BECAUSE
+;   THE SHIFTING ITSELF DOESN'T HAVE TO BE TESTED ANYMORE.  
+		LDX	#$30
+		LDA	#$AA
+		STA	Z10
+		STA	A0400
+		STA	Z10,X
+		STA	A0400,X
 
-		lda	#$D7
-		sta	POSTcode
+		LDA	#$D7
+		STA	POSTCODE
 
-		lsr	Z10
-		lda	Z10
-		cmp	#$55
+		LSR	Z10
+		LDA	Z10
+		CMP	#$55
 M057		
-		bne	M057
+		BNE	M057
 
 
-		lda	#$D8
-		sta	POSTcode
+		LDA	#$D8
+		STA	POSTCODE
 
-		lsr	A0400
-		lda	A0400
-		cmp	#$55
+		LSR	A0400
+		LDA	A0400
+		CMP	#$55
 M058		
-		bne	M058
+		BNE	M058
 
 
-		lda	#$D9
-		sta	POSTcode
+		LDA	#$D9
+		STA	POSTCODE
 
-		ldx	#$30
-		lsr	Z10,X
-		lda	Z10,X
-		cmp	#$55
+		LDX	#$30
+		LSR	Z10,X
+		LDA	Z10,X
+		CMP	#$55
 M059		
-		bne	M059
+		BNE	M059
 
 
-		lda	#$DA
-		sta	POSTcode
+		LDA	#$DA
+		STA	POSTCODE
 
-		ldx	#$30
-		lsr	A0400,X
-		lda	A0400,X
-		cmp	#$55
+		LDX	#$30
+		LSR	A0400,X
+		LDA	A0400,X
+		CMP	#$55
 M060		
-		bne	M060
+		BNE	M060
 
 
 ;**  ROL
-		lda	#$D8
-		sta	POSTcode
+		LDA	#$D8
+		STA	POSTCODE
 
-		lda	#$11
-		clc
-		rol
+		LDA	#$11
+		CLC
+		ROL
 M071
-		bcs	M071
+		BCS	M071
 M072
-		bmi	M072
+		BMI	M072
 		
-		cmp	#$22
+		CMP	#$22
 M073
-		bne	M073
+		BNE	M073
 		
 
-		sec
-		rol
+		SEC
+		ROL
 M074
-		bcs	M074
+		BCS	M074
 M075
-		bmi	M075
+		BMI	M075
 		
-		cmp	#$45
+		CMP	#$45
 M076
-		bne	M076
+		BNE	M076
 		
 
-		clc
-		rol
+		CLC
+		ROL
 M077
-		bcs	M077
+		BCS	M077
 M078
-		bpl	M078
+		BPL	M078
 		
-		cmp	#$8A
+		CMP	#$8A
 M079
-		bne	M079
+		BNE	M079
 		
 
-		clc
-		rol
+		CLC
+		ROL
 M081
-		bcc	M081
+		BCC	M081
 M082
-		bmi	M082
+		BMI	M082
 		
-		cmp	#Z10+4
+		CMP	#Z10+4
 M083
-		bne	M083
+		BNE	M083
 		
 
-;* Rest of possible ROL opcodes. Only read/write has to be tested because
-;   the shifting itself doesn't have to be tested anymore.  
-		ldx	#$30
-		lda	#$55
-		sta	Z10
-		sta	A0400
-		sta	Z10,X
-		sta	A0400,X
+;* REST OF POSSIBLE ROL OPCODES. ONLY READ/WRITE HAS TO BE TESTED BECAUSE
+;   THE SHIFTING ITSELF DOESN'T HAVE TO BE TESTED ANYMORE.  
+		LDX	#$30
+		LDA	#$55
+		STA	Z10
+		STA	A0400
+		STA	Z10,X
+		STA	A0400,X
 
 
-		lda	#$D9
-		sta	POSTcode
+		LDA	#$D9
+		STA	POSTCODE
 
-		sec
-		rol	Z10
-		lda	Z10
-		cmp	#$AB
+		SEC
+		ROL	Z10
+		LDA	Z10
+		CMP	#$AB
 M085		
-		bne	M085
+		BNE	M085
 
 
-		lda	#$DA
-		sta	POSTcode
+		LDA	#$DA
+		STA	POSTCODE
 
-		sec
-		rol	A0400
-		lda	A0400
-		cmp	#$AB
+		SEC
+		ROL	A0400
+		LDA	A0400
+		CMP	#$AB
 M086		
-		bne	M086
+		BNE	M086
 
 
-		lda	#$DB
-		sta	POSTcode
+		LDA	#$DB
+		STA	POSTCODE
 
-		ldx	#$30
-		sec
-		rol	Z10,X
-		lda	Z10,X
-		cmp	#$AB
+		LDX	#$30
+		SEC
+		ROL	Z10,X
+		LDA	Z10,X
+		CMP	#$AB
 M087		
-		bne	M087
+		BNE	M087
 
 
-		lda	#$DC
-		sta	POSTcode
+		LDA	#$DC
+		STA	POSTCODE
 
-		sec
-		rol	A0400,X
-		lda	A0400,X
-		cmp	#$AB
+		SEC
+		ROL	A0400,X
+		LDA	A0400,X
+		CMP	#$AB
 M088		
-		bne	M088
+		BNE	M088
 
 
 ;**  ROR
-		lda	#$DD
-		sta	POSTcode
+		LDA	#$DD
+		STA	POSTCODE
 
-		lda	#$88
-		clc
-		ror
+		LDA	#$88
+		CLC
+		ROR
 M091
-		bcs	M091
+		BCS	M091
 M092
-		bmi	M092
+		BMI	M092
 		
-		cmp	#$44
+		CMP	#$44
 M093
-		bne	M093
+		BNE	M093
 		
 
-		sec
-		ror
+		SEC
+		ROR
 M094
-		bcs	M094
+		BCS	M094
 M095
-		bpl	M095
+		BPL	M095
 		
-		cmp	#$A2
+		CMP	#$A2
 M096
-		bne	M096
+		BNE	M096
 		
 
-		clc
-		ror
+		CLC
+		ROR
 M097
-		bcs	M097
+		BCS	M097
 M098
-		bmi	M098
+		BMI	M098
 		
-		cmp	#$51
+		CMP	#$51
 M099
-		bne	M099
+		BNE	M099
 		
 
-		clc
-		ror
+		CLC
+		ROR
 M101
-		bcc	M101
+		BCC	M101
 M102
-		bmi	M102
+		BMI	M102
 		
-		cmp	#$28
+		CMP	#$28
 M103
-		bne	M103
+		BNE	M103
 		
 
-;* Rest of possible ror opcodes. Only read/write has to be tested because
-;   the shifting itself doesn't have to be tested anymore.  
-		ldx	#$30
-		lda	#$AA
-		sta	Z10
-		sta	A0400
-		sta	Z10,X
-		sta	A0400,X
+;* REST OF POSSIBLE ROR OPCODES. ONLY READ/WRITE HAS TO BE TESTED BECAUSE
+;   THE SHIFTING ITSELF DOESN'T HAVE TO BE TESTED ANYMORE.  
+		LDX	#$30
+		LDA	#$AA
+		STA	Z10
+		STA	A0400
+		STA	Z10,X
+		STA	A0400,X
 
 
-		lda	#$DE
-		sta	POSTcode
+		LDA	#$DE
+		STA	POSTCODE
 
-		sec
-		ror	Z10
-		lda	Z10
-		cmp	#$D5
+		SEC
+		ROR	Z10
+		LDA	Z10
+		CMP	#$D5
 M105		
-		bne	M105
+		BNE	M105
 
 
-		lda	#$DF
-		sta	POSTcode
+		LDA	#$DF
+		STA	POSTCODE
 
-		sec
-		ror	A0400
-		lda	A0400
-		cmp	#$D5
+		SEC
+		ROR	A0400
+		LDA	A0400
+		CMP	#$D5
 M106		
-		bne	M106
+		BNE	M106
 
 
-		lda	#$E0
-		sta	POSTcode
+		LDA	#$E0
+		STA	POSTCODE
 
-		ldx	#$30
-		sec
-		ror	Z10,X
-		lda	Z10,X
-		cmp	#$D5
+		LDX	#$30
+		SEC
+		ROR	Z10,X
+		LDA	Z10,X
+		CMP	#$D5
 M107		
-		bne	M107
+		BNE	M107
 
 
-		lda	#$E1
-		sta	POSTcode
+		LDA	#$E1
+		STA	POSTCODE
 
-		ldx	#$30
-		sec
-		ror	A0400,X
-		lda	A0400,X
-		cmp	#$D5
+		LDX	#$30
+		SEC
+		ROR	A0400,X
+		LDA	A0400,X
+		CMP	#$D5
 M108		
-		bne	M108
+		BNE	M108
 
 
 ;**  BIT
-		lda	#$E1
-		sta	POSTcode
+		LDA	#$E1
+		STA	POSTCODE
 
-;* A = $FF, memory = 0
-		lda	#0
-		sta	Z10
-		sta	A0400
+;* A = $FF, MEMORY = 0
+		LDA	#0
+		STA	Z10
+		STA	A0400
 
-		lda	#$FF
-		bit	Z10
+		LDA	#$FF
+		BIT	Z10
 M111
-		bne	M111		; error, ->
+		BNE	M111		; ERROR, ->
 M112
-		bmi	M112		; error, ->
+		BMI	M112		; ERROR, ->
 M113
-		bvs	M113		; error, ->
+		BVS	M113		; ERROR, ->
 
 
-		lda	#$E2
-		sta	POSTcode
+		LDA	#$E2
+		STA	POSTCODE
 
-		lda	#$FF
-		bit	A0400
+		LDA	#$FF
+		BIT	A0400
 M121
-		bne	M121		; error, ->
+		BNE	M121		; ERROR, ->
 M122
-		bmi	M122		; error, ->
+		BMI	M122		; ERROR, ->
 M123
-		bvs	M123		; error, ->
+		BVS	M123		; ERROR, ->
 
 
-;* A = 0, memory = $FF
-		lda	#$E3
-		sta	POSTcode
+;* A = 0, MEMORY = $FF
+		LDA	#$E3
+		STA	POSTCODE
 
-		lda	#$FF
-		sta	Z10
-		sta	A0400
+		LDA	#$FF
+		STA	Z10
+		STA	A0400
 
-		lda	#0
-		bit	Z10
+		LDA	#0
+		BIT	Z10
 M131
-		bne	M131		; error, ->
+		BNE	M131		; ERROR, ->
 M132
-		bpl	M132		; error, ->
+		BPL	M132		; ERROR, ->
 M133
-		bvc	M133		; error, ->
+		BVC	M133		; ERROR, ->
 
 
-		lda	#$E4
-		sta	POSTcode
+		LDA	#$E4
+		STA	POSTCODE
 
-		lda	#0
-		bit	A0400
+		LDA	#0
+		BIT	A0400
 M141
-		bne	M141		; error, ->
+		BNE	M141		; ERROR, ->
 M142
-		bpl	M142		; error, ->
+		BPL	M142		; ERROR, ->
 M143
-		bvc	M143		; error, ->
+		BVC	M143		; ERROR, ->
 
 
-;* A = $54, memory = $55
-		lda	#$E5
-		sta	POSTcode
+;* A = $54, MEMORY = $55
+		LDA	#$E5
+		STA	POSTCODE
 
-		lda	#$55
-		sta	Z10
-		sta	A0400
+		LDA	#$55
+		STA	Z10
+		STA	A0400
 
-		lda	#$54
-		bit	Z10
+		LDA	#$54
+		BIT	Z10
 M151
-		beq	M151		; error, ->
+		BEQ	M151		; ERROR, ->
 M152
-		bmi	M152		; error, ->
+		BMI	M152		; ERROR, ->
 M153
-		bvc	M153		; error, ->
+		BVC	M153		; ERROR, ->
 
 
-		lda	#$E6
-		sta	POSTcode
+		LDA	#$E6
+		STA	POSTCODE
 
-		lda	#$54
-		bit	A0400
+		LDA	#$54
+		BIT	A0400
 M161
-		beq	M161		; error, ->
+		BEQ	M161		; ERROR, ->
 M162
-		bmi	M162		; error, ->
+		BMI	M162		; ERROR, ->
 M163
-		bvc	M163		; error, ->
+		BVC	M163		; ERROR, ->
 
 
 ;**  DEC
-;   Only read/write has to be tested because the decrement itself
-;   doesn't have to be tested anymore; done with DEX and DEY. 
-		lda	#$E7
-		sta	POSTcode
+;   ONLY READ/WRITE HAS TO BE TESTED BECAUSE THE DECREMENT ITSELF
+;   DOESN'T HAVE TO BE TESTED ANYMORE; DONE WITH DEX AND DEY. 
+		LDA	#$E7
+		STA	POSTCODE
 
-		ldx	#$30
-		lda	#$AA
-		sta	Z10
-		sta	A0400
-		sta	Z10,X
-		sta	A0400,X
+		LDX	#$30
+		LDA	#$AA
+		STA	Z10
+		STA	A0400
+		STA	Z10,X
+		STA	A0400,X
 
-		dec	Z10
-		lda	Z10
-		cmp	#$A9
+		DEC	Z10
+		LDA	Z10
+		CMP	#$A9
 M171
-		bne	M171
+		BNE	M171
 		
-		dec	A0400
-		lda	A0400
-		cmp	#$A9
+		DEC	A0400
+		LDA	A0400
+		CMP	#$A9
 M172
-		bne	M172
+		BNE	M172
 		
-		dec	Z10,X
-		lda	Z10,X
-		cmp	#$A9
+		DEC	Z10,X
+		LDA	Z10,X
+		CMP	#$A9
 M173
-		bne	M173
+		BNE	M173
 		
-		dec	A0400,X
-		lda	A0400,x
-		cmp	#$A9
+		DEC	A0400,X
+		LDA	A0400,X
+		CMP	#$A9
 M174
-		bne	M174
+		BNE	M174
 		
 
 ;**  DEC
-;   Only read/write has to be tested because the decrement itself
-;   doesn't have to be tested anymore; done with DEX and DEY. 
-		lda	#$E7
-		sta	POSTcode
+;   ONLY READ/WRITE HAS TO BE TESTED BECAUSE THE DECREMENT ITSELF
+;   DOESN'T HAVE TO BE TESTED ANYMORE; DONE WITH DEX AND DEY. 
+		LDA	#$E7
+		STA	POSTCODE
 
-		inc	Z10
-		lda	Z10
-		cmp	#$AA
+		INC	Z10
+		LDA	Z10
+		CMP	#$AA
 M181
-		bne	M181
+		BNE	M181
 		
-		inc	A0400
-		lda	A0400
-		cmp	#$AA
+		INC	A0400
+		LDA	A0400
+		CMP	#$AA
 M182
-		bne	M182
+		BNE	M182
 		
-		inc	Z10,X
-		lda	Z10,X
-		cmp	#$AA
+		INC	Z10,X
+		LDA	Z10,X
+		CMP	#$AA
 M183
-		bne	M183
+		BNE	M183
 		
-		inc	A0400,X
-		lda	A0400,x
-		cmp	#$AA
+		INC	A0400,X
+		LDA	A0400,X
+		CMP	#$AA
 M184
-		bne	M184
+		BNE	M184
 		
 		
 ;**  EOR
-;* A = $AA, memory = $55
-		lda	#$E8
-		sta	POSTcode
+;* A = $AA, MEMORY = $55
+		LDA	#$E8
+		STA	POSTCODE
 
-		ldx	#$30
-		lda	#$55
-		sta	Z10
-		sta	A0400
-		sta	Z10,X
-		sta	A0400,X
-		sta	(Z10,X)
+		LDX	#$30
+		LDA	#$55
+		STA	Z10
+		STA	A0400
+		STA	Z10,X
+		STA	A0400,X
+		STA	(Z10,X)
 
-		ldy	#$30
-		sta	A0400,Y
-		sta	(Z10+4),Y
+		LDY	#$30
+		STA	A0400,Y
+		STA	(Z10+4),Y
 
 
-		lda	#$AA
-		eor	#$55
+		LDA	#$AA
+		EOR	#$55
 M191
-		beq	M191		; error, ->
+		BEQ	M191		; ERROR, ->
 M192
-		bpl	M192		; error, ->
+		BPL	M192		; ERROR, ->
 		
-		cmp	#$FF
+		CMP	#$FF
 M193
-		bne	M193
+		BNE	M193
 
 
-		lda	#$E9
-		sta	POSTcode
+		LDA	#$E9
+		STA	POSTCODE
 
-		lda	#$AA
-		eor	Z10
+		LDA	#$AA
+		EOR	Z10
 M201
-		beq	M201		; error, ->
+		BEQ	M201		; ERROR, ->
 M202
-		bpl	M202		; error, ->
+		BPL	M202		; ERROR, ->
 
-		cmp	#$FF
+		CMP	#$FF
 M203
-		bne	M203
+		BNE	M203
 
 
-		lda	#$EA
-		sta	POSTcode
+		LDA	#$EA
+		STA	POSTCODE
 
-		lda	#$AA
-		eor	A0400
+		LDA	#$AA
+		EOR	A0400
 M211
-		beq	M211		; error, ->
+		BEQ	M211		; ERROR, ->
 M212
-		bpl	M212		; error, ->
+		BPL	M212		; ERROR, ->
 
-		cmp	#$FF
+		CMP	#$FF
 M213
-		bne	M213
+		BNE	M213
 
 
-		lda	#$EB
-		sta	POSTcode
+		LDA	#$EB
+		STA	POSTCODE
 
-		lda	#$AA
-		eor	Z10,X
+		LDA	#$AA
+		EOR	Z10,X
 M221
-		beq	M221		; error, ->
+		BEQ	M221		; ERROR, ->
 M222
-		bpl	M222		; error, ->
+		BPL	M222		; ERROR, ->
 
-		cmp	#$FF
+		CMP	#$FF
 M223
-		bne	M223
+		BNE	M223
 
 
-		lda	#$EC
-		sta	POSTcode
+		LDA	#$EC
+		STA	POSTCODE
 
-		ldx	#$30
-		lda	#$AA
-		eor	A0400,X
+		LDX	#$30
+		LDA	#$AA
+		EOR	A0400,X
 M231
-		beq	M231		; error, ->
+		BEQ	M231		; ERROR, ->
 M232
-		bpl	M232		; error, ->
+		BPL	M232		; ERROR, ->
 
-		cmp	#$FF
+		CMP	#$FF
 M233
-		bne	M233
+		BNE	M233
 
 
-		lda	#$ED
-		sta	POSTcode
+		LDA	#$ED
+		STA	POSTCODE
 
-		ldy	#$30
-		lda	#$AA
-		eor	A0400,Y
+		LDY	#$30
+		LDA	#$AA
+		EOR	A0400,Y
 M241
-		beq	M241		; error, ->
+		BEQ	M241		; ERROR, ->
 M242
-		bpl	M242		; error, ->
+		BPL	M242		; ERROR, ->
 
-		cmp	#$FF
+		CMP	#$FF
 M243
-		bne	M243
+		BNE	M243
 
 
-		lda	#$EE
-		sta	POSTcode
+		LDA	#$EE
+		STA	POSTCODE
 
-		lda	#$AA
-		eor	(Z10,X)
+		LDA	#$AA
+		EOR	(Z10,X)
 M251
-		beq	M251		; error, ->
+		BEQ	M251		; ERROR, ->
 M252
-		bpl	M252		; error, ->
+		BPL	M252		; ERROR, ->
 
-		cmp	#$FF
+		CMP	#$FF
 M253
-		bne	M253
+		BNE	M253
 
 
-		lda	#$EF
-		sta	POSTcode
+		LDA	#$EF
+		STA	POSTCODE
 
-		ldy	#$30
-		lda	#$AA
-		eor	(Z10+4),Y
+		LDY	#$30
+		LDA	#$AA
+		EOR	(Z10+4),Y
 M261
-		beq	M261		; error, ->
+		BEQ	M261		; ERROR, ->
 M262
-		bpl	M262		; error, ->
+		BPL	M262		; ERROR, ->
 
-		cmp	#$FF
+		CMP	#$FF
 M263
-		bne	M263
+		BNE	M263
 
 
-;* A = $CC, memory = $CC
-		lda	#$F0
-		sta	POSTcode
+;* A = $CC, MEMORY = $CC
+		LDA	#$F0
+		STA	POSTCODE
 
-		ldx	#$30
-		lda	#$CC
-		sta	Z10
-		sta	A0400
-		sta	Z10,X
-		sta	A0400,X
-		sta	(Z10,X)
+		LDX	#$30
+		LDA	#$CC
+		STA	Z10
+		STA	A0400
+		STA	Z10,X
+		STA	A0400,X
+		STA	(Z10,X)
 
-		ldy	#$30
-		sta	A0400,Y
-		sta	(Z10+4),Y
+		LDY	#$30
+		STA	A0400,Y
+		STA	(Z10+4),Y
 
-		lda	#$CC
-		eor	#$CC
+		LDA	#$CC
+		EOR	#$CC
 M291
-		bne	M291		; error, ->
+		BNE	M291		; ERROR, ->
 M292
-		bmi	M292		; error, ->
+		BMI	M292		; ERROR, ->
 		
 
-		lda	#$F1
-		sta	POSTcode
+		LDA	#$F1
+		STA	POSTCODE
 
-		lda	#$CC
-		eor	Z10
+		LDA	#$CC
+		EOR	Z10
 M301
-		bne	M301		; error, ->
+		BNE	M301		; ERROR, ->
 M302
-		bmi	M302		; error, ->
+		BMI	M302		; ERROR, ->
 
 
-		lda	#$F2
-		sta	POSTcode
+		LDA	#$F2
+		STA	POSTCODE
 
-		lda	#$CC
-		eor	A0400
+		LDA	#$CC
+		EOR	A0400
 M311
-		bne	M311		; error, ->
+		BNE	M311		; ERROR, ->
 M312
-		bmi	M312		; error, ->
+		BMI	M312		; ERROR, ->
 
 
-		lda	#$F3
-		sta	POSTcode
+		LDA	#$F3
+		STA	POSTCODE
 
-		ldx	#$30
-		lda	#$CC
-		eor	Z10,X
+		LDX	#$30
+		LDA	#$CC
+		EOR	Z10,X
 M321
-		bne	M321		; error, ->
+		BNE	M321		; ERROR, ->
 M322
-		bmi	M322		; error, ->
+		BMI	M322		; ERROR, ->
 
 
-		lda	#$F4
-		sta	POSTcode
+		LDA	#$F4
+		STA	POSTCODE
 
-		ldx	#$30
-		lda	#$CC
-		eor	A0400,X
+		LDX	#$30
+		LDA	#$CC
+		EOR	A0400,X
 M331
-		bne	M331		; error, ->
+		BNE	M331		; ERROR, ->
 M332
-		bmi	M332		; error, ->
+		BMI	M332		; ERROR, ->
 
 
-		lda	#$F5
-		sta	POSTcode
+		LDA	#$F5
+		STA	POSTCODE
 
-		ldy	#$30
-		lda	#$CC
-		eor	A0400,Y
+		LDY	#$30
+		LDA	#$CC
+		EOR	A0400,Y
 M341
-		bne	M341		; error, ->
+		BNE	M341		; ERROR, ->
 M342
-		bmi	M342		; error, ->
+		BMI	M342		; ERROR, ->
 
 
-		lda	#$F6
-		sta	POSTcode
+		LDA	#$F6
+		STA	POSTCODE
 
-		ldx	#$30
-		lda	#$CC
-		eor	(Z10,X)
+		LDX	#$30
+		LDA	#$CC
+		EOR	(Z10,X)
 M351
-		bne	M351		; error, ->
+		BNE	M351		; ERROR, ->
 M352
-		bmi	M352		; error, ->
+		BMI	M352		; ERROR, ->
 
 
-		lda	#$F7
-		sta	POSTcode
+		LDA	#$F7
+		STA	POSTCODE
 
-		ldy	#$30
-		lda	#$CC
-		eor	(Z10+4),Y
+		LDY	#$30
+		LDA	#$CC
+		EOR	(Z10+4),Y
 M361
-		bne	M361		; error, ->
+		BNE	M361		; ERROR, ->
 M362
-		bmi	M362		; error, ->
+		BMI	M362		; ERROR, ->
 
 
-;**  JMP ($xxxx)
-		lda	#$F8
-		sta	POSTcode
+;**  JMP ($XXXX)
+		LDA	#$F8
+		STA	POSTCODE
 
-		lda	#<(L000)
-		sta	A0400
+		LDA	#<(L000)
+		STA	A0400
 
-		lda	#>(L000)
-		sta	A0400+1
+		LDA	#>(L000)
+		STA	A0400+1
 
-		jmp	(A0400)
+		JMP	(A0400)
 
 
-;* Should not be executed at all
-		nop
-		sec
+;* SHOULD NOT BE EXECUTED AT ALL
+		NOP
+		SEC
 M371
-		bcs	M371
+		BCS	M371
 		
-		nop
+		NOP
 M372
-		nop
+		NOP
 
 		
 ;**  JSR
-		lda	#$F9
-		sta	POSTcode
+		LDA	#$F9
+		STA	POSTCODE
 
-		ldx	#$F8
-		txs
+		LDX	#$F8
+		TXS
 		
-		sec
-		lda	#$FF
-		jsr	L000a
+		SEC
+		LDA	#$FF
+		JSR	L000A
 M373
-		bcs	M373
+		BCS	M373
 M374
-		bne	M374
+		BNE	M374
 
-		nop
+		NOP
 
 
 ;**  PHP, PLP
-		lda	#$FA
-		sta	POSTcode
+		LDA	#$FA
+		STA	POSTCODE
 		
-		lda	#$FF
-		pha
+		LDA	#$FF
+		PHA
 
-		lda	#0
-		pla
-		sta	$06
-		cmp	#$FF
+		LDA	#0
+		PLA
+		STA	$06
+		CMP	#$FF
 XX01
-		bne	XX01		    
+		BNE	XX01		    
 
-		ldx	#0
+		LDX	#0
 		
-		lda	#$FF
-		pha		
-		plp
+		LDA	#$FF
+		PHA		
+		PLP
 		
-		stx	$01F8
+		STX	$01F8
 		
-		php
-		pla
-		sta	$08
-		cmp	#$FF
+		PHP
+		PLA
+		STA	$08
+		CMP	#$FF
 M381
-		bne	M381
+		BNE	M381
 		
-		tax
+		TAX
 
-		lda	#0
-		pha		
-		plp
+		LDA	#0
+		PHA		
+		PLP
 		
-		stx	$01F8		; erase original value on purpose
+		STX	$01F8		; ERASE ORIGINAL VALUE ON PURPOSE
 		
-		php
-		pla
- sta POSTcode2		
- and #$20
-		cmp	#$20
+		PHP
+		PLA
+ STA POSTCODE2		
+ AND #$20
+		CMP	#$20
 M382
-		bne	M382
+		BNE	M382
 
 
 ;**  BRK, RTI
-		lda	#$FB
-		sta	POSTcode
+		LDA	#$FB
+		STA	POSTCODE
 			    
-		brk
-		nop
+		BRK
+		NOP
 		
 
-;**  ADC  (3)             	Test ADC in decimal mode
-		lda	#$FC
-		sta	POSTcode
+;**  ADC  (3)             	TEST ADC IN DECIMAL MODE
+		LDA	#$FC
+		STA	POSTCODE
 			    
-		sed
+		SED
 		
-		clc
-		lda	#$12
-		adc	#$34
+		CLC
+		LDA	#$12
+		ADC	#$34
 M390
-		bcs	M390
+		BCS	M390
 
-		cmp	#$46
+		CMP	#$46
 M391
-		bne	M391
+		BNE	M391
 M392
-		bcc	M392
+		BCC	M392
 M393
-		bmi	M393
+		BMI	M393
 		
-		sec
-		adc	#$34
+		SEC
+		ADC	#$34
 M395
-		bcs	M395
+		BCS	M395
 M396
-		bpl	M396
+		BPL	M396
 
-		sta	$04		; to check possible bug in T65 	
-		cmp	#$81
+		STA	$04		; TO CHECK POSSIBLE BUG IN T65 	
+		CMP	#$81
 M394
-		bne	M394
+		BNE	M394
 
-		clc
-		adc	#$19
+		CLC
+		ADC	#$19
 M397
-		bne	M397
+		BNE	M397
 M398
-		bcc	M398
+		BCC	M398
 M399
-		bmi	M399
+		BMI	M399
 
 
-;**  SBC  (3)             	Test SBC in decimal mode
-		lda	#$FD
-		sta	POSTcode
+;**  SBC  (3)             	TEST SBC IN DECIMAL MODE
+		LDA	#$FD
+		STA	POSTCODE
 			    
 
 
 
 
-		lda	#$FE
-		sta	POSTcode
+		LDA	#$FE
+		STA	POSTCODE
 			    
 L997
-		jmp	L997
+		JMP	L997
 
 
-.ba $FFEC
-;**  Part of testing JMP
+	ORG $FFEC
+;**  PART OF TESTING JMP
 L999
-		jmp	L005
+		JMP	L005
  
  
-;* Should not be executed at all
-		nop
-		sec
-L999c
-		bcs	L999c
+;* SHOULD NOT BE EXECUTED AT ALL
+		NOP
+		SEC
+L999C
+		BCS	L999C
 		
-		nop
+		NOP
 
 
 
-;.ba $FFF4
+;.BA $FFF4
 IRQ
 NMI
-		nop
+		NOP
 		
-		lda	#$FF
-		pha
-		plp			; change flag register on purpose
+		LDA	#$FF
+		PHA
+		PLP			; CHANGE FLAG REGISTER ON PURPOSE
 		
-		rti
+		RTI
 
-.ba $FFFA
-.wo NMI
-.wo Reset
-.wo IRQ
 
-.en
+

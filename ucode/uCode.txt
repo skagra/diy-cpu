@@ -7,7 +7,8 @@
 ZERO
 uP0-INIT p0
 CDATA/LD/FF | S/LD/CDATA
-CDATA/LD/0 | PCH/LD/CDATA | PCL/LD/CDATA | CDATA/TO/CADDRH | CDATA/TO/CADDRL | MARH/LD/CADDRH | MARL/LD/CADDRL | MBR/LD/CDATA 
+CDATA/LD/2 | PCH/LD/CDATA 
+CDATA/LD/0 | PCL/LD/CDATA | CDATA/TO/CADDRH | CDATA/TO/CADDRL | MARH/LD/CADDRH | MARL/LD/CADDRL | MBR/LD/CDATA 
 CDATA/LD/0 | A/LD/CDATA | X/LD/CDATA | Y/LD/CDATA | STASHH/LD/CDATA | STASHL/LD/CDATA | ALUA/LD/CDATA | ALUB/LD/CDATA | ALUC<-0
 PZ/LD | PN/LD | PC/LD | PV/LD | P/SRC-0
 
@@ -16,7 +17,8 @@ PZ/LD | PN/LD | PC/LD | PV/LD | P/SRC-0
 // Fetch (uP0) --->
 
 .label p0
-MAR<-PC | PC-INC | IR<-MEM                                           // Separate cycle as we don't have a handle on the op code for decoding until the previous cycle is complete
+MAR<-PC | PC-INC                                            // Separate cycle as we don't have a handle on the op code for decoding until the previous cycle is complete
+IR<-MEM 
 uP1                                                                  // Jump to uP1
 
 // <--- Fetch (uP0)
@@ -106,15 +108,15 @@ MBR<-A                                                               // Move A i
 MEM<-MBR | uP0                                                       // Write MBR to memory at MAR
 
 .opcode JMP                                                          // TODO: This should do its own addressing, faster and less hacky
-//PCL<-STASHL                                                          // Move the LSB target address into PCL - populated by absolute addressing
-//PCH<-MBR | uP0                                                       // Move the MSB target address into PCH - populated by absolute addressing
+//PCL<-STASHL                                                        // Move the LSB target address into PCL - populated by absolute addressing
+//PCH<-MBR | uP0                                                     // Move the MSB target address into PCH - populated by absolute addressing
 
 
 MAR<-PC | MBR<-MEM | PC-INC                                          // Read the LSB address at PC, and increase PC
 STASHL<-MBR                                                          // Store the LSB in STASHL
-MAR<-PC | MBR<-MEM                                              // Read the MSB address at PC, 
-PCL<-STASHL                                                         // Move the LSB into PCL
-PCH<-MBR | uP0                                                      // Move the MSB into PCH
+MAR<-PC | MBR<-MEM                                                   // Read the MSB address at PC, 
+PCL<-STASHL                                                          // Move the LSB into PCL
+PCH<-MBR | uP0                                                       // Move the MSB into PCH
 
 .opcode INX
 ALUA<-X | ALUC<-0                                                    // Move X to ALUA and clear the carry bit

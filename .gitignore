@@ -138,3 +138,5 @@ _NCrunch*
 [Bb]uild/
 
 *.bin.tags
+
+a.out

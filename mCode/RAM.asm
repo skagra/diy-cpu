@@ -2,13 +2,25 @@
 
 ; I/O Addresses
 TERMINAL = $4000
+POST = $4001
 
-; Entry point - always start of first segment
-            SEG entry
+; Skip zero page
+            SEG skip-zero-page
             ORG $0
+            DS $100 
+
+; Skip stack
+            SEG skip-stack
+            ORG $100
+            DS $100
+
+; Code
+            SEG entry
+            ORG $200
 
 ; Main routine
 main:       LDA #$22
+            STA POST
             ASL
             JSR sayhello
             JSR l1 
@@ -42,12 +54,12 @@ sayhello:   LDX #0
             JMP .next
 .done:      RTS
 
-            ORG $4FD
+            SEG variables
+            ORG $6FD
+
 hello:      DC    "Hello World" 
             DC.B  0
 
-; Zero page variables
-            SEG.U variables
-            ORG $100
-
-p1:         DS 1
+; Zero page 
+            SEG.U zero-page
+            ORG $0
