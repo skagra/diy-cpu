@@ -4,7 +4,7 @@
 * Test new ALU and conditional jump operations
   * Add new MC opcodes to support this
 * Initialize via via vector
-* Add shift/rot operatiosn to ALU and CPU
+* Add shift/rot operations to ALU and CPU
 * Consider design of ALU flag handling, can this be simplified?
 * Do we need a latch on the output of the ALU?
 * Investigate using multiple phases of clocks to reduce execution cycles
@@ -17,5 +17,5 @@
 * Have microasm account for where word size does not fit exactly with uROMs
 * Improve log output implementation in microasm - its all over the code base at the moment with multiple hard coded numbers
 * Consider adding keyboard for input (likely need interrupt support in CPU first)
-* Check ALU ignorese carry in on inc/dec operations
+* Check ALU ignores carry in on inc/dec operations
 * As we don't hold the result of the ALU in a register op needs to be set on same cycle and moving result. Add a register?
