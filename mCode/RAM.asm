@@ -8,7 +8,9 @@ TERMINAL = $4000
             ORG $0
 
 ; Main routine
-main:       JSR sayhello
+main:       LDA #$22
+            ASL
+            JSR sayhello
             JSR l1 
             LDA #$EE
             PHA

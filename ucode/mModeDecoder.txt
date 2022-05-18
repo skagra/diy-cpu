@@ -1,6 +1,7 @@
 // Mapping between addressing modes and op code values
 
 // JSR ($20) amd JMP (4C) are being treated as IMP to allow them to do their own addr handling
+ACC  0A
 IMM  A9 A2 A0 
 ABS  8D AD
 IMP  4C E8 AA 8A 00 48 68 20 60  

@@ -5806,11 +5806,11 @@ In/out CDATA out CADDR</string>
       <elementAttributes>
         <entry>
           <string>Input Splitting</string>
-          <string>1,1,1</string>
+          <string>1,1,1,1</string>
         </entry>
         <entry>
           <string>Output Splitting</string>
-          <string>3</string>
+          <string>4</string>
         </entry>
       </elementAttributes>
       <pos x="740" y="640"/>
@@ -6324,7 +6324,7 @@ In/out CDATA out CADDR</string>
           <string>ERR</string>
         </entry>
       </elementAttributes>
-      <pos x="1680" y="1920"/>
+      <pos x="1680" y="1940"/>
     </visualElement>
     <visualElement>
       <elementName>Tunnel</elementName>
@@ -6378,6 +6378,30 @@ In/out CDATA out CADDR</string>
         </entry>
       </elementAttributes>
       <pos x="-1000" y="-1220"/>
+    </visualElement>
+    <visualElement>
+      <elementName>Tunnel</elementName>
+      <elementAttributes>
+        <entry>
+          <string>NetName</string>
+          <string>ALUOP/3</string>
+        </entry>
+      </elementAttributes>
+      <pos x="1680" y="1920"/>
+    </visualElement>
+    <visualElement>
+      <elementName>Tunnel</elementName>
+      <elementAttributes>
+        <entry>
+          <string>rotation</string>
+          <rotation rotation="2"/>
+        </entry>
+        <entry>
+          <string>NetName</string>
+          <string>ALUOP/3</string>
+        </entry>
+      </elementAttributes>
+      <pos x="720" y="700"/>
     </visualElement>
   </visualElements>
   <wires>
@@ -7362,6 +7386,10 @@ In/out CDATA out CADDR</string>
       <p2 x="1680" y="1680"/>
     </wire>
     <wire>
+      <p1 x="1640" y="1940"/>
+      <p2 x="1680" y="1940"/>
+    </wire>
+    <wire>
       <p1 x="720" y="660"/>
       <p2 x="740" y="660"/>
     </wire>
@@ -7556,6 +7584,10 @@ In/out CDATA out CADDR</string>
     <wire>
       <p1 x="1280" y="700"/>
       <p2 x="1600" y="700"/>
+    </wire>
+    <wire>
+      <p1 x="720" y="700"/>
+      <p2 x="740" y="700"/>
     </wire>
     <wire>
       <p1 x="1640" y="960"/>

@@ -57,6 +57,10 @@ ALUOP-INC | MARH<-ALU | uP2                                          // Increase
 MARH<-MBR                                                            // Move the high order byte into the of the base address into the MARH
 MBR<-MEM | uP2                                                       // Move the calculation result into the low byte of the MARH, then jump to uP2
 
+// Accumulator 
+.mode ACC 
+uP2 
+
 // Immediate 
 .mode IMM
 MAR<-PC | PC-INC | uP2                                               // Move the PC into MAR and jump to uP2
@@ -150,6 +154,10 @@ MAR<-S | MBR<-MEM | S/INC                                            // Move the
 PCH<-MBR                                                             // Move the MSB of the return address into PCH
 MAR<-S | MBR<-MEM                                                    // Move the stack pointer int MAR, read the LSB of the returns from the stack
 PCL<-MBR | uP0                                                       // Move the LSB of the return address into PCL
+
+.opcode ASL
+ALUA<-A 
+ALUOP-SHL | A<-ALU | uP0
 
 .opcode BRK
 HALT
