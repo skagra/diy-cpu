@@ -162,6 +162,9 @@ PCL<-MBR | uP0                                                       // Move the
 ALUA<-A                                                              // Move A to ALUA
 ALUOP-SHL | A<-ALU | uP0                                             // Have the ALU shift left and load the result back into A
 
+.opcode NOP
+uP0
+
 .opcode BRK
 HALT
 

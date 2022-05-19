@@ -46,6 +46,36 @@
          "problemMatcher": []
       },
       {
+         "label": "mkdir-test-machine-code",
+         "type": "shell",
+         "options": {
+            "shell": {
+               "executable": "powershell"
+            },
+            "cwd": "${workspaceFolder}/tests"
+         },
+         "command": "[System.IO.Directory]::CreateDirectory('bin')",
+         "problemMatcher": []
+      },
+      {
+         "label": "generate-test-machine-code",
+         "command": "dasm",
+         "type": "process",
+         "options": {
+            "cwd": "${workspaceFolder}/tests"
+         },
+         "args": [
+            "tests.asm",
+            "-f3",
+            "-obin/tests.bin",
+            "-lbin/tests.txt"
+         ],
+         "dependsOn": [
+            "mkdir-test-machine-code"
+         ],
+         "problemMatcher": []
+      },
+      {
          "label": "publish",
          "command": "dotnet",
          "type": "process",
