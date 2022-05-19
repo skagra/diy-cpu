@@ -6543,7 +6543,7 @@ In/out CDATA out CADDR</string>
           <string>CS1</string>
         </entry>
       </elementAttributes>
-      <pos x="520" y="-540"/>
+      <pos x="560" y="-540"/>
     </visualElement>
     <visualElement>
       <elementName>And</elementName>
@@ -6609,7 +6609,7 @@ In/out CDATA out CADDR</string>
           <string>CS1</string>
         </entry>
       </elementAttributes>
-      <pos x="580" y="-660"/>
+      <pos x="620" y="-660"/>
     </visualElement>
     <visualElement>
       <elementName>And</elementName>
@@ -6657,6 +6657,16 @@ In/out CDATA out CADDR</string>
         </entry>
       </elementAttributes>
       <pos x="1880" y="0"/>
+    </visualElement>
+    <visualElement>
+      <elementName>Text</elementName>
+      <elementAttributes>
+        <entry>
+          <string>Description</string>
+          <string>Memory Mapped IO</string>
+        </entry>
+      </elementAttributes>
+      <pos x="560" y="-500"/>
     </visualElement>
   </visualElements>
   <wires>
@@ -6869,7 +6879,7 @@ In/out CDATA out CADDR</string>
       <p2 x="1680" y="1560"/>
     </wire>
     <wire>
-      <p1 x="520" y="-540"/>
+      <p1 x="560" y="-540"/>
       <p2 x="580" y="-540"/>
     </wire>
     <wire>
@@ -7673,7 +7683,7 @@ In/out CDATA out CADDR</string>
       <p2 x="1680" y="1680"/>
     </wire>
     <wire>
-      <p1 x="580" y="-660"/>
+      <p1 x="620" y="-660"/>
       <p2 x="640" y="-660"/>
     </wire>
     <wire>
