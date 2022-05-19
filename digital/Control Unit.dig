@@ -4231,7 +4231,7 @@
         </entry>
         <entry>
           <string>Label</string>
-          <string>CDATA/LD/2</string>
+          <string>PC/RESET</string>
         </entry>
       </elementAttributes>
       <pos x="-780" y="720"/>
@@ -4245,7 +4245,7 @@
         </entry>
         <entry>
           <string>NetName</string>
-          <string>CDATA/LD/2</string>
+          <string>PC/RESET</string>
         </entry>
       </elementAttributes>
       <pos x="440" y="420"/>
@@ -4259,7 +4259,7 @@
         </entry>
         <entry>
           <string>NetName</string>
-          <string>CDATA/LD/2</string>
+          <string>PC/RESET</string>
         </entry>
       </elementAttributes>
       <pos x="-800" y="720"/>

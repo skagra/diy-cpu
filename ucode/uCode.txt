@@ -5,21 +5,26 @@
 
 .label RESET
 ZERO
-uP0-INIT p0
-CDATA/LD/FF | S/LD/CDATA
-CDATA/LD/2 | PCH/LD/CDATA 
-CDATA/LD/0 | PCL/LD/CDATA | CDATA/TO/CADDRH | CDATA/TO/CADDRL | MARH/LD/CADDRH | MARL/LD/CADDRL | MBR/LD/CDATA 
+uP0-INIT p0                                                          // Load the location  of p0 code into the control unit
+CDATA/LD/FF | S/LD/CDATA                                             // Set the stack pointer 
+                                                                     // Zero registers
 CDATA/LD/0 | A/LD/CDATA | X/LD/CDATA | Y/LD/CDATA | STASHH/LD/CDATA | STASHL/LD/CDATA | ALUA/LD/CDATA | ALUB/LD/CDATA | ALUC<-0
-PZ/LD | PN/LD | PC/LD | PV/LD | P/SRC-0
+PZ/LD | PN/LD | PC/LD | PV/LD | P/SRC-0                              // Zero P   
+PC/RESET                                                             // Load the reset vector location in the PC
+MAR<-PC | MBR<-MEM                                                   // Load the LSB of the reset vector
+STASHL<-MBR | PC-INC                                                 // Store it in STASHL, and increase the PC
+MAR<-PC | MBR<-MEM                                                   // Load the MSB of the reset vector
+PCL<-STASHL                                                          // Move the LSB of the reset vector into the PC
+PCH<-MBR                                                             // Move the MSB of the reset vector into the PC
 
 // <--- Init code
 
 // Fetch (uP0) --->
 
 .label p0
-MAR<-PC | PC-INC                                            // Separate cycle as we don't have a handle on the op code for decoding until the previous cycle is complete
-IR<-MEM 
-uP1                                                                  // Jump to uP1
+MAR<-PC | PC-INC                                                     // Move the PC into MAR and increase the PC                        
+IR<-MEM                                                              // Load the current op code from memory into the IR
+uP1                                                                  // Separate cycle as we don't have a handle on the op code for decoding until the previous cycle is completed
 
 // <--- Fetch (uP0)
 
@@ -107,11 +112,7 @@ Y<-MBR | uP0                                                         // Move the
 MBR<-A                                                               // Move A into MBR
 MEM<-MBR | uP0                                                       // Write MBR to memory at MAR
 
-.opcode JMP                                                          // TODO: This should do its own addressing, faster and less hacky
-//PCL<-STASHL                                                        // Move the LSB target address into PCL - populated by absolute addressing
-//PCH<-MBR | uP0                                                     // Move the MSB target address into PCH - populated by absolute addressing
-
-
+.opcode JMP
 MAR<-PC | MBR<-MEM | PC-INC                                          // Read the LSB address at PC, and increase PC
 STASHL<-MBR                                                          // Store the LSB in STASHL
 MAR<-PC | MBR<-MEM                                                   // Read the MSB address at PC, 
@@ -158,8 +159,8 @@ MAR<-S | MBR<-MEM                                                    // Move the
 PCL<-MBR | uP0                                                       // Move the LSB of the return address into PCL
 
 .opcode ASL
-ALUA<-A 
-ALUOP-SHL | A<-ALU | uP0
+ALUA<-A                                                              // Move A to ALUA
+ALUOP-SHL | A<-ALU | uP0                                             // Have the ALU shift left and load the result back into A
 
 .opcode BRK
 HALT

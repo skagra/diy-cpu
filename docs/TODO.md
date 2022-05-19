@@ -19,3 +19,6 @@
 * Consider adding keyboard for input (likely need interrupt support in CPU first)
 * Check ALU ignores carry in on inc/dec operations
 * As we don't hold the result of the ALU in a register op needs to be set on same cycle and moving result. Add a register?
+* Check order of pushing bytes of addresses onto stack for JSR (and later BRK)
+* Integrate test rig
+
