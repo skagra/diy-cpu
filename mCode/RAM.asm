@@ -21,18 +21,22 @@ POST = $4001
 ; Main routine
 main:       LDA #$22
             STA POST
-            ASL
-            JSR sayhello
-            JSR l1 
+;            ASL      
+ ;           JSR sayhello
+ ;           JSR l1 
             LDA #$EE
             PHA
             LDA #$22
             PLA
             TAX
+            LDX #$F0
 .inc:       INX
-            BEQ halt
+            BEQ .decs
             JMP .inc
-            
+.decs:      LDX #10
+.dec        DEX
+            BNE .dec
+
 halt:       LDA #$DD
             LDY #$FF
             BRK

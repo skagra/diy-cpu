@@ -7,7 +7,6 @@ JMP     4C
 INX     E8
 LDX     A2 
 LDY     A0
-BEQ     F0
 TAX     AA
 TXA     8A
 PHA     48
@@ -16,4 +15,17 @@ JSR     20
 RTS     60
 ASL     0A
 NOP     EA
-
+SEC     38
+CLC     18
+CLV     B8
+BPL     10
+BMI     30
+BVC     50
+BVS     70
+BCC     90
+BCS     B0
+BNE     D0
+BEQ     F0
+TXS     9A
+PLP     28
+DEX     CA

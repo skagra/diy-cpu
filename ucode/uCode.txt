@@ -92,13 +92,7 @@ CDATA/LD/0 | CDATA/TO/CADDRH | MARH/LD/CADDRH | uP2                  // Move zer
 
 .opcode LDA
 MBR<-MEM                                                             // Read value at MAR 
-A<-MBR | PZ/LD | PN/LD | P/SRC-CDATA | uP0                           // Move value into A, setting P flags as appropriate
-
-.opcode TAX
-A/OUT/CDATA | X/LD/CDATA | uP0                                       // Move A to X 
-
-.opcode TXA
-X/OUT/CDATA | A/LD/CDATA | uP0                                       // Move X to A
+A<-MBR | PZ/LD | PN/LD | P/SRC-FLGCDATA | uP0                           // Move value into A, setting P flags as appropriate
 
 .opcode LDX
 MBR<-MEM                                                             // Read the value at MAR
@@ -123,12 +117,86 @@ PCH<-MBR | uP0                                                       // Move the
 ALUA<-X | ALUC<-0                                                    // Move X to ALUA and clear the carry bit
 ALUOP-INC | X<-ALU | PZ/LD | PN/LD | P/SRC-ALU | uP0                 // Add one, store result in X and set P flags
 
+.opcode DEX
+ALUA<-X | ALUC<-0                                                    // Move X to ALUA and clear the carry bit
+ALUOP-DEC | X<-ALU | PZ/LD | PN/LD | P/SRC-ALU | uP0                 // Subtract one, store result in X and set P flags
+
+// Branch instructions
+
+// Positive
+.opcode BPL  
+MBR<-MEM                                                             // Read the offset from memory at MAR into MBR
+uJMP/INV | uNJMP BPL_TRUE                                            // If previous operation resulted in non-negative jump to BPL_TRUE
+uP0                                                                  // Jump to uP0
+.label BPL_TRUE
+MBR/OUT/CDATA | PC/ADD/CDATA | uP0                                   // Add the displacement to the PC 
+
+// Negative
+.opcode BMI     
+MBR<-MEM                                                             // Read the offset from memory at MAR into MBR
+uNJMP BMI_TRUE                                                       // If previous operation resulted in negative jump to BMI_TRUE
+uP0                                                                  // Jump to uP0
+.label BMI_TRUE
+MBR/OUT/CDATA | PC/ADD/CDATA | uP0                                   // Add the displacement to the PC 
+
+// Overflow clear
+.opcode BVC     
+MBR<-MEM                                                             // Read the offset from memory at MAR into MBR
+uJMP/INV | uVJMP BVC_TRUE                                            // If previous operation resulted in no overflow jump to BVC_TRUE
+uP0                                                                  // Jump to uP0
+.label BVC_TRUE
+MBR/OUT/CDATA | PC/ADD/CDATA | uP0                                   // Add the displacement to the PC 
+
+// Overflow set
+.opcode BVS     
+MBR<-MEM                                                             // Read the offset from memory at MAR into MBR
+uVJMP BVS_TRUE                                                       // If previous operation resulted in overflow jump to BVS_TRUE
+uP0                                                                  // Jump to uP0
+.label BVS_TRUE
+MBR/OUT/CDATA | PC/ADD/CDATA | uP0                                   // Add the displacement to the PC 
+
+// No carry
+.opcode BCC     
+MBR<-MEM                                                             // Read the offset from memory at MAR into MBR
+uJMP/INV | uCJMP BVC_BCC                                             // If previous operation resulted in no carry jump to BVC_BCC
+uP0                                                                  // Jump to uP0
+.label BVC_BCC
+MBR/OUT/CDATA | PC/ADD/CDATA | uP0                                   // Add the displacement to the PC 
+
+// Carry
+.opcode BCS     
+MBR<-MEM                                                             // Read the offset from memory at MAR into MBR
+uCJMP BVC_BCS                                                        // If previous operation resulted in a carry jump to BVC_BCS
+uP0                                                                  // Jump to uP0
+.label BVC_BCS
+MBR/OUT/CDATA | PC/ADD/CDATA | uP0                                   // Add the displacement to the PC 
+
+// Not zero
+.opcode BNE     
+MBR<-MEM                                                             // Read the offset from memory at MAR into MBR
+uJMP/INV | uZJMP BEQ_BNE                                             // If previous operation resulted in non-zero jump to BEQ_BNE
+uP0                                                                  // Jump to uP0
+.label BEQ_BNE
+MBR/OUT/CDATA | PC/ADD/CDATA | uP0                                   // Add the displacement to the PC 
+
+// Zero
 .opcode BEQ                                                         
 MBR<-MEM                                                             // Read the offset from memory at MAR into MBR
 uZJMP BEQ_TRUE                                                       // If previous operation resulted in zero jump to BEQ_TRUE
 uP0                                                                  // Jump to uP0
 .label BEQ_TRUE
 MBR/OUT/CDATA | PC/ADD/CDATA | uP0                                   // Add the displacement to the PC 
+
+.opcode TAX
+A/OUT/CDATA | X/LD/CDATA | uP0                                       // Move A to X 
+
+.opcode TXA
+X/OUT/CDATA | A/LD/CDATA | uP0                                       // Move X to A
+
+// Stack operations
+
+.opcode TXS
+X/OUT/CDATA | S/LD/CDATA | uP0                                       // Move X to S
 
 .opcode PHA
 MAR<-S | MBR<-A                                                      // Copy the stack pointer to MAR and A to MBR
@@ -157,6 +225,20 @@ MAR<-S | MBR<-MEM | S/INC                                            // Move the
 PCH<-MBR                                                             // Move the MSB of the return address into PCH
 MAR<-S | MBR<-MEM                                                    // Move the stack pointer int MAR, read the LSB of the returns from the stack
 PCL<-MBR | uP0                                                       // Move the LSB of the return address into PCL
+
+.opcode SEC
+P/SRC-1 | PC/LD | uP0
+
+.opcode CLC
+P/SRC-0 | PC/LD | uP0
+
+.opcode CLV
+P/SRC-0 | PV/LD | uP0
+
+.opcode PLP
+S/INC                                                                // Increment the stack pointer
+MAR<-S | MBR<-MEM                                                    // Read the value from the top of the stack
+MBR/OUT/CDATA | P/SRC-CDATA | PN/LD | PV/LD | PZ/LD PC/LD | uP0      // Set P from the value read from the stack
 
 .opcode ASL
 ALUA<-A                                                              // Move A to ALUA
