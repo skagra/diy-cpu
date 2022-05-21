@@ -29,3 +29,4 @@ BEQ     F0
 TXS     9A
 PLP     28
 DEX     CA
+CMP     C9

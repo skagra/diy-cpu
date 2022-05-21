@@ -19,11 +19,15 @@ POST = $4001
             ORG $200
 
 ; Main routine
-main:       LDA #$22
+main:       LDA #$50
+            CMP #$60
+            CMP #$40
+            CMP #$50
+            LDA #$22
             STA POST
-;            ASL      
- ;           JSR sayhello
- ;           JSR l1 
+            ASL      
+            JSR sayhello
+            JSR l1 
             LDA #$EE
             PHA
             LDA #$22
@@ -60,6 +64,7 @@ sayhello:   LDX #0
 
             SEG variables
             ORG $6FD
+cval:       DC  2
 
 hello:      DC    "Hello World" 
             DC.B  0
@@ -67,3 +72,5 @@ hello:      DC    "Hello World"
 ; Zero page 
             SEG.U zero-page
             ORG $0
+
+

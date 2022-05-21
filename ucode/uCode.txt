@@ -247,6 +247,12 @@ ALUOP-SHL | A<-ALU | uP0                                             // Have the
 .opcode NOP
 uP0
 
+.opcode CMP
+MBR<-MEM  
+ALUB<-MBR 
+ALUA<-A | ALUC<-0 
+ALUOP-SUB | PZ/LD | PN/LD | PC/LD | P/SRC-ALU | uP0  
+
 .opcode BRK
 HALT
 

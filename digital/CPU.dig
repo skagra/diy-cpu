@@ -8,7 +8,7 @@
     </entry>
     <entry>
       <string>preloadProgramFile</string>
-      <file>E:\Development\diy-cpu\tests\bin\tests.bin</file>
+      <file>E:\Development\diy-cpu\mcode\bin\RAM.bin</file>
     </entry>
   </attributes>
   <visualElements>
@@ -4196,7 +4196,12 @@ In/out CDATA out CADDR</string>
     </visualElement>
     <visualElement>
       <elementName>Instruction Decoder.dig</elementName>
-      <elementAttributes/>
+      <elementAttributes>
+        <entry>
+          <string>Label</string>
+          <string>Instruction Decoder</string>
+        </entry>
+      </elementAttributes>
       <pos x="1360" y="620"/>
     </visualElement>
     <visualElement>
@@ -4687,6 +4692,10 @@ In/out CDATA out CADDR</string>
       <elementName>CounterPreset</elementName>
       <elementAttributes>
         <entry>
+          <string>Label</string>
+          <string>S</string>
+        </entry>
+        <entry>
           <string>Bits</string>
           <int>8</int>
         </entry>
@@ -5048,7 +5057,12 @@ In/out CDATA out CADDR</string>
     </visualElement>
     <visualElement>
       <elementName>PC.dig</elementName>
-      <elementAttributes/>
+      <elementAttributes>
+        <entry>
+          <string>Label</string>
+          <string>PC</string>
+        </entry>
+      </elementAttributes>
       <pos x="1900" y="-120"/>
     </visualElement>
     <visualElement>
@@ -5361,16 +5375,6 @@ In/out CDATA out CADDR</string>
       <pos x="720" y="-580"/>
     </visualElement>
     <visualElement>
-      <elementName>Text</elementName>
-      <elementAttributes>
-        <entry>
-          <string>Description</string>
-          <string>Instruction Decoder</string>
-        </entry>
-      </elementAttributes>
-      <pos x="1340" y="560"/>
-    </visualElement>
-    <visualElement>
       <elementName>LED</elementName>
       <elementAttributes>
         <entry>
@@ -5644,7 +5648,7 @@ In/out CDATA out CADDR</string>
       <elementAttributes>
         <entry>
           <string>rotation</string>
-          <rotation reference="../../../../visualElement[457]/elementAttributes/entry/rotation"/>
+          <rotation reference="../../../../visualElement[456]/elementAttributes/entry/rotation"/>
         </entry>
         <entry>
           <string>NetName</string>
@@ -5658,7 +5662,7 @@ In/out CDATA out CADDR</string>
       <elementAttributes>
         <entry>
           <string>rotation</string>
-          <rotation reference="../../../../visualElement[457]/elementAttributes/entry/rotation"/>
+          <rotation reference="../../../../visualElement[456]/elementAttributes/entry/rotation"/>
         </entry>
         <entry>
           <string>NetName</string>
@@ -5686,7 +5690,7 @@ In/out CDATA out CADDR</string>
       <elementAttributes>
         <entry>
           <string>rotation</string>
-          <rotation reference="../../../../visualElement[460]/elementAttributes/entry/rotation"/>
+          <rotation reference="../../../../visualElement[459]/elementAttributes/entry/rotation"/>
         </entry>
         <entry>
           <string>NetName</string>
@@ -5700,7 +5704,7 @@ In/out CDATA out CADDR</string>
       <elementAttributes>
         <entry>
           <string>rotation</string>
-          <rotation reference="../../../../visualElement[460]/elementAttributes/entry/rotation"/>
+          <rotation reference="../../../../visualElement[459]/elementAttributes/entry/rotation"/>
         </entry>
         <entry>
           <string>NetName</string>
@@ -5977,7 +5981,7 @@ In/out CDATA out CADDR</string>
       <elementAttributes>
         <entry>
           <string>rotation</string>
-          <rotation reference="../../../../visualElement[483]/elementAttributes/entry/rotation"/>
+          <rotation reference="../../../../visualElement[482]/elementAttributes/entry/rotation"/>
         </entry>
         <entry>
           <string>NetName</string>
@@ -5991,7 +5995,7 @@ In/out CDATA out CADDR</string>
       <elementAttributes>
         <entry>
           <string>rotation</string>
-          <rotation reference="../../../../visualElement[483]/elementAttributes/entry/rotation"/>
+          <rotation reference="../../../../visualElement[482]/elementAttributes/entry/rotation"/>
         </entry>
         <entry>
           <string>NetName</string>
@@ -6005,7 +6009,7 @@ In/out CDATA out CADDR</string>
       <elementAttributes>
         <entry>
           <string>rotation</string>
-          <rotation reference="../../../../visualElement[483]/elementAttributes/entry/rotation"/>
+          <rotation reference="../../../../visualElement[482]/elementAttributes/entry/rotation"/>
         </entry>
         <entry>
           <string>NetName</string>
@@ -6089,7 +6093,7 @@ In/out CDATA out CADDR</string>
       <elementAttributes>
         <entry>
           <string>rotation</string>
-          <rotation reference="../../../../visualElement[491]/elementAttributes/entry/rotation"/>
+          <rotation reference="../../../../visualElement[490]/elementAttributes/entry/rotation"/>
         </entry>
         <entry>
           <string>NetName</string>
@@ -6103,7 +6107,7 @@ In/out CDATA out CADDR</string>
       <elementAttributes>
         <entry>
           <string>rotation</string>
-          <rotation reference="../../../../visualElement[491]/elementAttributes/entry/rotation"/>
+          <rotation reference="../../../../visualElement[490]/elementAttributes/entry/rotation"/>
         </entry>
         <entry>
           <string>NetName</string>
@@ -6117,7 +6121,7 @@ In/out CDATA out CADDR</string>
       <elementAttributes>
         <entry>
           <string>rotation</string>
-          <rotation reference="../../../../visualElement[491]/elementAttributes/entry/rotation"/>
+          <rotation reference="../../../../visualElement[490]/elementAttributes/entry/rotation"/>
         </entry>
         <entry>
           <string>NetName</string>
@@ -6713,7 +6717,7 @@ In/out CDATA out CADDR</string>
       <elementAttributes>
         <entry>
           <string>rotation</string>
-          <rotation reference="../../../../visualElement[542]/elementAttributes/entry/rotation"/>
+          <rotation reference="../../../../visualElement[541]/elementAttributes/entry/rotation"/>
         </entry>
         <entry>
           <string>NetName</string>
@@ -6833,7 +6837,7 @@ In/out CDATA out CADDR</string>
       <elementAttributes>
         <entry>
           <string>rotation</string>
-          <rotation reference="../../../../visualElement[552]/elementAttributes/entry/rotation"/>
+          <rotation reference="../../../../visualElement[551]/elementAttributes/entry/rotation"/>
         </entry>
         <entry>
           <string>NetName</string>
@@ -6893,7 +6897,7 @@ In/out CDATA out CADDR</string>
       <elementAttributes>
         <entry>
           <string>rotation</string>
-          <rotation reference="../../../../visualElement[556]/elementAttributes/entry/rotation"/>
+          <rotation reference="../../../../visualElement[555]/elementAttributes/entry/rotation"/>
         </entry>
         <entry>
           <string>NetName</string>
