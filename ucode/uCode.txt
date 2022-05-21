@@ -30,6 +30,10 @@ uP1                                                                  // Separate
 
 // Addressing modes (uP1) --->
 
+// Accumulator 
+.mode ACC 
+uP2 
+
 // Absolute 
 .mode ABS
 MAR<-PC | MBR<-MEM | PC-INC                                          // Read the LSB address at PC, and increase PC
@@ -45,40 +49,45 @@ ALUA<-MBR                                                            // Move the
 MAR<-PC | MBR<-MEM | PC-INC                                          // Read the MSB of the index base  
 ALUB<-X | ALUC<-0                                                    // Move X into ALUB and reset the carry flag
 ALUOP-ADD | MARL<-ALU | CUP/SRC/ALU | uJMP/INV | uCJMP ABSX_DONE     // Add X and the LSB, store the result in MARL and check whether we've spanned a page boundary
-ALUA<-MBR | ALUC<-0                                                  // Spanned a page boundary - move MSB to ALUA 
+ALUA<-MBR                                                            // Spanned a page boundary - move MSB to ALUA 
 ALUOP-INC | MARH<-ALU | uP2                                          // Increase the MSB, store the result in MARH, then jump to uP2
 .label ABSX_DONE
 MARH<-MBR                                                            // Move the high order byte into the of the base address into the MARH
 MBR<-MEM | uP2                                                       // Move the calculation result into the low byte of the MARH, then jump to uP2
 
-// Abs index by X 
+// Abs index by Y 
 .mode ABSY
 MAR<-PC | MBR<-MEM | PC-INC                                          // Read the LSB of the index base then increase the PC
 ALUA<-MBR                                                            // Move the LSB to ALUA
 MAR<-PC | MBR<-MEM | PC-INC                                          // Read the MSB of the index base  
 Y/OUT/CDATA | ALUB/LD/CDATA | ALUC<-0                                // Move Y into ALUB and reset the carry flag
 ALUOP-ADD | MARL<-ALU | CUP/SRC/ALU | uJMP/INV | uCJMP ABSY_DONE     // Add Y and the LSB, store the result in MARL and check whether we've spanned a page boundary
-ALUA<-MBR | ALUC<-0                                                  // Spanned a page boundary - move MSB to ALUA 
+ALUA<-MBR                                                            // Spanned a page boundary - move MSB to ALUA 
 ALUOP-INC | MARH<-ALU | uP2                                          // Increase the MSB, store the result in MARH, then jump to uP2
 .label ABSY_DONE
 MARH<-MBR                                                            // Move the high order byte into the of the base address into the MARH
 MBR<-MEM | uP2                                                       // Move the calculation result into the low byte of the MARH, then jump to uP2
 
-// Accumulator 
-.mode ACC 
-uP2 
-
 // Immediate 
 .mode IMM
-MAR<-PC | PC-INC | uP2                                               // Move the PC into MAR and jump to uP2
-
-// Relative 
-.mode REL
 MAR<-PC | PC-INC | uP2                                               // Move the PC into MAR and jump to uP2
 
 // Implied 
 .mode IMP 
 uP2                                                                  // Jump directly to uP2
+
+// Indirect
+// .mode IND
+
+// X Indirect
+// .mode XIND
+
+// Indirect Y
+// .mode INDY
+
+// Relative 
+.mode REL
+MAR<-PC | PC-INC | uP2                                               // Move the PC into MAR and jump to uP2
 
 // Zero 
 .mode ZP
@@ -86,21 +95,27 @@ MAR<-PC | MBR<-MEM | PC-INC                                          // Read the
 MARL<-MBR                                                            // Move the address into the LSB of the MAR
 CDATA/LD/0 | CDATA/TO/CADDRH | MARH/LD/CADDRH | uP2                  // Move zero into the MSB of the MAR
 
+// Zero index X
+// .mode ZPINDX
+
+// Zero index Y
+// .mode ZPINDY
+
 // <--- Addressing modes (uP1) 
 
 // Op codes (uP2) --->
 
 .opcode LDA
 MBR<-MEM                                                             // Read value at MAR 
-A<-MBR | PZ/LD | PN/LD | P/SRC-FLGCDATA | uP0                           // Move value into A, setting P flags as appropriate
+A<-MBR | PZ/LD | PN/LD | P/SRC-FLGCDATA | uP0                        // Move value into A, setting P flags as appropriate
 
 .opcode LDX
 MBR<-MEM                                                             // Read the value at MAR
-X<-MBR | uP0                                                         // Move value into X                            
+X<-MBR |  PZ/LD | PN/LD | P/SRC-FLGCDATA | uP0                       // Move value into X                            
 
 .opcode LDY
 MBR<-MEM                                                             // Read the value at MAR
-Y<-MBR | uP0                                                         // Move the value into Y
+Y<-MBR |  PZ/LD | PN/LD | P/SRC-FLGCDATA | uP0                       // Move the value into Y
 
 .opcode STA
 MBR<-A                                                               // Move A into MBR
@@ -114,12 +129,20 @@ PCL<-STASHL                                                          // Move the
 PCH<-MBR | uP0                                                       // Move the MSB into PCH
 
 .opcode INX
-ALUA<-X | ALUC<-0                                                    // Move X to ALUA and clear the carry bit
+ALUA<-X                                                     // Move X to ALUA and clear the carry bit
 ALUOP-INC | X<-ALU | PZ/LD | PN/LD | P/SRC-ALU | uP0                 // Add one, store result in X and set P flags
 
 .opcode DEX
-ALUA<-X | ALUC<-0                                                    // Move X to ALUA and clear the carry bit
+ALUA<-X                                                    // Move X to ALUA and clear the carry bit
 ALUOP-DEC | X<-ALU | PZ/LD | PN/LD | P/SRC-ALU | uP0                 // Subtract one, store result in X and set P flags
+
+.opcode INY
+ALUA<-Y                                                   
+ALUOP-INC | Y<-ALU | PZ/LD | PN/LD | P/SRC-ALU | uP0 
+
+.opcode DEY
+ALUA<-Y                                                     
+ALUOP-DEC | Y<-ALU | PZ/LD | PN/LD | P/SRC-ALU | uP0 
 
 // Branch instructions
 
@@ -188,15 +211,24 @@ uP0                                                                  // Jump to 
 MBR/OUT/CDATA | PC/ADD/CDATA | uP0                                   // Add the displacement to the PC 
 
 .opcode TAX
-A/OUT/CDATA | X/LD/CDATA | uP0                                       // Move A to X 
+A/OUT/CDATA | X/LD/CDATA | PZ/LD | PN/LD | P/SRC-FLGCDATA | uP0                                       // Move A to X 
 
 .opcode TXA
-X/OUT/CDATA | A/LD/CDATA | uP0                                       // Move X to A
+X/OUT/CDATA | A/LD/CDATA | PZ/LD | PN/LD | P/SRC-FLGCDATA | uP0                                       // Move X to A
+
+.opcode TAY
+A/OUT/CDATA | Y/LD/CDATA | PZ/LD | PN/LD | P/SRC-FLGCDATA | uP0                                        
+
+.opcode TYA
+Y/OUT/CDATA | A/LD/CDATA | PZ/LD | PN/LD | P/SRC-FLGCDATA | uP0  
 
 // Stack operations
 
 .opcode TXS
 X/OUT/CDATA | S/LD/CDATA | uP0                                       // Move X to S
+
+.opcode TSX
+S/OUT/CDATA | PZ/LD | PN/LD | P/SRC-FLGCDATA | X/LD/CDATA | uP0
 
 .opcode PHA
 MAR<-S | MBR<-A                                                      // Copy the stack pointer to MAR and A to MBR
@@ -205,7 +237,7 @@ MEM<-MBR | S/DEC | uP0                                               // Push A o
 .opcode PLA
 S/INC                                                                // Increment the stack pointer
 MAR<-S | MBR<-MEM                                                    // Read the value from the top of the stack
-A<-MBR | uP0                                                         // And move it into A
+A<-MBR | PZ/LD | PN/LD | P/SRC-FLGCDATA | uP0                                                         // And move it into A
 
 .opcode JSR
 MAR<-PC | MBR<-MEM | PC-INC                                          // Read the LSB of the target address
@@ -250,8 +282,33 @@ uP0
 .opcode CMP
 MBR<-MEM  
 ALUB<-MBR 
-ALUA<-A | ALUC<-0 
+ALUA<-A | ALUC<-1 
 ALUOP-SUB | PZ/LD | PN/LD | PC/LD | P/SRC-ALU | uP0  
+
+.opcode CPX
+MBR<-MEM  
+ALUB<-MBR 
+ALUA<-X | ALUC<-1 
+ALUOP-SUB | PZ/LD | PN/LD | PC/LD | P/SRC-ALU | uP0  
+
+.opcode CPY
+MBR<-MEM  
+ALUB<-MBR 
+ALUA<-Y | ALUC<-1 
+ALUOP-SUB | PZ/LD | PN/LD | PC/LD | P/SRC-ALU | uP0  
+
+.opcode STX
+MBR<-X                                                               // Move X into MBR
+MEM<-MBR | uP0   
+
+.opcode STY
+MBR<-Y                                                               // Move Y into MBR
+MEM<-MBR | uP0   
+
+.opcode ADC
+MBR<-MEM | ALUA<-MBR
+ALUB<-MBR
+ALUOP-ADD | ALUR/OUT/CDATA | A/LD/CDATA | PZ/LD | PN/LD | PC/LD | P/SRC-ALU | uP0  
 
 .opcode BRK
 HALT

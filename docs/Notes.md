@@ -63,6 +63,30 @@ S9 S8 S7 S6 S5 S4 S3 S2 A1 A0 => AO A1 S2 S3 S4 S5 S6 S7 S8 S9
 | Zero page, X | `ADC $44,X`   | The zero page argument is added to X to give the zero page address of the operand.  Addition wraps to zero page.                                                                                                                                                                                                               |
 | Zero page, Y | `STA $00,Y`   | The zero page argument is added to Y to give the zero page address of the operand.  Addition wraps to zero page.                                                                                                                                                                                                               |
 
+# SBC and CMP                                     |
+
+http://www.6502.org/tutorials/compare_beyond.html
+https://www.righto.com/2013/01/a-small-part-of-6502-chip-explained.html
+http://www.6502.org/tutorials/vflag.html
+https://www.righto.com/2012/12/the-6502-overflow-flag-explained.html
+http://6502.cdot.systems/
+
+`CMP` is equivalent of:
+
+```
+SEC
+SBC NUM
+```
+
+Only effecting `NZC`
+
+`SBC` uses 1 complement!  So to get a proper substraction
+
+```
+SEC
+SBC
+```
+
 # References
 
 * 6502 Instruction set - good analysis of bit patterns for addressing modes: https://link.springer.com/content/pdf/bbm%3A978-1-349-07360-3%2F1.pdf
