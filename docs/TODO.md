@@ -23,5 +23,6 @@
 * Integrate test rig
 * Check the substraction logic in the PC ADD circuit
 * Take a very careful look at ADC, SBC, CMPs and setting of C and V flags
-  
+* Review flag handling throughout
+* Review C flag in INC/DEC operations in ALU
 

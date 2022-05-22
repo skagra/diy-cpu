@@ -71,6 +71,8 @@ http://www.6502.org/tutorials/vflag.html
 https://www.righto.com/2012/12/the-6502-overflow-flag-explained.html
 http://6502.cdot.systems/
 
+Noting SBC actually does 1's compliment subtraction - so need to set the carry flag!
+
 `CMP` is equivalent of:
 
 ```
