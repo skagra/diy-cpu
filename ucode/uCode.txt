@@ -94,9 +94,26 @@ MBR<-MEM                                                             // Load the
 MARH<-MBR                                                            // Copy final values into MAR
 MARL<-STASHH | uP2
 
+//  The zero page argument is added to Y to give the zero page address of the operand.  Addition wraps to zero page.  
 // Indirect Y ADC ($44),Y
-// .mode INDY
-// MAR<-PC | MBR<-MEM | PC-INC                                          // Read the ZP address of the index then increase the PC
+.mode INDY
+MAR<-PC | MBR<-MEM | PC-INC                                          // Read the ZP address of the index then increase the PC
+STASHH<-MBR                                                          // Store the ZP address in STASHH
+CDATA/LD/0 | CDATA/TO/CADDRH | MARH/LD/CADDRH                        // Zero out the MARH as we are in ZP
+MARL<-STASHH | MBR<-MEM                                              // Get the low byte of index base
+STASHL<-MBR                                                          // Store LSB in STASHL
+ALUA<-STASHH                                                         // Zero page index address
+ALUOP-INC | MARL<-ALU                                                // Increase it
+MBR<-MEM                                                             // Get the second byte of index base 
+STASHH<-MBR                                                          // Store it in STASHH
+ALUA<-STASHL                                                         // Now we need to add Y
+ALUB<-Y | ALUC<-0
+ALUOP-ADD | STASHL<-ALU | CUP/SRC/ALU | uJMP/INV | uCJMP INDY_DONE   // No carry so done
+ALUA<-STASHH                                                         // Carry so need to increase the MSB
+ALUOP-INC | STASHH<-ALU                                                                    
+.label INDY_DONE
+MARH<-STASHH
+MARL<-STASHL | uP2
 
 // Zero 
 .mode ZP
@@ -131,13 +148,15 @@ CDATA/LD/0 | CDATA/TO/CADDRH | MARH/LD/CADDRH | uP2                  // Zero out
 // -----------------------------------------------------------------------------
 
 .opcode ADC
-MBR<-MEM | ALUA<-MBR
-ALUB<-MBR
+MBR<-MEM
+ALUA<-MBR
+ALUB<-A | ALUC<-PC
 ALUOP-ADD | ALUR/OUT/CDATA | A/LD/CDATA | PZ/LD | PN/LD | PC/LD | PV/LD | P/SRC-ALU | uP0  
 
 .opcode SBC
-MBR<-MEM | ALUA<-MBR
+MBR<-MEM
 ALUB<-MBR
+ALUA<-A | ALUC<-PC
 ALUOP-SUB | ALUR/OUT/CDATA | A/LD/CDATA | PZ/LD | PN/LD | PC/LD | PV/LD | P/SRC-ALU | uP0  
 
 // -----------------------------------------------------------------------------
@@ -145,18 +164,21 @@ ALUOP-SUB | ALUR/OUT/CDATA | A/LD/CDATA | PZ/LD | PN/LD | PC/LD | PV/LD | P/SRC-
 // -----------------------------------------------------------------------------
 
 .opcode AND
-MBR<-MEM | ALUA<-MBR
-ALUB<-MBR
+MBR<-MEM
+ALUA<-MBR
+ALUB<-A
 ALUOP-AND | ALUR/OUT/CDATA | A/LD/CDATA | PZ/LD | PN/LD | P/SRC-ALU | uP0  
 
 .opcode ORA
-MBR<-MEM | ALUA<-MBR
-ALUB<-MBR
+MBR<-MEM 
+ALUA<-MBR
+ALUB<-A
 ALUOP-OR | ALUR/OUT/CDATA | A/LD/CDATA | PZ/LD | PN/LD | P/SRC-ALU | uP0  
 
 .opcode EOR
-MBR<-MEM | ALUA<-MBR
-ALUB<-MBR
+MBR<-MEM
+ALUA<-MBR
+ALUB<-A
 ALUOP-XOR | ALUR/OUT/CDATA | A/LD/CDATA | PZ/LD | PN/LD | P/SRC-ALU | uP0  
 
 // -----------------------------------------------------------------------------
@@ -164,12 +186,22 @@ ALUOP-XOR | ALUR/OUT/CDATA | A/LD/CDATA | PZ/LD | PN/LD | P/SRC-ALU | uP0
 // -----------------------------------------------------------------------------
 
 .opcode ASL
-ALUA<-A                                                              // Move A to ALUA
-ALUOP-SHL | A<-ALU | uP0                                             // Have the ALU shift left and load the result back into A
+ALUA<-A                                                              
+ALUOP-SHL | A<-ALU | PZ/LD | PN/LD | PC/LD | P/SRC-ALU | uP0                                     
 
-//.opcode LSR
-//.opcode ROL
-//.opcode ROR
+.opcode LSR
+ALUA<-A                                                             
+ALUOP-SHR | A<-ALU | PZ/LD | PN/LD | PC/LD | P/SRC-ALU | uP0 
+
+.opcode ROL
+MBR<-MEM                                                          
+ALUOP-ROTL | MBR<-ALU | PZ/LD | PN/LD | PC/LD | P/SRC-ALU  
+MEM<-MBR | uP0 
+
+.opcode ROR
+MBR<-MEM                                                          
+ALUOP-ROTR | MBR<-ALU | PZ/LD | PN/LD | PC/LD | P/SRC-ALU |
+MEM<-MBR | uP0 
 
 // -----------------------------------------------------------------------------
 // Branch
@@ -265,8 +297,17 @@ ALUOP-SUB | PZ/LD | PN/LD | PC/LD | P/SRC-ALU | uP0
 // Inc and Dec
 // -----------------------------------------------------------------------------
 
-//.opcode DEC
-//.opcode INC
+.opcode DEC
+MBR<-MEM 
+ALUA<-MBR
+ALUOP-DEC | MBR<-ALU | PZ/LD | PN/LD | P/SRC-ALU 
+MEM<-MBR | uP0 
+
+.opcode INC
+MBR<-MEM 
+ALUA<-MBR
+ALUOP-INC | MBR<-ALU | PZ/LD | PN/LD | P/SRC-ALU 
+MEM<-MBR | uP0 
 
 .opcode INX
 ALUA<-X                                                              // Move X to ALUA and clear the carry bit
@@ -300,7 +341,10 @@ P/SRC-1 | PC/LD | uP0
 .opcode CLV
 P/SRC-0 | PV/LD | uP0
 
-// .opcode CLD
+// TODO
+.opcode CLD
+uP0
+
 // .opcode SED
 
 // -----------------------------------------------------------------------------

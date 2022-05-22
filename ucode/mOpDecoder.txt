@@ -12,9 +12,9 @@ EOR     49 45 55 4D 5D 59 41 51
 
 // Shifts and rotates
 ASL     0A 06 16 0E 1E
-// LSR     4A 46 56 4E 5E
-// ROL     2A 26 36 2E 3E
-// ROR     6A 66 76 6E 7E
+LSR     4A 46 56 4E 5E
+ROL     2A 26 36 2E 3E
+ROR     6A 66 76 6E 7E
 
 // Branch 
 BPL	    10
@@ -32,8 +32,8 @@ CPX     E0 E4 EC
 CPY     C0 C4 CC
 
 // Inc and Dec
-// DEC     C6 D6 CE DE
-// INC     E6 F6 EE FE
+DEC     C6 D6 CE DE
+INC     E6 F6 EE FE
 DEX	    CA
 INX	    E8
 DEY	    88
@@ -45,10 +45,10 @@ SEC	    38
 // CLI	    58
 // SEI	    78
 CLV	    B8
-// CLD	    D8
+CLD	    D8
 // SED	    F8
 
-// Jump and subroutine
+// Jump and subroutine TODO: JMPINDIRECT
 JMP     4C 6C
 JSR     20
 RTS     60
