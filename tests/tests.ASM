@@ -3673,12 +3673,12 @@ L392
 		BMI	L392		; ERROR, ->
 
 
-;* A = 0, MEMORY = $FF
+;* A = 0, MEMORY = $FF XXX
 		LDA	#$A9
 		STA	POSTCODE
 
 		LDX	#5
-		LDA	#$FF
+		LDA	#$1C
 		STA	Z10
 		STA	A0400
 		STA	Z10,X
@@ -3889,27 +3889,27 @@ L592
 ;* A = $FF, MEMORY = $FF
 		LDA	#$B9
 		STA	POSTCODE
-
-		LDX	#5
-		LDA	#$FF
-		STA	Z10
-		STA	A0400
-		STA	Z10,X
-		STA	A0400,X
-		STA	(Z10,X)
-
-		LDY	#5
-		STA	A0400,Y
-		STA	(Z10+4),Y
-
-		LDA	#$FF
-		AND	#$FF
+;
+;		LDX	#5
+;		LDA	#$FF
+;		STA	Z10
+;		STA	A0400
+;		STA	Z10,X
+;		STA	A0400,X
+;		STA	(Z10,X)
+;
+;		LDY	#5
+;		STA	A0400,Y
+;		STA	(Z10+4),Y
+;
+;		LDA	#$FF
+;		AND	#$FF
 L622
-		BPL	L622		; ERROR, ->
-
-		CMP	#$FF
+;		BPL	L622		; ERROR, ->
+;
+;		CMP	#$FF
 L621
-		BNE	L621		; ERROR, ->
+;		BNE	L621		; ERROR, ->
 
 
 		LDA	#$BA
