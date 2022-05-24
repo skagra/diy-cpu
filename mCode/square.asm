@@ -31,55 +31,55 @@ POST = $4001
             SEG entry
             ORG $200
 
-            LDA   #$6
+            LDA   #$22
             STA   Numberl
             LDA   #$0
             STA   Numberh
             JSR   Square
-            LDA   Squarel
-            STA   POST
+            LDX   Squarel
+            LDY   Squareh
             BRK
 
-Square:  
-            LDA   #$00        
-            STA   Squarel     
-                             
-            LDA   Numberl     ; get number low byte
-            LDX   Numberh     ; get number high  byte
-            BPL   NoNneg      ; if +ve don't negate it
-                              ; else do a two's complement
-            EOR   #$FF        ; invert
-            SEC	            ; +1
-            ADC   #$00        ; and add it
+Square:
+        LDA     #$00        ; clear A
+        STA     Squarel     ; clear square low byte
+                            ; (no need to clear the high byte, it gets
+        LDA	Numberl     ; get number low byte
+	LDX	Numberh     ; get number high  byte
+	BPL	NoNneg      ; if +ve don't negate it
+                            ; else do a two's complement
+	EOR	#$FF        ; invert
+        SEC	            ; +1
+	ADC	#$00        ; and add it
 
 NoNneg:
-            STA	Tempsq      ; save ABS(number)
-            LDX	#$08        ; set bit count
+	STA	Tempsq      ; save ABS(number)
+	LDX	#$08        ; set bit count
 
 Nextr2bit:
-            ASL	Squarel     ; low byte *2
-            ROL	Squareh     ; high byte *2+carry from low
-            ASL	            ; shift number byte
-            BCC	NoSqadd     ; don't do add if C = 0
-            TAY               ; save A
-            CLC               ; clear carry for add
-            LDA	Tempsq      ; get number
-            ADC	Squarel     ; add number^2 low byte
-            STA	Squarel     ; save number^2 low byte
-            LDA	#$00        ; clear A
-            ADC	Squareh     ; add number^2 high byte
-            STA	Squareh     ; save number^2 high byte
-            TYA               ; get A back
+	ASL	Squarel     ; low byte *2
+	ROL	Squareh     ; high byte *2+carry from low
+	ASL	           ; shift number byte
+	BCC	NoSqadd     ; don't do add if C = 0
+	TAY                 ; save A
+	CLC                 ; clear carry for add
+	LDA	Tempsq      ; get number
+	ADC	Squarel     ; add number^2 low byte
+	STA	Squarel     ; save number^2 low byte
+	LDA	#$00        ; clear A
+	ADC	Squareh     ; add number^2 high byte
+	STA	Squareh     ; save number^2 high byte
+	TYA                 ; get A back
 
 NoSqadd:
-            DEX               ; decrement bit count
-            BNE	Nextr2bit   ; go do next bit
-            RTS
+	DEX                 ; decrement bit count
+	BNE	Nextr2bit   ; go do next bit
+	RTS
 
-
-Tempsq:     DS.B 0   ; temp byte for intermediate result
+Tempsq:     DC.B    ; temp byte for intermediate result
+            DC.B
 Numberl:    DC.B     ; number to square low byte
-Numberh:    DC.B	   ; number to square high byte
+Numberh:    DC.B 	   ; number to square high byte
 
 Squarel:    DC.B     ; square low byte
 Squareh:    DC.B	   ; square high byte

@@ -708,10 +708,6 @@
           <string>Label</string>
           <string>OP</string>
         </entry>
-        <entry>
-          <string>Bits</string>
-          <int>2</int>
-        </entry>
       </elementAttributes>
       <pos x="140" y="120"/>
     </visualElement>
