@@ -21,8 +21,8 @@
 * As we don't hold the result of the ALU in a register op needs to be set on same cycle and moving result. Add a register?
 * Check order of pushing bytes of addresses onto stack for JSR (and later BRK)
 * Integrate test rig
-* Check the substraction logic in the PC ADD circuit
+* Check the subtraction logic in the PC ADD circuit
 * Take a very careful look at ADC, SBC, CMPs and setting of C and V flags
 * Review flag handling throughout
-* Review C flag in INC/DEC operations in ALU
+
 

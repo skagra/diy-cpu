@@ -380,10 +380,11 @@ MAR<-PC | MBR<-MEM                                                   // Read the
 PCL<-STASHL                                                          // Move the LSB into PCL
 PCH<-MBR | uP0                                                       // Move the MSB into PCH
 
+// Note: Return address-1 is pushed onto the stack as per 6502
 .opcode JSR
 MAR<-PC | MBR<-MEM | PC-INC                                          // Read the LSB of the target address
 STASHL<-MBR                                                          // Store the LSB in STASHL
-MAR<-PC | MBR<-MEM | PC-INC                                          // Read the MSB of the target address
+MAR<-PC | MBR<-MEM                                                   // Read the MSB of the target address
 STASHH<-MBR                                                          // Store the MSB in STASHH
 MAR<-S | MBR<-PCH                                                    // Push the MSB of the PC onto the stack
 MEM<-MBR | S/DEC
@@ -395,9 +396,10 @@ PCH<-STASHH | uP0
 .opcode RTS
 S/INC                                                                // Increment the stack pointer
 MAR<-S | MBR<-MEM | S/INC                                            // Move the stack pointer into MAR, read the MSB of the return address from the stack and increase the stack pointer
-PCL<-MBR                                                             // Move the MSB of the return address into PCH
+PCL<-MBR                                                             // Move the LSB of the return address into PCL
 MAR<-S | MBR<-MEM                                                    // Move the stack pointer int MAR, read the LSB of the returns from the stack
-PCH<-MBR | uP0                                                       // Move the LSB of the return address into PCL
+PCH<-MBR                                                             // Move the MSB of the return address into PCH
+PC-INC | uP0                                                         // Inc PC as return address-1 was pushed
 
 // Note: This operation functions like the 6502 in that the increment of the argument to point to
 // the location of the MSB of the ultimate argument is done without carry.
