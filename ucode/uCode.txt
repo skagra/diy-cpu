@@ -39,16 +39,15 @@ MARH<-MBR | uP2                                                      // Move the
 
 // Abs index by X 
 .mode ABSIDXX 
-MAR<-PC | MBR<-MEM | PC-INC                                          // Read the LSB of the index base then increase the PC
-ALUA<-MBR                                                            // Move the LSB to ALUA
-MAR<-PC | MBR<-MEM | PC-INC                                          // Read the MSB of the index base  
+MAR<-PC | MBR<-MEM | PC-INC                                          // Read the LSB of the index base argument then increase the PC
+ALUA<-MBR                                                            // Move the LSB of the argument ALUA
+MAR<-PC | MBR<-MEM | PC-INC                                          // Read the MSB of the index base argument in the MBR  
 ALUB<-X | ALUC<-0                                                    // Move X into ALUB and reset the carry flag
 ALUOP-ADD | MARL<-ALU | CUP/SRC/ALU | uJMP/INV | uCJMP ABSX_DONE     // Add X and the LSB, store the result in MARL and check whether we've spanned a page boundary
 ALUA<-MBR                                                            // Spanned a page boundary - move MSB to ALUA 
 ALUOP-INC | MARH<-ALU | uP2                                          // Increase the MSB, store the result in MARH, then jump to uP2
 .label ABSX_DONE
-MARH<-MBR                                                            // Move the high order byte into the of the base address into the MARH
-MBR<-MEM | uP2                                                       // Move the calculation result into the low byte of the MARH, then jump to uP2
+MARH<-MBR | uP2                                                      // Move the high order byte into the of the base address into the MARH
 
 // Abs index by Y 
 .mode ABSIDXY
@@ -60,8 +59,7 @@ ALUOP-ADD | MARL<-ALU | CUP/SRC/ALU | uJMP/INV | uCJMP ABSY_DONE     // Add Y an
 ALUA<-MBR                                                            // Spanned a page boundary - move MSB to ALUA 
 ALUOP-INC | MARH<-ALU | uP2                                          // Increase the MSB, store the result in MARH, then jump to uP2
 .label ABSY_DONE
-MARH<-MBR                                                            // Move the high order byte into the of the base address into the MARH
-MBR<-MEM | uP2                                                       // Move the calculation result into the low byte of the MARH, then jump to uP2
+MARH<-MBR | uP2                                                      // Move the high order byte into the of the base address into the MARH
 
 // Accumulator 
 .mode ACC 
@@ -136,8 +134,6 @@ ALUA<-MBR                                                            // Move ind
 ALUB<-Y | ALUC<-0                                                    // Move X into ALUB and clear carry
 ALUOP-ADD | MARL<-ALU                                                // Add X and the index base and store in MARL
 CDATA/LD/0 | CDATA/TO/CADDRH | MARH/LD/CADDRH | uP2                  // Zero out MARH
-
-// <--- Addressing modes (uP1) 
 
 // =============================================================================
 // Op codes (uP2)
@@ -376,6 +372,21 @@ MAR<-S | MBR<-MEM | S/INC                                            // Move the
 PCH<-MBR                                                             // Move the MSB of the return address into PCH
 MAR<-S | MBR<-MEM                                                    // Move the stack pointer int MAR, read the LSB of the returns from the stack
 PCL<-MBR | uP0                                                       // Move the LSB of the return address into PCL
+
+.opcode JMPIND
+// Note: This operation functions like the 6502 in that the increment of the argument to point to
+// the location of the MSB of the ultimate argument is done without carry.
+// So if the operand points to the last byte of a page it is bugged.
+MAR<-PC | MBR<-MEM | PC-INC                                          // Read the LSB of the argument
+STASHL<-MBR                                                          // And stash the LSB of the argument
+MAR<-PC | MBR<-MEM | PC-INC                                          // Read the MSB of the argument
+MARH<-MBR                                                            // Set MARH to point to the operand - this will remain for the rest of the instruction
+MARL<-STASHL | MBR<-MEM                                              // Set MARL to point to the LSB of the operand and read the LSB of the final operand 
+PCL<-MBR                                                             // And store it in PCL
+ALUA<-STASHL                                                         // Load the LSB of the argument into the ALU                
+ALUOP-INC | STASHL<-ALU                                              // Increase it to point to the MSB of the operand
+MARL<-STASHL | MBR<-MEM                                              // Load the MSB of the final operand
+PCH<-MBR | uP0                                                       // Move the MSB of the final operand into PCH
 
 // -----------------------------------------------------------------------------
 // Register load and store

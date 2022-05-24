@@ -49,9 +49,10 @@ CLD	    D8
 // SED	    F8
 
 // Jump and subroutine TODO: JMPINDIRECT
-JMP     4C 6C
+JMP     4C 
 JSR     20
 RTS     60
+JMPIND  6C
 
 // Register load and store
 LDA     A9 A5 B5 AD BD B9 A1 B1
