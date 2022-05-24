@@ -82,7 +82,7 @@ MAR<-PC | PC-INC | uP2                                               // Move the
 MAR<-PC | MBR<-MEM | PC-INC                                          // Get the base index zero page location
 ALUA<-MBR                                                            // Move it into ALUA
 X/OUT/CDATA | ALUB/LD/CDATA | ALUC<-0                                // Move X into ALUB and clear carry
-ALUOP-ADD | STASHL<-ALU                                              // Add X and the base index, store result in STASHL (ingoring any carry), this points to the ZP data we need
+ALUOP-ADD | STASHL<-ALU                                              // Add X and the base index, store result in STASHL (ignoring any carry), this points to the ZP data we need
 CDATA/LD/0 | CDATA/TO/CADDRH | MARH/LD/CADDRH                        // Zero out MARH as we are in ZP
 MARL<-STASHL | MBR<-MEM                                              // Load the final LSB into STASHH
 STASHH<-MBR
@@ -92,7 +92,7 @@ MBR<-MEM                                                             // Load the
 MARH<-MBR                                                            // Copy final values into MAR
 MARL<-STASHH | uP2
 
-//  The zero page argument is added to Y to give the zero page address of the operand.  Addition wraps to zero page.  
+// The zero page argument is added to Y to give the zero page address of the operand.  Addition wraps to zero page.  
 // Indirect Y ADC ($44),Y
 .mode INDY
 MAR<-PC | MBR<-MEM | PC-INC                                          // Read the ZP address of the index then increase the PC
@@ -144,7 +144,7 @@ CDATA/LD/0 | CDATA/TO/CADDRH | MARH/LD/CADDRH | uP2                  // Zero out
 // -----------------------------------------------------------------------------
 
 .opcode ADC
-MBR<-MEM
+MBR<-MEM                                                                   
 ALUA<-MBR
 ALUB<-A | ALUC<-PC
 ALUOP-ADD | ALUR/OUT/CDATA | A/LD/CDATA | PZ/LD | PN/LD | PC/LD | PV/LD | P/SRC-ALU | uP0  
@@ -160,34 +160,60 @@ ALUOP-SUB | ALUR/OUT/CDATA | A/LD/CDATA | PZ/LD | PN/LD | PC/LD | PV/LD | P/SRC-
 // -----------------------------------------------------------------------------
 
 .opcode AND
-MBR<-MEM
-ALUA<-MBR
-ALUB<-A
-ALUOP-AND | ALUR/OUT/CDATA | A/LD/CDATA | PZ/LD | PN/LD | P/SRC-ALU | uP0  
+MBR<-MEM                                                                   // Load the operand into MBR
+ALUA<-MBR                                                                  // Move the operand to ALUA
+ALUB<-A                                                                    // Move A to ALUB
+ALUOP-AND | ALUR/OUT/CDATA | A/LD/CDATA | PZ/LD | PN/LD | P/SRC-ALU | uP0  // AND storing result in A and setting P flags
 
 .opcode ORA
-MBR<-MEM 
-ALUA<-MBR
-ALUB<-A
-ALUOP-OR | ALUR/OUT/CDATA | A/LD/CDATA | PZ/LD | PN/LD | P/SRC-ALU | uP0  
+MBR<-MEM                                                                   // Load the operand into MBR   
+ALUA<-MBR                                                                  // Move the operand to ALUA
+ALUB<-A                                                                    // Move A to ALUB
+ALUOP-OR | ALUR/OUT/CDATA | A/LD/CDATA | PZ/LD | PN/LD | P/SRC-ALU | uP0   // OR storing result in A and setting P flags
 
 .opcode EOR
-MBR<-MEM
-ALUA<-MBR
-ALUB<-A
-ALUOP-XOR | ALUR/OUT/CDATA | A/LD/CDATA | PZ/LD | PN/LD | P/SRC-ALU | uP0  
+MBR<-MEM                                                                   // Load the operand into MBR
+ALUA<-MBR                                                                  // Move the operand to ALUA   
+ALUB<-A                                                                    // Move A to ALUB   
+ALUOP-XOR | ALUR/OUT/CDATA | A/LD/CDATA | PZ/LD | PN/LD | P/SRC-ALU | uP0  // EOR storing result in A and setting P flags
+
+.opcode BIT
+uP0
+MBR<-MEM                                                                   // Load the operand into MBR 
+ALUA<-MBR                                                                  // Move the operand to ALUA   
+ALUB<-A                                                                    // Move A into ALUB
+ALUOP-AND | ALUR/OUT/CDATA | PZ/LD | P/SRC-ALU                             // AND A and the operand using the result to set Z
+MBR/OUT/CDATA | PN/LD | PV/LD | P/SRC-CDATA | uP0                          // Set N & V from bits 7 and 6 of the operand
 
 // -----------------------------------------------------------------------------
-// Shifts and rotates
+// Shifts and rotates  
 // -----------------------------------------------------------------------------
 
-.opcode ASL
+.opcode ASLACC 
 ALUA<-A                                                              
 ALUOP-SHL | A<-ALU | PZ/LD | PN/LD | PC/LD | P/SRC-ALU | uP0                                     
 
-.opcode LSR
+.opcode LSRACC
 ALUA<-A                                                             
 ALUOP-SHR | A<-ALU | PZ/LD | PN/LD | PC/LD | P/SRC-ALU | uP0 
+
+.opcode ROLACC
+ALUA<-A                                                          
+ALUOP-ROTL | A<-ALU | PZ/LD | PN/LD | PC/LD | P/SRC-ALU | uP0   
+ 
+.opcode RORACC
+ALUA<-A                                                           
+ALUOP-ROTR | A<-ALU | PZ/LD | PN/LD | PC/LD | P/SRC-ALU | uP0
+
+.opcode ASL
+MBR<-MEM                                                          
+ALUOP-SHL | MBR<-ALU | PZ/LD | PN/LD | PC/LD | P/SRC-ALU  
+MEM<-MBR | uP0 
+
+.opcode LSR
+MBR<-MEM                                                          
+ALUOP-SHR | MBR<-ALU | PZ/LD | PN/LD | PC/LD | P/SRC-ALU  
+MEM<-MBR | uP0 
 
 .opcode ROL
 MBR<-MEM                                                          
@@ -196,7 +222,7 @@ MEM<-MBR | uP0
 
 .opcode ROR
 MBR<-MEM                                                          
-ALUOP-ROTR | MBR<-ALU | PZ/LD | PN/LD | PC/LD | P/SRC-ALU |
+ALUOP-ROTR | MBR<-ALU | PZ/LD | PN/LD | PC/LD | P/SRC-ALU 
 MEM<-MBR | uP0 
 
 // -----------------------------------------------------------------------------
@@ -272,76 +298,76 @@ MBR/OUT/CDATA | PC/ADD/CDATA | uP0                                   // Add the 
 // -----------------------------------------------------------------------------
 
 .opcode CMP
-MBR<-MEM  
-ALUB<-MBR 
-ALUA<-A | ALUC<-1 
-ALUOP-SUB | PZ/LD | PN/LD | PC/LD | P/SRC-ALU | uP0  
+MBR<-MEM                                                             // Read operand from memory into MBR 
+ALUB<-MBR                                                            // Move the operand into ALUB
+ALUA<-A | ALUC<-1                                                    // Move A into ALUA (setting the carry as the ALU will do 1's complement otherwise!)
+ALUOP-SUB | PZ/LD | PN/LD | PC/LD | P/SRC-ALU | uP0                  // Subtract the operand from A setting P flags as appropriate
 
 .opcode CPX
-MBR<-MEM  
-ALUB<-MBR 
-ALUA<-X | ALUC<-1 
-ALUOP-SUB | PZ/LD | PN/LD | PC/LD | P/SRC-ALU | uP0  
+MBR<-MEM                                                             // Read operand from memory into MBR 
+ALUB<-MBR                                                            // Move the operand into ALUB
+ALUA<-X | ALUC<-1                                                    // Move X into ALUA (setting the carry as the ALU will do 1's complement otherwise!)
+ALUOP-SUB | PZ/LD | PN/LD | PC/LD | P/SRC-ALU | uP0                  // Subtract the operand from X setting P flags as appropriate
 
 .opcode CPY
-MBR<-MEM  
-ALUB<-MBR 
-ALUA<-Y | ALUC<-1 
-ALUOP-SUB | PZ/LD | PN/LD | PC/LD | P/SRC-ALU | uP0  
+MBR<-MEM                                                             // Read operand from memory into MBR 
+ALUB<-MBR                                                            // Move the operand into ALUB
+ALUA<-Y | ALUC<-1                                                    // Move Y into ALUA (setting the carry as the ALU will do 1's complement otherwise!)
+ALUOP-SUB | PZ/LD | PN/LD | PC/LD | P/SRC-ALU | uP0                  // Subtract the operand from Y setting P flags as appropriate
 
 // -----------------------------------------------------------------------------
 // Inc and Dec
 // -----------------------------------------------------------------------------
 
 .opcode DEC
-MBR<-MEM 
-ALUA<-MBR
-ALUOP-DEC | MBR<-ALU | PZ/LD | PN/LD | P/SRC-ALU 
-MEM<-MBR | uP0 
+MBR<-MEM                                                             // Read operand from memory into MBR 
+ALUA<-MBR                                                            // Move the operand into ALUA
+ALUOP-DEC | MBR<-ALU | PZ/LD | PN/LD | P/SRC-ALU                     // Decrease the operand moving the result into MBR
+MEM<-MBR | uP0                                                       // Write the MBR back to the original memory location
 
 .opcode INC
-MBR<-MEM 
-ALUA<-MBR
-ALUOP-INC | MBR<-ALU | PZ/LD | PN/LD | P/SRC-ALU 
-MEM<-MBR | uP0 
+MBR<-MEM                                                             // Read operand from memory into MBR
+ALUA<-MBR                                                            // Move the operand into ALUA
+ALUOP-INC | MBR<-ALU | PZ/LD | PN/LD | P/SRC-ALU                     // Increase the operand moving the result into MBR
+MEM<-MBR | uP0                                                       // Write the MBR back to the original memory location
 
 .opcode INX
-ALUA<-X                                                              // Move X to ALUA and clear the carry bit
+ALUA<-X                                                              // Move X to ALUA 
 ALUOP-INC | X<-ALU | PZ/LD | PN/LD | P/SRC-ALU | uP0                 // Add one, store result in X and set P flags
 
 .opcode DEX
-ALUA<-X                                                              // Move X to ALUA and clear the carry bit
+ALUA<-X                                                              // Move X to ALUA 
 ALUOP-DEC | X<-ALU | PZ/LD | PN/LD | P/SRC-ALU | uP0                 // Subtract one, store result in X and set P flags
 
-.opcode INY
-ALUA<-Y                                                   
-ALUOP-INC | Y<-ALU | PZ/LD | PN/LD | P/SRC-ALU | uP0 
+.opcode INY                                                           
+ALUA<-Y                                                              // Move Y to ALUA                                     
+ALUOP-INC | Y<-ALU | PZ/LD | PN/LD | P/SRC-ALU | uP0                 // Add one, store result in Y and set P flags
 
 .opcode DEY
-ALUA<-Y                                                     
-ALUOP-DEC | Y<-ALU | PZ/LD | PN/LD | P/SRC-ALU | uP0 
+ALUA<-Y                                                              // Move Y to ALUA
+ALUOP-DEC | Y<-ALU | PZ/LD | PN/LD | P/SRC-ALU | uP0                 // Subtract one, store result in Y and set P flags
 
 // -----------------------------------------------------------------------------
 // Flags
 // -----------------------------------------------------------------------------
 
 .opcode CLC
-P/SRC-0 | PC/LD | uP0
+P/SRC-0 | PC/LD | uP0                                                // Reset carry
 
 .opcode SEC
-P/SRC-1 | PC/LD | uP0
+P/SRC-1 | PC/LD | uP0                                                // Set Carry
 
 // .opcode CLI
 // .opcode SEI
 
 .opcode CLV
-P/SRC-0 | PV/LD | uP0
+P/SRC-0 | PV/LD | uP0                                                // Reset overflow
 
 // TODO
 .opcode CLD
-uP0
+uP0                                                                  // Do nothing as BCD mode is not implemented
 
-// .opcode SED
+// .opcode SED                                                       // BCD mode not implemented so setting D must trigger an error
 
 // -----------------------------------------------------------------------------
 // Jump and subroutine
@@ -359,24 +385,24 @@ MAR<-PC | MBR<-MEM | PC-INC                                          // Read the
 STASHL<-MBR                                                          // Store the LSB in STASHL
 MAR<-PC | MBR<-MEM | PC-INC                                          // Read the MSB of the target address
 STASHH<-MBR                                                          // Store the MSB in STASHH
+MAR<-S | MBR<-PCH                                                    // Push the MSB of the PC onto the stack
+MEM<-MBR | S/DEC
 MAR<-S |  MBR<-PCL                                                   // Push the LSB of the PC onto the stack 
 MEM<-MBR | S/DEC
-MAR<-S | MBR<-PCH                                                    // Push the MSB of the PC onto the stack
-MEM<-MBR | S/DEC                                                                   
 PCL<-STASHL                                                          // Move the stored target address into the PC
 PCH<-STASHH | uP0
 
 .opcode RTS
 S/INC                                                                // Increment the stack pointer
 MAR<-S | MBR<-MEM | S/INC                                            // Move the stack pointer into MAR, read the MSB of the return address from the stack and increase the stack pointer
-PCH<-MBR                                                             // Move the MSB of the return address into PCH
+PCL<-MBR                                                             // Move the MSB of the return address into PCH
 MAR<-S | MBR<-MEM                                                    // Move the stack pointer int MAR, read the LSB of the returns from the stack
-PCL<-MBR | uP0                                                       // Move the LSB of the return address into PCL
+PCH<-MBR | uP0                                                       // Move the LSB of the return address into PCL
 
-.opcode JMPIND
 // Note: This operation functions like the 6502 in that the increment of the argument to point to
 // the location of the MSB of the ultimate argument is done without carry.
 // So if the operand points to the last byte of a page it is bugged.
+.opcode JMPIND
 MAR<-PC | MBR<-MEM | PC-INC                                          // Read the LSB of the argument
 STASHL<-MBR                                                          // And stash the LSB of the argument
 MAR<-PC | MBR<-MEM | PC-INC                                          // Read the MSB of the argument
@@ -406,7 +432,7 @@ X<-MBR |  PZ/LD | PN/LD | P/SRC-FLGCDATA | uP0                       // Move val
 
 .opcode STX
 MBR<-X                                                               // Move X into MBR
-MEM<-MBR | uP0   
+MEM<-MBR | uP0                                                       // Write MBR to memory at MAR
 
 .opcode LDY
 MBR<-MEM                                                             // Read the value at MAR
@@ -414,7 +440,7 @@ Y<-MBR |  PZ/LD | PN/LD | P/SRC-FLGCDATA | uP0                       // Move the
 
 .opcode STY
 MBR<-Y                                                               // Move Y into MBR
-MEM<-MBR | uP0   
+MEM<-MBR | uP0                                                       // Write MBR to memory at MAR
 
 // -----------------------------------------------------------------------------
 // Register transfer
@@ -427,16 +453,16 @@ A/OUT/CDATA | X/LD/CDATA | PZ/LD | PN/LD | P/SRC-FLGCDATA | uP0       // Move A 
 X/OUT/CDATA | A/LD/CDATA | PZ/LD | PN/LD | P/SRC-FLGCDATA | uP0       // Move X to A
 
 .opcode TAY
-A/OUT/CDATA | Y/LD/CDATA | PZ/LD | PN/LD | P/SRC-FLGCDATA | uP0                                        
+A/OUT/CDATA | Y/LD/CDATA | PZ/LD | PN/LD | P/SRC-FLGCDATA | uP0       // Move A to Y                                 
 
 .opcode TYA
-Y/OUT/CDATA | A/LD/CDATA | PZ/LD | PN/LD | P/SRC-FLGCDATA | uP0  
+Y/OUT/CDATA | A/LD/CDATA | PZ/LD | PN/LD | P/SRC-FLGCDATA | uP0       // Move Y to A
 
 .opcode TXS
-X/OUT/CDATA | S/LD/CDATA | uP0                                        // Move X to S
+X/OUT/CDATA | S/LD/CDATA | PZ/LD | PN/LD | P/SRC-FLGCDATA | uP0       // Move X to S
 
 .opcode TSX
-S/OUT/CDATA | PZ/LD | PN/LD | P/SRC-FLGCDATA | X/LD/CDATA | uP0
+S/OUT/CDATA | PZ/LD | PN/LD | P/SRC-FLGCDATA | X/LD/CDATA | uP0       // Move S to X
 
 // -----------------------------------------------------------------------------
 // Stack
@@ -449,14 +475,17 @@ MEM<-MBR | S/DEC | uP0                                               // Push A o
 .opcode PLA
 S/INC                                                                // Increment the stack pointer
 MAR<-S | MBR<-MEM                                                    // Read the value from the top of the stack
-A<-MBR | PZ/LD | PN/LD | P/SRC-FLGCDATA | uP0                                                         // And move it into A
+A<-MBR | PZ/LD | PN/LD | P/SRC-FLGCDATA | uP0                        // And move it into A
 
-// .opcode PHP
+.opcode PHP
+MAR<-S | P/OUT/CDATA | MBR/LD/CDATA                                  // Copy stack pointer into MAR and P to MBR
+MEM<-MBR | S/DEC | uP0                                               // Push P onto the stack decrementing the stack pointer
 
 .opcode PLP
 S/INC                                                                // Increment the stack pointer
 MAR<-S | MBR<-MEM                                                    // Read the value from the top of the stack
 MBR/OUT/CDATA | P/SRC-CDATA | PN/LD | PV/LD | PZ/LD PC/LD | uP0      // Set P from the value read from the stack
+
 
 // -----------------------------------------------------------------------------
 // Misc
