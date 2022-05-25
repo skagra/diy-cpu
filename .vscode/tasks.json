@@ -54,6 +54,24 @@
          ]
       },
       {
+         "label": "generate-dow-code",
+         "command": "dasm",
+         "type": "process",
+         "options": {
+            "cwd": "${workspaceFolder}/mCode"
+         },
+         "args": [
+            "dow.asm",
+            "-f3",
+            "-obin/dow.bin",
+            "-lbin/dow.txt"
+         ],
+         "problemMatcher": [],
+         "dependsOn": [
+            "mkdir-machine-code"
+         ]
+      },
+      {
          "label": "generate-mul10-code",
          "command": "dasm",
          "type": "process",
