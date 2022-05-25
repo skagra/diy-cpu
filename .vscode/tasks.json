@@ -28,15 +28,17 @@
          "problemMatcher": []
       },
       {
-         "label": "generate-machine-code",
+         "label": "assemble-examples",
          "dependsOn": [
-            "generate-custom-code",
-            "generate-mul10-code",
-            "generate-square-code"
+            "assemble-dow",
+            "assemble-mul10",
+            "assemble-multiply",
+            "assemble-RAM",
+            "assemble-square"
          ]
       },
       {
-         "label": "generate-custom-code",
+         "label": "assemble-RAM",
          "command": "dasm",
          "type": "process",
          "options": {
@@ -54,7 +56,7 @@
          ]
       },
       {
-         "label": "generate-dow-code",
+         "label": "assemble-dow",
          "command": "dasm",
          "type": "process",
          "options": {
@@ -72,7 +74,7 @@
          ]
       },
       {
-         "label": "generate-mul10-code",
+         "label": "assemble-mul10",
          "command": "dasm",
          "type": "process",
          "options": {
@@ -90,7 +92,25 @@
          "problemMatcher": []
       },
       {
-         "label": "generate-square-code",
+         "label": "assemble-multiply",
+         "command": "dasm",
+         "type": "process",
+         "options": {
+            "cwd": "${workspaceFolder}/mCode"
+         },
+         "args": [
+            "multiply.asm",
+            "-f3",
+            "-obin/multiply.bin",
+            "-lbin/multiply.txt"
+         ],
+         "dependsOn": [
+            "mkdir-machine-code"
+         ],
+         "problemMatcher": []
+      },
+      {
+         "label": "assemble-square",
          "command": "dasm",
          "type": "process",
          "options": {

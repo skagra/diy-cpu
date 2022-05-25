@@ -1,28 +1,29 @@
 
-            PROCESSOR 6502
+        PROCESSOR 6502
 
 ; I/O Addresses
-TERMINAL = $4000
-POST = $4001
+TERMINAL        = $4000
+POSTL           = $4001
+POSTH           = $4002
 
 ; Skip zero page
-            SEG skip-zero-page
-            ORG $0
-            DS $100 
+        SEG skip-zero-page
+        ORG $0
+        DS $100 
 
 ; Skip stack
-            SEG skip-stack
-            ORG $100
-            DS $100
+        SEG skip-stack
+        ORG $100
+        DS $100
 
 ; Code
-            SEG entry
-            ORG $200
+        SEG entry
+        ORG $200
 
         LDA #$4
         JSR MULT10
-        STA POST
-        BRK
+        STA POSTL
+LOOP    JMP LOOP
         
 MULT10  ASL         ;multiply by 2
         STA TEMP    ;temp store in TEMP
