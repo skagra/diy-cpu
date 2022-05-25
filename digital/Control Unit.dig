@@ -2085,7 +2085,7 @@
         </entry>
         <entry>
           <string>NetName</string>
-          <string>PC/ADD/CDATA</string>
+          <string>PC/REL/CDATA</string>
         </entry>
       </elementAttributes>
       <pos x="-80" y="20"/>
@@ -2771,7 +2771,7 @@
         </entry>
         <entry>
           <string>NetName</string>
-          <string>PC/ADD/CDATA</string>
+          <string>PC/REL/CDATA</string>
         </entry>
       </elementAttributes>
       <pos x="-800" y="-120"/>
@@ -3429,7 +3429,7 @@
         </entry>
         <entry>
           <string>Label</string>
-          <string>PC/ADD/CDATA</string>
+          <string>PC/REL/CDATA</string>
         </entry>
       </elementAttributes>
       <pos x="-780" y="-120"/>
@@ -3984,7 +3984,7 @@
           <string>ERR</string>
         </entry>
       </elementAttributes>
-      <pos x="-800" y="800"/>
+      <pos x="-800" y="840"/>
     </visualElement>
     <visualElement>
       <elementName>Out</elementName>
@@ -4423,10 +4423,52 @@
         </entry>
         <entry>
           <string>Label</string>
+          <string>P/IRQ</string>
+        </entry>
+      </elementAttributes>
+      <pos x="-780" y="780"/>
+    </visualElement>
+    <visualElement>
+      <elementName>Tunnel</elementName>
+      <elementAttributes>
+        <entry>
+          <string>rotation</string>
+          <rotation rotation="2"/>
+        </entry>
+        <entry>
+          <string>NetName</string>
+          <string>PC/IRQ</string>
+        </entry>
+      </elementAttributes>
+      <pos x="440" y="620"/>
+    </visualElement>
+    <visualElement>
+      <elementName>Tunnel</elementName>
+      <elementAttributes>
+        <entry>
+          <string>rotation</string>
+          <rotation rotation="2"/>
+        </entry>
+        <entry>
+          <string>NetName</string>
+          <string>PC/IRQ</string>
+        </entry>
+      </elementAttributes>
+      <pos x="-800" y="780"/>
+    </visualElement>
+    <visualElement>
+      <elementName>Out</elementName>
+      <elementAttributes>
+        <entry>
+          <string>small</string>
+          <boolean>true</boolean>
+        </entry>
+        <entry>
+          <string>Label</string>
           <string>ERR</string>
         </entry>
       </elementAttributes>
-      <pos x="-780" y="800"/>
+      <pos x="-780" y="840"/>
     </visualElement>
   </visualElements>
   <wires>
@@ -4549,6 +4591,10 @@
     <wire>
       <p1 x="-800" y="140"/>
       <p2 x="-780" y="140"/>
+    </wire>
+    <wire>
+      <p1 x="-800" y="780"/>
+      <p2 x="-780" y="780"/>
     </wire>
     <wire>
       <p1 x="920" y="-400"/>
@@ -4697,10 +4743,6 @@
     <wire>
       <p1 x="-800" y="160"/>
       <p2 x="-780" y="160"/>
-    </wire>
-    <wire>
-      <p1 x="-800" y="800"/>
-      <p2 x="-780" y="800"/>
     </wire>
     <wire>
       <p1 x="920" y="-420"/>
@@ -4971,6 +5013,10 @@
       <p2 x="-300" y="-200"/>
     </wire>
     <wire>
+      <p1 x="-800" y="840"/>
+      <p2 x="-780" y="840"/>
+    </wire>
+    <wire>
       <p1 x="200" y="200"/>
       <p2 x="220" y="200"/>
     </wire>
@@ -5177,6 +5223,10 @@
     <wire>
       <p1 x="-800" y="620"/>
       <p2 x="-780" y="620"/>
+    </wire>
+    <wire>
+      <p1 x="440" y="620"/>
+      <p2 x="460" y="620"/>
     </wire>
     <wire>
       <p1 x="-800" y="-240"/>

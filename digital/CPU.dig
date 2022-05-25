@@ -8,7 +8,7 @@
     </entry>
     <entry>
       <string>preloadProgramFile</string>
-      <file>E:\Development\diy-cpu\mcode\bin\RAM.bin</file>
+      <file>E:\Development\diy-cpu\tests\bin\tests.bin</file>
     </entry>
   </attributes>
   <visualElements>
@@ -3655,7 +3655,7 @@ In/out CDATA out CADDR</string>
       <elementAttributes>
         <entry>
           <string>NetName</string>
-          <string>PC/ADD/CDATA</string>
+          <string>PC/REL/CDATA</string>
         </entry>
       </elementAttributes>
       <pos x="1680" y="1180"/>
@@ -5120,7 +5120,7 @@ In/out CDATA out CADDR</string>
         </entry>
         <entry>
           <string>NetName</string>
-          <string>PC/ADD/CDATA</string>
+          <string>PC/REL/CDATA</string>
         </entry>
       </elementAttributes>
       <pos x="1880" y="-60"/>
@@ -6193,16 +6193,6 @@ In/out CDATA out CADDR</string>
       <elementAttributes>
         <entry>
           <string>NetName</string>
-          <string>ERR</string>
-        </entry>
-      </elementAttributes>
-      <pos x="1680" y="2000"/>
-    </visualElement>
-    <visualElement>
-      <elementName>Tunnel</elementName>
-      <elementAttributes>
-        <entry>
-          <string>NetName</string>
           <string>PC/RESET</string>
         </entry>
       </elementAttributes>
@@ -6613,7 +6603,7 @@ In/out CDATA out CADDR</string>
       <elementAttributes>
         <entry>
           <string>rotation</string>
-          <rotation reference="../../../../visualElement[532]/elementAttributes/entry/rotation"/>
+          <rotation reference="../../../../visualElement[531]/elementAttributes/entry/rotation"/>
         </entry>
         <entry>
           <string>NetName</string>
@@ -6733,7 +6723,7 @@ In/out CDATA out CADDR</string>
       <elementAttributes>
         <entry>
           <string>rotation</string>
-          <rotation reference="../../../../visualElement[542]/elementAttributes/entry/rotation"/>
+          <rotation reference="../../../../visualElement[541]/elementAttributes/entry/rotation"/>
         </entry>
         <entry>
           <string>NetName</string>
@@ -6793,7 +6783,7 @@ In/out CDATA out CADDR</string>
       <elementAttributes>
         <entry>
           <string>rotation</string>
-          <rotation reference="../../../../visualElement[546]/elementAttributes/entry/rotation"/>
+          <rotation reference="../../../../visualElement[545]/elementAttributes/entry/rotation"/>
         </entry>
         <entry>
           <string>NetName</string>
@@ -7035,7 +7025,7 @@ In/out CDATA out CADDR</string>
       <elementAttributes>
         <entry>
           <string>rotation</string>
-          <rotation reference="../../../../visualElement[565]/elementAttributes/entry/rotation"/>
+          <rotation reference="../../../../visualElement[564]/elementAttributes/entry/rotation"/>
         </entry>
         <entry>
           <string>NetName</string>
@@ -7671,7 +7661,7 @@ In/out CDATA out CADDR</string>
       <elementAttributes>
         <entry>
           <string>rotation</string>
-          <rotation reference="../../../../visualElement[623]/elementAttributes/entry/rotation"/>
+          <rotation reference="../../../../visualElement[622]/elementAttributes/entry/rotation"/>
         </entry>
         <entry>
           <string>NetName</string>
@@ -7685,7 +7675,7 @@ In/out CDATA out CADDR</string>
       <elementAttributes>
         <entry>
           <string>rotation</string>
-          <rotation reference="../../../../visualElement[623]/elementAttributes/entry/rotation"/>
+          <rotation reference="../../../../visualElement[622]/elementAttributes/entry/rotation"/>
         </entry>
         <entry>
           <string>NetName</string>
@@ -7699,7 +7689,7 @@ In/out CDATA out CADDR</string>
       <elementAttributes>
         <entry>
           <string>rotation</string>
-          <rotation reference="../../../../visualElement[623]/elementAttributes/entry/rotation"/>
+          <rotation reference="../../../../visualElement[622]/elementAttributes/entry/rotation"/>
         </entry>
         <entry>
           <string>NetName</string>
@@ -8321,6 +8311,40 @@ In/out CDATA out CADDR</string>
       </elementAttributes>
       <pos x="-1100" y="-1280"/>
     </visualElement>
+    <visualElement>
+      <elementName>Tunnel</elementName>
+      <elementAttributes>
+        <entry>
+          <string>NetName</string>
+          <string>ERR</string>
+        </entry>
+      </elementAttributes>
+      <pos x="1680" y="2020"/>
+    </visualElement>
+    <visualElement>
+      <elementName>Tunnel</elementName>
+      <elementAttributes>
+        <entry>
+          <string>rotation</string>
+          <rotation rotation="2"/>
+        </entry>
+        <entry>
+          <string>NetName</string>
+          <string>PC/IRQ</string>
+        </entry>
+      </elementAttributes>
+      <pos x="1880" y="20"/>
+    </visualElement>
+    <visualElement>
+      <elementName>Tunnel</elementName>
+      <elementAttributes>
+        <entry>
+          <string>NetName</string>
+          <string>PC/IRQ</string>
+        </entry>
+      </elementAttributes>
+      <pos x="1680" y="2000"/>
+    </visualElement>
   </visualElements>
   <wires>
     <wire>
@@ -8526,6 +8550,10 @@ In/out CDATA out CADDR</string>
     <wire>
       <p1 x="-180" y="1300"/>
       <p2 x="-80" y="1300"/>
+    </wire>
+    <wire>
+      <p1 x="1880" y="20"/>
+      <p2 x="1900" y="20"/>
     </wire>
     <wire>
       <p1 x="-460" y="-280"/>
@@ -10024,10 +10052,6 @@ In/out CDATA out CADDR</string>
       <p2 x="780" y="-720"/>
     </wire>
     <wire>
-      <p1 x="1640" y="2000"/>
-      <p2 x="1680" y="2000"/>
-    </wire>
-    <wire>
       <p1 x="1300" y="720"/>
       <p2 x="1580" y="720"/>
     </wire>
@@ -10038,6 +10062,10 @@ In/out CDATA out CADDR</string>
     <wire>
       <p1 x="1020" y="720"/>
       <p2 x="1040" y="720"/>
+    </wire>
+    <wire>
+      <p1 x="1640" y="2000"/>
+      <p2 x="1680" y="2000"/>
     </wire>
     <wire>
       <p1 x="820" y="980"/>
@@ -10150,6 +10178,10 @@ In/out CDATA out CADDR</string>
     <wire>
       <p1 x="1020" y="740"/>
       <p2 x="1040" y="740"/>
+    </wire>
+    <wire>
+      <p1 x="1640" y="2020"/>
+      <p2 x="1680" y="2020"/>
     </wire>
     <wire>
       <p1 x="360" y="1000"/>

@@ -19,25 +19,25 @@ POSTL           = $4001
 POSTH           = $4002
 
 ; Skip zero page
-   SEG skip-zero-page
-   ORG $0
-   DS $100 
+      SEG skip-zero-page
+      ORG $0
+      DS $100 
 
 ; Skip stack
-   SEG skip-stack
-   ORG $100
-   DS $100
+      SEG skip-stack
+      ORG $100
+      DS $100
 
 ; Code
-   SEG entry
-   ORG $200
+      SEG entry
+      ORG $200
 
-   LDY #122  ; 2022
-   LDX #05  ; May
-   LDA #25  ; 25th of Month
-   JSR WEEKDAY
-   STA POSTL
-   BRK
+      LDY #122  ; 2022
+      LDX #05  ; May
+      LDA #25  ; 25th of Month
+      JSR WEEKDAY
+      STA POSTL
+      BRK
 
 WEEKDAY:
       CPX #3          ; Year starts in March to bypass

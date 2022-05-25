@@ -144,16 +144,16 @@ CDATA/LD/0 | CDATA/TO/CADDRH | MARH/LD/CADDRH | uP2                  // Zero out
 // -----------------------------------------------------------------------------
 
 .opcode ADC
-MBR<-MEM                                                                   
-ALUA<-MBR
-ALUB<-A | ALUC<-PC
-ALUOP-ADD | ALUR/OUT/CDATA | A/LD/CDATA | PZ/LD | PN/LD | PC/LD | PV/LD | P/SRC-ALU | uP0  
+MBR<-MEM                                                             // Read the operand from memory                
+ALUA<-MBR                                                            // and move it to ALUA
+ALUB<-A | ALUC<-PC                                                   // Move A to ALUB
+ALUOP-ADD | ALUR/OUT/CDATA | A/LD/CDATA | PZ/LD | PN/LD | PC/LD | PV/LD | P/SRC-ALU | uP0   // Carry out addition and store the result in A  
 
 .opcode SBC
-MBR<-MEM
-ALUB<-MBR
-ALUA<-A | ALUC<-PC
-ALUOP-SUB | ALUR/OUT/CDATA | A/LD/CDATA | PZ/LD | PN/LD | PC/LD | PV/LD | P/SRC-ALU | uP0  
+MBR<-MEM                                                             // Read the operand from memory  
+ALUB<-MBR                                                            // and move it to ALUA
+ALUA<-A | ALUC<-PC                                                   // Move A to ALUB
+ALUOP-SUB | ALUR/OUT/CDATA | A/LD/CDATA | PZ/LD | PN/LD | PC/LD | PV/LD | P/SRC-ALU | uP0  // Carry out subtraction and store the result in A  
 
 // -----------------------------------------------------------------------------
 // Logical
@@ -239,7 +239,7 @@ MBR<-MEM                                                             // Read the
 uJMP/INV | uNJMP BPL_TRUE                                            // If previous operation resulted in non-negative jump to BPL_TRUE
 uP0                                                                  // Jump to uP0
 .label BPL_TRUE
-MBR/OUT/CDATA | PC/ADD/CDATA | uP0                                   // Add the displacement to the PC 
+MBR/OUT/CDATA | PC/REL/CDATA | uP0                                   // Add the displacement to the PC 
 
 // Negative
 .opcode BMI     
@@ -247,7 +247,7 @@ MBR<-MEM                                                             // Read the
 uNJMP BMI_TRUE                                                       // If previous operation resulted in negative jump to BMI_TRUE
 uP0                                                                  // Jump to uP0
 .label BMI_TRUE
-MBR/OUT/CDATA | PC/ADD/CDATA | uP0                                   // Add the displacement to the PC 
+MBR/OUT/CDATA | PC/REL/CDATA | uP0                                   // Add the displacement to the PC 
 
 // Overflow clear
 .opcode BVC     
@@ -255,7 +255,7 @@ MBR<-MEM                                                             // Read the
 uJMP/INV | uVJMP BVC_TRUE                                            // If previous operation resulted in no overflow jump to BVC_TRUE
 uP0                                                                  // Jump to uP0
 .label BVC_TRUE
-MBR/OUT/CDATA | PC/ADD/CDATA | uP0                                   // Add the displacement to the PC 
+MBR/OUT/CDATA | PC/REL/CDATA | uP0                                   // Add the displacement to the PC 
 
 // Overflow set
 .opcode BVS     
@@ -263,7 +263,7 @@ MBR<-MEM                                                             // Read the
 uVJMP BVS_TRUE                                                       // If previous operation resulted in overflow jump to BVS_TRUE
 uP0                                                                  // Jump to uP0
 .label BVS_TRUE
-MBR/OUT/CDATA | PC/ADD/CDATA | uP0                                   // Add the displacement to the PC 
+MBR/OUT/CDATA | PC/REL/CDATA | uP0                                   // Add the displacement to the PC 
 
 // No carry
 .opcode BCC     
@@ -271,7 +271,7 @@ MBR<-MEM                                                             // Read the
 uJMP/INV | uCJMP BVC_BCC                                             // If previous operation resulted in no carry jump to BVC_BCC
 uP0                                                                  // Jump to uP0
 .label BVC_BCC
-MBR/OUT/CDATA | PC/ADD/CDATA | uP0                                   // Add the displacement to the PC 
+MBR/OUT/CDATA | PC/REL/CDATA | uP0                                   // Add the displacement to the PC 
 
 // Carry
 .opcode BCS     
@@ -279,7 +279,7 @@ MBR<-MEM                                                             // Read the
 uCJMP BVC_BCS                                                        // If previous operation resulted in a carry jump to BVC_BCS
 uP0                                                                  // Jump to uP0
 .label BVC_BCS
-MBR/OUT/CDATA | PC/ADD/CDATA | uP0                                   // Add the displacement to the PC 
+MBR/OUT/CDATA | PC/REL/CDATA | uP0                                   // Add the displacement to the PC 
 
 // Not zero
 .opcode BNE     
@@ -287,7 +287,7 @@ MBR<-MEM                                                             // Read the
 uJMP/INV | uZJMP BEQ_BNE                                             // If previous operation resulted in non-zero jump to BEQ_BNE
 uP0                                                                  // Jump to uP0
 .label BEQ_BNE
-MBR/OUT/CDATA | PC/ADD/CDATA | uP0                                   // Add the displacement to the PC 
+MBR/OUT/CDATA | PC/REL/CDATA | uP0                                   // Add the displacement to the PC 
 
 // Zero
 .opcode BEQ                                                         
@@ -295,7 +295,7 @@ MBR<-MEM                                                             // Read the
 uZJMP BEQ_TRUE                                                       // If previous operation resulted in zero jump to BEQ_TRUE
 uP0                                                                  // Jump to uP0
 .label BEQ_TRUE
-MBR/OUT/CDATA | PC/ADD/CDATA | uP0                                   // Add the displacement to the PC 
+MBR/OUT/CDATA | PC/REL/CDATA | uP0                                   // Add the displacement to the PC 
 
 // -----------------------------------------------------------------------------
 // Compare
