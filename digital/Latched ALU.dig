@@ -736,20 +736,6 @@
       <pos x="800" y="40"/>
     </visualElement>
     <visualElement>
-      <elementName>Tunnel</elementName>
-      <elementAttributes>
-        <entry>
-          <string>rotation</string>
-          <rotation rotation="2"/>
-        </entry>
-        <entry>
-          <string>NetName</string>
-          <string>Cin</string>
-        </entry>
-      </elementAttributes>
-      <pos x="880" y="180"/>
-    </visualElement>
-    <visualElement>
       <elementName>Multiplexer</elementName>
       <elementAttributes>
         <entry>
@@ -1091,7 +1077,7 @@
     </wire>
     <wire>
       <p1 x="780" y="360"/>
-      <p2 x="900" y="360"/>
+      <p2 x="860" y="360"/>
     </wire>
     <wire>
       <p1 x="1340" y="360"/>
@@ -1100,6 +1086,10 @@
     <wire>
       <p1 x="360" y="360"/>
       <p2 x="380" y="360"/>
+    </wire>
+    <wire>
+      <p1 x="860" y="360"/>
+      <p2 x="900" y="360"/>
     </wire>
     <wire>
       <p1 x="820" y="40"/>
@@ -1142,7 +1132,7 @@
       <p2 x="1160" y="180"/>
     </wire>
     <wire>
-      <p1 x="880" y="180"/>
+      <p1 x="860" y="180"/>
       <p2 x="900" y="180"/>
     </wire>
     <wire>
@@ -1280,6 +1270,10 @@
     <wire>
       <p1 x="860" y="40"/>
       <p2 x="860" y="160"/>
+    </wire>
+    <wire>
+      <p1 x="860" y="180"/>
+      <p2 x="860" y="360"/>
     </wire>
   </wires>
   <measurementOrdering/>

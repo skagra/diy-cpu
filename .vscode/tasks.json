@@ -29,6 +29,14 @@
       },
       {
          "label": "generate-machine-code",
+         "dependsOn": [
+            "generate-custom-code",
+            "generate-mul10-code",
+            "generate-square-code"
+         ]
+      },
+      {
+         "label": "generate-custom-code",
          "command": "dasm",
          "type": "process",
          "options": {
@@ -39,6 +47,42 @@
             "-f3",
             "-obin/RAM.bin",
             "-lbin/RAM.txt"
+         ],
+         "problemMatcher": [],
+         "dependsOn": [
+            "mkdir-machine-code"
+         ]
+      },
+      {
+         "label": "generate-mul10-code",
+         "command": "dasm",
+         "type": "process",
+         "options": {
+            "cwd": "${workspaceFolder}/mCode"
+         },
+         "args": [
+            "mul10.asm",
+            "-f3",
+            "-obin/mul10.bin",
+            "-lbin/mul10.txt"
+         ],
+         "dependsOn": [
+            "mkdir-machine-code"
+         ],
+         "problemMatcher": []
+      },
+      {
+         "label": "generate-square-code",
+         "command": "dasm",
+         "type": "process",
+         "options": {
+            "cwd": "${workspaceFolder}/mCode"
+         },
+         "args": [
+            "square.asm",
+            "-f3",
+            "-obin/square.bin",
+            "-lbin/square.txt"
          ],
          "dependsOn": [
             "mkdir-machine-code"

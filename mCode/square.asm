@@ -31,22 +31,22 @@ POST = $4001
             SEG entry
             ORG $200
 
-            LDA   #$22
+            LDA   #$7
             STA   Numberl
             LDA   #$0
             STA   Numberh
             JSR   Square
-            LDX   Squarel
-            LDY   Squareh
-            BRK
+            LDA   Squarel
+            STA   POST
+loop:       JMP   loop
 
 Square:
         LDA     #$00        ; clear A
         STA     Squarel     ; clear square low byte
                             ; (no need to clear the high byte, it gets
         LDA	Numberl     ; get number low byte
-	LDX	Numberh     ; get number high  byte
-	BPL	NoNneg      ; if +ve don't negate it
+	     LDX	Numberh     ; get number high  byte
+	     BPL NoNneg      ; if +ve don't negate it
                             ; else do a two's complement
 	EOR	#$FF        ; invert
         SEC	            ; +1

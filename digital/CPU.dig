@@ -8,7 +8,7 @@
     </entry>
     <entry>
       <string>preloadProgramFile</string>
-      <file>E:\Development\diy-cpu\mcode\bin\square.bin</file>
+      <file>E:\Development\diy-cpu\mCode\bin\square.bin</file>
     </entry>
   </attributes>
   <visualElements>
@@ -7821,20 +7821,20 @@ In/out CDATA out CADDR</string>
       <elementName>Splitter</elementName>
       <elementAttributes>
         <entry>
-          <string>Input Splitting</string>
-          <string>1,1,1,1</string>
-        </entry>
-        <entry>
           <string>mirror</string>
           <boolean>true</boolean>
         </entry>
         <entry>
-          <string>Output Splitting</string>
-          <string>4</string>
-        </entry>
-        <entry>
           <string>rotation</string>
           <rotation rotation="1"/>
+        </entry>
+        <entry>
+          <string>Input Splitting</string>
+          <string>1,1,1,1</string>
+        </entry>
+        <entry>
+          <string>Output Splitting</string>
+          <string>4</string>
         </entry>
       </elementAttributes>
       <pos x="720" y="-600"/>

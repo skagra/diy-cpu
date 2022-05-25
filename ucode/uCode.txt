@@ -190,38 +190,42 @@ MBR/OUT/CDATA | PN/LD | PV/LD | P/SRC-CDATA | uP0                          // Se
 // -----------------------------------------------------------------------------
 
 .opcode ASLACC 
-ALUA<-A                                                              
+ALUA<-A | ALUC<-PC                                                             
 ALUOP-SHL | A<-ALU | PZ/LD | PN/LD | PC/LD | P/SRC-ALU | uP0                                     
 
 .opcode LSRACC
-ALUA<-A                                                             
+ALUA<-A | ALUC<-PC                                                            
 ALUOP-SHR | A<-ALU | PZ/LD | PN/LD | PC/LD | P/SRC-ALU | uP0 
 
 .opcode ROLACC
-ALUA<-A                                                          
+ALUA<-A | ALUC<-PC                                                         
 ALUOP-ROTL | A<-ALU | PZ/LD | PN/LD | PC/LD | P/SRC-ALU | uP0   
  
 .opcode RORACC
-ALUA<-A                                                           
+ALUA<-A | ALUC<-PC                                                          
 ALUOP-ROTR | A<-ALU | PZ/LD | PN/LD | PC/LD | P/SRC-ALU | uP0
 
 .opcode ASL
-MBR<-MEM                                                          
+MBR<-MEM | ALUC<-PC  
+ALUA<-MBR                                                       
 ALUOP-SHL | MBR<-ALU | PZ/LD | PN/LD | PC/LD | P/SRC-ALU  
 MEM<-MBR | uP0 
 
 .opcode LSR
-MBR<-MEM                                                          
+MBR<-MEM | ALUC<-PC  
+ALUA<-MBR                                                       
 ALUOP-SHR | MBR<-ALU | PZ/LD | PN/LD | PC/LD | P/SRC-ALU  
 MEM<-MBR | uP0 
 
 .opcode ROL
-MBR<-MEM                                                          
+MBR<-MEM | ALUC<-PC
+ALUA<-MBR                                                       
 ALUOP-ROTL | MBR<-ALU | PZ/LD | PN/LD | PC/LD | P/SRC-ALU  
 MEM<-MBR | uP0 
 
 .opcode ROR
-MBR<-MEM                                                          
+MBR<-MEM | ALUC<-PC  
+ALUA<-MBR                                                       
 ALUOP-ROTR | MBR<-ALU | PZ/LD | PN/LD | PC/LD | P/SRC-ALU 
 MEM<-MBR | uP0 
 
