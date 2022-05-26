@@ -2,7 +2,8 @@
 
 ; I/O Addresses
 TERMINAL = $4000
-POST = $4001
+POSTL = $4001
+POSTH = $4002
 
 ; Skip zero page
             SEG skip-zero-page
@@ -24,7 +25,7 @@ main:       LDA #$50
             CMP #$40
             CMP #$50
             LDA #$22
-            STA POST
+            STA POSTL
             ASL      
             JSR sayhello
             JSR l1 
@@ -44,6 +45,10 @@ main:       LDA #$50
 halt:       LDA #$DD
             LDY #$FF
             BRK
+            LDA #$00
+            STA POSTL
+            STA POSTH
+here:       JMP here
 
 l1:         LDA #01
             JSR l2

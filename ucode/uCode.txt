@@ -500,7 +500,34 @@ MBR/OUT/CDATA | P/SRC-CDATA | PN/LD | PV/LD | PZ/LD PC/LD | uP0      // Set P fr
 .opcode NOP
 uP0
 
+// TODO: Just to test, needs to push return address and P
+// And we need to set the B flag once it is implemented!
+// Not quite sure what address needs to be pushed!
+// BRK is a two byte instruction in the sense that when the PC is pushed it is double-incremented. Most assemblers either ignore that feature 
+// or give you the option to assemble BRK with a following ("signature") byte, such as $EA (NOP)?the Kowalski 6502 simulator falls into the latter category.
 .opcode BRK
-HALT
+MAR<-S | P/OUT/CDATA | MBR/LD/CDATA                                  // Copy stack pointer into MAR and P to MBR
+MEM<-MBR | S/DEC                                                     // Push P onto the stack decrementing the stack pointer
+PC/IRQ
+MAR<-PC | MBR<-MEM | PC-INC                                          // Read the LSB of the target address
+STASHL<-MBR                                                          // Store the LSB in STASHL
+MAR<-PC | MBR<-MEM                                                   // Read the MSB of the target address
+STASHH<-MBR                                                          // Store the MSB in STASHH
+MAR<-S | MBR<-PCH                                                    // Push the MSB of the PC onto the stack
+MEM<-MBR | S/DEC
+MAR<-S |  MBR<-PCL                                                   // Push the LSB of the PC onto the stack 
+MEM<-MBR | S/DEC
+PCL<-STASHL                                                          // Move the stored target address into the PC
+PCH<-STASHH | uP0
 
-// <--- Op codes (uP2)
+.opcode RTI
+S/INC                                                                // Increment the stack pointer
+MAR<-S | MBR<-MEM                                                    // Read the value from the top of the stack
+MBR/OUT/CDATA | P/SRC-CDATA | PN/LD | PV/LD | PZ/LD PC/LD            // Set P from the value read from the stack
+S/INC                                                                // Increment the stack pointer
+MAR<-S | MBR<-MEM | S/INC                                            // Move the stack pointer into MAR, read the MSB of the return address from the stack and increase the stack pointer
+PCL<-MBR                                                             // Move the LSB of the return address into PCL
+MAR<-S | MBR<-MEM                                                    // Move the stack pointer int MAR, read the LSB of the returns from the stack
+PCH<-MBR                                                             // Move the MSB of the return address into PCH
+uP0                                                                  // Inc PC as return address-1 was pushed
+

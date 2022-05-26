@@ -8,7 +8,7 @@
     </entry>
     <entry>
       <string>preloadProgramFile</string>
-      <file>E:\Development\diy-cpu\tests\bin\tests.bin</file>
+      <file>E:\Development\diy-cpu\examples\bin\RAM.bin</file>
     </entry>
   </attributes>
   <visualElements>
@@ -4883,6 +4883,14 @@ In/out CDATA out CADDR</string>
         <entry>
           <string>Data</string>
           <data>a9,42,16379*0,2</data>
+        </entry>
+        <entry>
+          <string>lastDataFile</string>
+          <file>E:\Development\diy-cpu\examples\bin\init.bin</file>
+        </entry>
+        <entry>
+          <string>autoReload</string>
+          <boolean>true</boolean>
         </entry>
       </elementAttributes>
       <pos x="300" y="-180"/>

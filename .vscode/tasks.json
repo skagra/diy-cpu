@@ -22,7 +22,7 @@
             "shell": {
                "executable": "powershell"
             },
-            "cwd": "${workspaceFolder}/mCode"
+            "cwd": "${workspaceFolder}/examples"
          },
          "command": "[System.IO.Directory]::CreateDirectory('bin')",
          "problemMatcher": []
@@ -34,7 +34,26 @@
             "assemble-mul10",
             "assemble-multiply",
             "assemble-RAM",
-            "assemble-square"
+            "assemble-square",
+            "assemble-init"
+         ]
+      },
+      {
+         "label": "assemble-init",
+         "command": "dasm",
+         "type": "process",
+         "options": {
+            "cwd": "${workspaceFolder}/examples"
+         },
+         "args": [
+            "init.asm",
+            "-f3",
+            "-obin/init.bin",
+            "-lbin/init.txt"
+         ],
+         "problemMatcher": [],
+         "dependsOn": [
+            "mkdir-machine-code"
          ]
       },
       {
@@ -42,7 +61,7 @@
          "command": "dasm",
          "type": "process",
          "options": {
-            "cwd": "${workspaceFolder}/mCode"
+            "cwd": "${workspaceFolder}/examples"
          },
          "args": [
             "RAM.asm",
@@ -60,7 +79,7 @@
          "command": "dasm",
          "type": "process",
          "options": {
-            "cwd": "${workspaceFolder}/mCode"
+            "cwd": "${workspaceFolder}/examples"
          },
          "args": [
             "dow.asm",
@@ -78,7 +97,7 @@
          "command": "dasm",
          "type": "process",
          "options": {
-            "cwd": "${workspaceFolder}/mCode"
+            "cwd": "${workspaceFolder}/examples"
          },
          "args": [
             "mul10.asm",
@@ -96,7 +115,7 @@
          "command": "dasm",
          "type": "process",
          "options": {
-            "cwd": "${workspaceFolder}/mCode"
+            "cwd": "${workspaceFolder}/examples"
          },
          "args": [
             "multiply.asm",
@@ -114,7 +133,7 @@
          "command": "dasm",
          "type": "process",
          "options": {
-            "cwd": "${workspaceFolder}/mCode"
+            "cwd": "${workspaceFolder}/examples"
          },
          "args": [
             "square.asm",
