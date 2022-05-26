@@ -16,13 +16,13 @@
          "problemMatcher": "$msCompile"
       },
       {
-         "label": "mkdir-machine-code",
+         "label": "mkdir-bin",
          "type": "shell",
          "options": {
             "shell": {
                "executable": "powershell"
             },
-            "cwd": "${workspaceFolder}/examples"
+            "cwd": "${fileDirname}"
          },
          "command": "[System.IO.Directory]::CreateDirectory('bin')",
          "problemMatcher": []
@@ -34,26 +34,25 @@
             "assemble-mul10",
             "assemble-multiply",
             "assemble-RAM",
-            "assemble-square",
-            "assemble-init"
+            "assemble-square"
          ]
       },
       {
-         "label": "assemble-init",
+         "label": "assemble-os",
          "command": "dasm",
          "type": "process",
          "options": {
-            "cwd": "${workspaceFolder}/examples"
+            "cwd": "${workspaceFolder}/os"
          },
          "args": [
-            "init.asm",
+            "os.asm",
             "-f3",
-            "-obin/init.bin",
-            "-lbin/init.txt"
+            "-obin/os.bin",
+            "-lbin/os.txt"
          ],
          "problemMatcher": [],
          "dependsOn": [
-            "mkdir-machine-code"
+            "mkdir-bin"
          ]
       },
       {
