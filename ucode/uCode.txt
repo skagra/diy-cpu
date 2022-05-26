@@ -367,7 +367,7 @@ P/SRC-1 | PC/LD | uP0                                                // Set Carr
 .opcode CLV
 P/SRC-0 | PV/LD | uP0                                                // Reset overflow
 
-// TODO
+// TODO Implement CLD
 .opcode CLD
 uP0                                                                  // Do nothing as BCD mode is not implemented
 

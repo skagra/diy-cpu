@@ -28,6 +28,11 @@ namespace MicroAsm
          return _resolvedSymbols.TryGetValue(symbol, out result);
       }
 
+      public bool Contains(string symbol)
+      {
+         return _resolvedSymbols.Keys.Contains(symbol);
+      }
+
       private static void Or(byte[] source, byte[] dest)
       {
          for (var i = 0; i < source.Length; i++)

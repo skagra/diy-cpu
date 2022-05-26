@@ -8,7 +8,7 @@ SBC      E9 E5 F5 ED FD F9 E1 F1
 AND      29 25 35 2D 3D 39 21 31
 ORA      09 05 15 0D 1D 19 01 11
 EOR      49 45 55 4D 5D 59 41 51
-// BIT     24 2C
+BIT      24 2C
 
 // Shifts and rotates
 ASL      06 16 0E 1E
@@ -52,7 +52,7 @@ CLV	   B8
 CLD	   D8
 // SED	    F8
 
-// Jump and subroutine TODO: JMPINDIRECT
+// Jump and subroutine 
 JMP      4C 
 JSR      20
 RTS      60
@@ -77,7 +77,7 @@ TSX	   BA
 // Stack 
 PHA	   48
 PLA	   68
-// PHP	    08
+PHP	    08
 PLP	   28
 
 // Misc

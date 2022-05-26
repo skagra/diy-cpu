@@ -33,7 +33,7 @@
       // Symbols tables filled in as the uCode file is parsed then used to generate ROM output
       // Each symbol value is in output (little endian) order and is the full size of uCode word
       private readonly Dictionary<string, byte[]> _labelSymbols = new();
-      private readonly Dictionary<string, byte[]> _codeSymbols = new();
+      //   private readonly Dictionary<string, byte[]> _codeSymbols = new();
       private readonly Dictionary<string, int> _opCodeRoutineAddresses = new();
       private readonly Dictionary<string, int> _modeRoutineAddresses = new();
 
@@ -42,6 +42,8 @@
 
       private readonly MicroCtrl _microCtrl;
       private readonly MicroOps _microOps;
+
+      private HashSet<string> _uOpsUsed = new();
 
       private readonly List<string> _outputLog = new();
 
@@ -82,16 +84,26 @@
          return _romAddress;
       }
 
+      public int GetCountOfMicroOpsUsed()
+      {
+         return _uOpsUsed.Count();
+      }
+
       private byte[] ResolveSymbol(string symbol, string line, int lineNumber)
       {
          byte[] result;
 
          if (!(_microCtrl.TryGetValue(symbol, out result) ||
                _microOps.TryGetValue(symbol, out result) ||
-               _labelSymbols.TryGetValue(symbol, out result) ||
-               _codeSymbols.TryGetValue(symbol, out result)))
+               _labelSymbols.TryGetValue(symbol, out result))) // ||
+                                                               //  _codeSymbols.TryGetValue(symbol, out result)))
          {
             throw new MicroAsmException($"Symbol not found '{symbol}'", line, lineNumber, _sourceFile);
+         }
+
+         if (_microOps.Contains(symbol))
+         {
+            _uOpsUsed.Add(symbol);
          }
 
          return result;
@@ -320,7 +332,7 @@
             }
             catch (KeyNotFoundException)
             {
-               throw new MicroAsmException($"The symbol '{symbol}' was not found in the decoder");
+               throw new MicroAsmException($"The symbol decoder '{symbol}' is not implemented in the uCode");
             }
          }
          writer.Close();
