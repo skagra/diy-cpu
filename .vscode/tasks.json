@@ -16,13 +16,25 @@
          "problemMatcher": "$msCompile"
       },
       {
-         "label": "mkdir-bin",
+         "label": "mkdir-os-bin",
          "type": "shell",
          "options": {
             "shell": {
                "executable": "powershell"
             },
-            "cwd": "${fileDirname}"
+            "cwd": "${workspaceFolder}/os"
+         },
+         "command": "[System.IO.Directory]::CreateDirectory('bin')",
+         "problemMatcher": []
+      },
+      {
+         "label": "mkdir-examples-bin",
+         "type": "shell",
+         "options": {
+            "shell": {
+               "executable": "powershell"
+            },
+            "cwd": "${workspaceFolder}/examples"
          },
          "command": "[System.IO.Directory]::CreateDirectory('bin')",
          "problemMatcher": []
@@ -52,7 +64,7 @@
          ],
          "problemMatcher": [],
          "dependsOn": [
-            "mkdir-bin"
+            "mkdir-os-bin"
          ]
       },
       {
@@ -70,7 +82,7 @@
          ],
          "problemMatcher": [],
          "dependsOn": [
-            "mkdir-machine-code"
+            "mkdir-examples-bin"
          ]
       },
       {
@@ -88,7 +100,7 @@
          ],
          "problemMatcher": [],
          "dependsOn": [
-            "mkdir-machine-code"
+            "mkdir-examples-bin"
          ]
       },
       {
@@ -105,7 +117,7 @@
             "-lbin/mul10.txt"
          ],
          "dependsOn": [
-            "mkdir-machine-code"
+            "mkdir-examples-bin"
          ],
          "problemMatcher": []
       },
@@ -123,7 +135,7 @@
             "-lbin/multiply.txt"
          ],
          "dependsOn": [
-            "mkdir-machine-code"
+            "mkdir-examples-bin"
          ],
          "problemMatcher": []
       },
@@ -141,12 +153,12 @@
             "-lbin/square.txt"
          ],
          "dependsOn": [
-            "mkdir-machine-code"
+            "mkdir-examples-bin"
          ],
          "problemMatcher": []
       },
       {
-         "label": "mkdir-test-code",
+         "label": "mkdir-tests-bin",
          "type": "shell",
          "options": {
             "shell": {
@@ -171,7 +183,7 @@
             "-lbin/tests.txt"
          ],
          "dependsOn": [
-            "mkdir-test-code"
+            "mkdir-tests-bin"
          ],
          "problemMatcher": []
       },

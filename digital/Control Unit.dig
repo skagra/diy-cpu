@@ -3943,7 +3943,7 @@
 0 0 1 p0
 0 1 0 p1
 0 1 1 p2
-1 X X uJMPs</string>
+1 0 0 uJMPs</string>
         </entry>
       </elementAttributes>
       <pos x="1320" y="-60"/>

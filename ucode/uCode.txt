@@ -190,44 +190,44 @@ MBR/OUT/CDATA | PN/LD | PV/LD | P/SRC-CDATA | uP0                          // Se
 // -----------------------------------------------------------------------------
 
 .opcode ASLACC 
-ALUA<-A | ALUC<-PC                                                             
-ALUOP-SHL | A<-ALU | PZ/LD | PN/LD | PC/LD | P/SRC-ALU | uP0                                     
+ALUA<-A | ALUC<-PC                                                   // Move A to ALUA, and the C flag to ALUC          
+ALUOP-SHL | A<-ALU | PZ/LD | PN/LD | PC/LD | P/SRC-ALU | uP0         // Carry of the shift, set flags and store result in A                                  
 
 .opcode LSRACC
-ALUA<-A | ALUC<-PC                                                            
-ALUOP-SHR | A<-ALU | PZ/LD | PN/LD | PC/LD | P/SRC-ALU | uP0 
+ALUA<-A | ALUC<-PC                                                   // Move A to ALUA, and the C flag to ALUC        
+ALUOP-SHR | A<-ALU | PZ/LD | PN/LD | PC/LD | P/SRC-ALU | uP0         // Carry of the shift, set flags and store result in A 
 
 .opcode ROLACC
-ALUA<-A | ALUC<-PC                                                         
-ALUOP-ROTL | A<-ALU | PZ/LD | PN/LD | PC/LD | P/SRC-ALU | uP0   
+ALUA<-A | ALUC<-PC                                                   // Move A to ALUA, and the C flag to ALUC   
+ALUOP-ROTL | A<-ALU | PZ/LD | PN/LD | PC/LD | P/SRC-ALU | uP0        // Carry of the rot, set flags and store result in A 
  
 .opcode RORACC
-ALUA<-A | ALUC<-PC                                                          
-ALUOP-ROTR | A<-ALU | PZ/LD | PN/LD | PC/LD | P/SRC-ALU | uP0
+ALUA<-A | ALUC<-PC                                                   // Move A to ALUA, and the C flag to ALUC   
+ALUOP-ROTR | A<-ALU | PZ/LD | PN/LD | PC/LD | P/SRC-ALU | uP0        // Carry of the rot, set flags and store result in A 
 
 .opcode ASL
-MBR<-MEM | ALUC<-PC  
-ALUA<-MBR                                                       
-ALUOP-SHL | MBR<-ALU | PZ/LD | PN/LD | PC/LD | P/SRC-ALU  
-MEM<-MBR | uP0 
+MBR<-MEM | ALUC<-PC                                                  // Move operand in memory to MBR, and the C flag to ALUC   
+ALUA<-MBR                                                            // Move operand from MBR into ALUA                                  
+ALUOP-SHL | MBR<-ALU | PZ/LD | PN/LD | PC/LD | P/SRC-ALU             // Carry of the shift, set flags and move result to MBR
+MEM<-MBR | uP0                                                       // Move the result into the original memory location
 
 .opcode LSR
-MBR<-MEM | ALUC<-PC  
-ALUA<-MBR                                                       
-ALUOP-SHR | MBR<-ALU | PZ/LD | PN/LD | PC/LD | P/SRC-ALU  
-MEM<-MBR | uP0 
+MBR<-MEM | ALUC<-PC                                                  // Move operand in memory to MBR, and the C flag to ALUC    
+ALUA<-MBR                                                            // Move operand from MBR into ALUA
+ALUOP-SHR | MBR<-ALU | PZ/LD | PN/LD | PC/LD | P/SRC-ALU             // Carry of the shift, set flags and move result to MBR
+MEM<-MBR | uP0                                                       // Move the result into the original memory location
 
 .opcode ROL
-MBR<-MEM | ALUC<-PC
-ALUA<-MBR                                                       
-ALUOP-ROTL | MBR<-ALU | PZ/LD | PN/LD | PC/LD | P/SRC-ALU  
-MEM<-MBR | uP0 
+MBR<-MEM | ALUC<-PC                                                  // Move operand in memory to MBR, and the C flag to ALUC  
+ALUA<-MBR                                                            // Move operand from MBR into ALUA
+ALUOP-ROTL | MBR<-ALU | PZ/LD | PN/LD | PC/LD | P/SRC-ALU            // Carry of the rot, set flags and move result to MBR
+MEM<-MBR | uP0                                                       // Move the result into the original memory location
 
 .opcode ROR
-MBR<-MEM | ALUC<-PC  
-ALUA<-MBR                                                       
-ALUOP-ROTR | MBR<-ALU | PZ/LD | PN/LD | PC/LD | P/SRC-ALU 
-MEM<-MBR | uP0 
+MBR<-MEM | ALUC<-PC                                                  // Move operand in memory to MBR, and the C flag to ALUC  
+ALUA<-MBR                                                            // Move operand from MBR into ALUA
+ALUOP-ROTR | MBR<-ALU | PZ/LD | PN/LD | PC/LD | P/SRC-ALU            // Carry of the rot, set flags and move result to MBR
+MEM<-MBR | uP0                                                       // Move the result into the original memory location
 
 // -----------------------------------------------------------------------------
 // Branch
@@ -235,67 +235,67 @@ MEM<-MBR | uP0
 
 // Positive
 .opcode BPL  
-MBR<-MEM                                                             // Read the offset from memory at MAR into MBR
-uJMP/INV | uNJMP BPL_TRUE                                            // If previous operation resulted in non-negative jump to BPL_TRUE
-uP0                                                                  // Jump to uP0
+MBR<-MEM                                                              // Read the offset from memory at MAR into MBR
+uJMP/INV | uNJMP BPL_TRUE                                             // If previous operation resulted in non-negative jump to BPL_TRUE
+uP0                                                                   // Jump to uP0
 .label BPL_TRUE
-MBR/OUT/CDATA | PC/REL/CDATA | uP0                                   // Add the displacement to the PC 
+MBR/OUT/CDATA | PC/REL/CDATA | uP0                                    // Add the displacement to the PC 
 
 // Negative
 .opcode BMI     
-MBR<-MEM                                                             // Read the offset from memory at MAR into MBR
-uNJMP BMI_TRUE                                                       // If previous operation resulted in negative jump to BMI_TRUE
-uP0                                                                  // Jump to uP0
+MBR<-MEM                                                              // Read the offset from memory at MAR into MBR
+uNJMP BMI_TRUE                                                        // If previous operation resulted in negative jump to BMI_TRUE
+uP0                                                                   // Jump to uP0
 .label BMI_TRUE
-MBR/OUT/CDATA | PC/REL/CDATA | uP0                                   // Add the displacement to the PC 
+MBR/OUT/CDATA | PC/REL/CDATA | uP0                                    // Add the displacement to the PC 
 
 // Overflow clear
 .opcode BVC     
-MBR<-MEM                                                             // Read the offset from memory at MAR into MBR
-uJMP/INV | uVJMP BVC_TRUE                                            // If previous operation resulted in no overflow jump to BVC_TRUE
-uP0                                                                  // Jump to uP0
+MBR<-MEM                                                              // Read the offset from memory at MAR into MBR
+uJMP/INV | uVJMP BVC_TRUE                                             // If previous operation resulted in no overflow jump to BVC_TRUE
+uP0                                                                   // Jump to uP0
 .label BVC_TRUE
-MBR/OUT/CDATA | PC/REL/CDATA | uP0                                   // Add the displacement to the PC 
+MBR/OUT/CDATA | PC/REL/CDATA | uP0                                    // Add the displacement to the PC 
 
 // Overflow set
 .opcode BVS     
-MBR<-MEM                                                             // Read the offset from memory at MAR into MBR
-uVJMP BVS_TRUE                                                       // If previous operation resulted in overflow jump to BVS_TRUE
-uP0                                                                  // Jump to uP0
+MBR<-MEM                                                              // Read the offset from memory at MAR into MBR
+uVJMP BVS_TRUE                                                        // If previous operation resulted in overflow jump to BVS_TRUE
+uP0                                                                   // Jump to uP0
 .label BVS_TRUE
-MBR/OUT/CDATA | PC/REL/CDATA | uP0                                   // Add the displacement to the PC 
+MBR/OUT/CDATA | PC/REL/CDATA | uP0                                    // Add the displacement to the PC 
 
 // No carry
 .opcode BCC     
-MBR<-MEM                                                             // Read the offset from memory at MAR into MBR
-uJMP/INV | uCJMP BVC_BCC                                             // If previous operation resulted in no carry jump to BVC_BCC
-uP0                                                                  // Jump to uP0
+MBR<-MEM                                                              // Read the offset from memory at MAR into MBR
+uJMP/INV | uCJMP BVC_BCC                                              // If previous operation resulted in no carry jump to BVC_BCC
+uP0                                                                   // Jump to uP0
 .label BVC_BCC
-MBR/OUT/CDATA | PC/REL/CDATA | uP0                                   // Add the displacement to the PC 
+MBR/OUT/CDATA | PC/REL/CDATA | uP0                                    // Add the displacement to the PC 
 
 // Carry
 .opcode BCS     
-MBR<-MEM                                                             // Read the offset from memory at MAR into MBR
-uCJMP BVC_BCS                                                        // If previous operation resulted in a carry jump to BVC_BCS
-uP0                                                                  // Jump to uP0
+MBR<-MEM                                                              // Read the offset from memory at MAR into MBR
+uCJMP BVC_BCS                                                         // If previous operation resulted in a carry jump to BVC_BCS
+uP0                                                                   // Jump to uP0
 .label BVC_BCS
-MBR/OUT/CDATA | PC/REL/CDATA | uP0                                   // Add the displacement to the PC 
+MBR/OUT/CDATA | PC/REL/CDATA | uP0                                    // Add the displacement to the PC 
 
 // Not zero
 .opcode BNE     
-MBR<-MEM                                                             // Read the offset from memory at MAR into MBR
-uJMP/INV | uZJMP BEQ_BNE                                             // If previous operation resulted in non-zero jump to BEQ_BNE
-uP0                                                                  // Jump to uP0
+MBR<-MEM                                                              // Read the offset from memory at MAR into MBR
+uJMP/INV | uZJMP BEQ_BNE                                              // If previous operation resulted in non-zero jump to BEQ_BNE
+uP0                                                                   // Jump to uP0
 .label BEQ_BNE
-MBR/OUT/CDATA | PC/REL/CDATA | uP0                                   // Add the displacement to the PC 
+MBR/OUT/CDATA | PC/REL/CDATA | uP0                                    // Add the displacement to the PC 
 
 // Zero
 .opcode BEQ                                                         
-MBR<-MEM                                                             // Read the offset from memory at MAR into MBR
-uZJMP BEQ_TRUE                                                       // If previous operation resulted in zero jump to BEQ_TRUE
-uP0                                                                  // Jump to uP0
+MBR<-MEM                                                              // Read the offset from memory at MAR into MBR
+uZJMP BEQ_TRUE                                                        // If previous operation resulted in zero jump to BEQ_TRUE
+uP0                                                                   // Jump to uP0
 .label BEQ_TRUE
-MBR/OUT/CDATA | PC/REL/CDATA | uP0                                   // Add the displacement to the PC 
+MBR/OUT/CDATA | PC/REL/CDATA | uP0                                    // Add the displacement to the PC 
 
 // -----------------------------------------------------------------------------
 // Compare
@@ -500,11 +500,7 @@ MBR/OUT/CDATA | P/SRC-CDATA | PN/LD | PV/LD | PZ/LD PC/LD | uP0      // Set P fr
 .opcode NOP
 uP0
 
-// TODO: Just to test, needs to push return address and P
-// And we need to set the B flag once it is implemented!
-// Not quite sure what address needs to be pushed!
-// BRK is a two byte instruction in the sense that when the PC is pushed it is double-incremented. Most assemblers either ignore that feature 
-// or give you the option to assemble BRK with a following ("signature") byte, such as $EA (NOP)?the Kowalski 6502 simulator falls into the latter category.
+// TODO: Add B flag, and check whether BRK really is one byte or two!
 .opcode BRK
                                                                      // Push P onto the stack
 MAR<-S | P/OUT/CDATA | MBR/LD/CDATA                                  // Copy stack pointer into MAR and P to MBR
@@ -516,14 +512,14 @@ MAR<-S |  MBR<-PCL                                                   // Push the
 MEM<-MBR | S/DEC
 
 PC/IRQ                                                               // Set PC to the IRQ vector
+
 MAR<-PC | MBR<-MEM | PC-INC                                          // Read the LSB of the vector
 STASHL<-MBR                                                          // Store the LSB in STASHL
 MAR<-PC | MBR<-MEM                                                   // Read the MSB of the target address
 STASHH<-MBR                                                          // Store the MSB in STASHH
-
-                                                                     // Jump to the target address
-PCL<-STASHL                                                          // Move the stored target address into the PC
-PCH<-STASHH | uP0
+                                                                
+PCL<-STASHL                                                          // Jump to the target address
+PCH<-STASHH | uP0                                                    // Move the stored target address into the PC
 
 .opcode RTI
 S/INC                                                                // Increment the stack pointer
