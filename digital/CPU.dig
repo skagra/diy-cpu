@@ -6266,11 +6266,16 @@ In/out CDATA out CADDR</string>
           <string>CS1</string>
         </entry>
       </elementAttributes>
-      <pos x="-1120" y="700"/>
+      <pos x="-1120" y="680"/>
     </visualElement>
     <visualElement>
       <elementName>And</elementName>
-      <elementAttributes/>
+      <elementAttributes>
+        <entry>
+          <string>Inputs</string>
+          <int>3</int>
+        </entry>
+      </elementAttributes>
       <pos x="-1100" y="660"/>
     </visualElement>
     <visualElement>
@@ -8844,11 +8849,16 @@ In/out CDATA out CADDR</string>
           <string>CS1</string>
         </entry>
       </elementAttributes>
-      <pos x="-1120" y="1280"/>
+      <pos x="-1120" y="1260"/>
     </visualElement>
     <visualElement>
       <elementName>And</elementName>
-      <elementAttributes/>
+      <elementAttributes>
+        <entry>
+          <string>Inputs</string>
+          <int>3</int>
+        </entry>
+      </elementAttributes>
       <pos x="-1100" y="1240"/>
     </visualElement>
     <visualElement>
@@ -8915,11 +8925,16 @@ In/out CDATA out CADDR</string>
           <string>CS1</string>
         </entry>
       </elementAttributes>
-      <pos x="-1120" y="1400"/>
+      <pos x="-1120" y="1380"/>
     </visualElement>
     <visualElement>
       <elementName>And</elementName>
-      <elementAttributes/>
+      <elementAttributes>
+        <entry>
+          <string>Inputs</string>
+          <int>3</int>
+        </entry>
+      </elementAttributes>
       <pos x="-1100" y="1360"/>
     </visualElement>
     <visualElement>
@@ -8959,7 +8974,7 @@ In/out CDATA out CADDR</string>
     <visualElement>
       <elementName>Keyboard</elementName>
       <elementAttributes/>
-      <pos x="-980" y="840"/>
+      <pos x="-960" y="840"/>
     </visualElement>
     <visualElement>
       <elementName>Tunnel</elementName>
@@ -8973,7 +8988,7 @@ In/out CDATA out CADDR</string>
           <string>Clck1</string>
         </entry>
       </elementAttributes>
-      <pos x="-1000" y="840"/>
+      <pos x="-980" y="840"/>
     </visualElement>
     <visualElement>
       <elementName>Tunnel</elementName>
@@ -8983,7 +8998,7 @@ In/out CDATA out CADDR</string>
           <string>KIRQ</string>
         </entry>
       </elementAttributes>
-      <pos x="-900" y="860"/>
+      <pos x="-880" y="860"/>
     </visualElement>
     <visualElement>
       <elementName>Comparator</elementName>
@@ -9035,12 +9050,17 @@ In/out CDATA out CADDR</string>
           <string>CS1</string>
         </entry>
       </elementAttributes>
-      <pos x="-1140" y="880"/>
+      <pos x="-1120" y="860"/>
     </visualElement>
     <visualElement>
       <elementName>And</elementName>
-      <elementAttributes/>
-      <pos x="-1120" y="840"/>
+      <elementAttributes>
+        <entry>
+          <string>Inputs</string>
+          <int>3</int>
+        </entry>
+      </elementAttributes>
+      <pos x="-1100" y="840"/>
     </visualElement>
     <visualElement>
       <elementName>Splitter</elementName>
@@ -9054,7 +9074,7 @@ In/out CDATA out CADDR</string>
           <string>8,8</string>
         </entry>
       </elementAttributes>
-      <pos x="-840" y="840"/>
+      <pos x="-820" y="840"/>
     </visualElement>
     <visualElement>
       <elementName>Driver</elementName>
@@ -9068,7 +9088,7 @@ In/out CDATA out CADDR</string>
           <boolean>true</boolean>
         </entry>
       </elementAttributes>
-      <pos x="-760" y="840"/>
+      <pos x="-740" y="840"/>
     </visualElement>
     <visualElement>
       <elementName>Tunnel</elementName>
@@ -9078,7 +9098,7 @@ In/out CDATA out CADDR</string>
           <string>XDATA</string>
         </entry>
       </elementAttributes>
-      <pos x="-720" y="840"/>
+      <pos x="-700" y="840"/>
     </visualElement>
     <visualElement>
       <elementName>Text</elementName>
@@ -9174,11 +9194,16 @@ In/out CDATA out CADDR</string>
           <string>CS1</string>
         </entry>
       </elementAttributes>
-      <pos x="-1120" y="1600"/>
+      <pos x="-1120" y="1580"/>
     </visualElement>
     <visualElement>
       <elementName>And</elementName>
-      <elementAttributes/>
+      <elementAttributes>
+        <entry>
+          <string>Inputs</string>
+          <int>3</int>
+        </entry>
+      </elementAttributes>
       <pos x="-1100" y="1560"/>
     </visualElement>
     <visualElement>
@@ -9293,11 +9318,16 @@ In/out CDATA out CADDR</string>
           <string>CS1</string>
         </entry>
       </elementAttributes>
-      <pos x="-1120" y="1080"/>
+      <pos x="-1120" y="1060"/>
     </visualElement>
     <visualElement>
       <elementName>And</elementName>
-      <elementAttributes/>
+      <elementAttributes>
+        <entry>
+          <string>Inputs</string>
+          <int>3</int>
+        </entry>
+      </elementAttributes>
       <pos x="-1100" y="1040"/>
     </visualElement>
     <visualElement>
@@ -9362,6 +9392,90 @@ In/out CDATA out CADDR</string>
       </elementAttributes>
       <pos x="-1080" y="980"/>
     </visualElement>
+    <visualElement>
+      <elementName>Tunnel</elementName>
+      <elementAttributes>
+        <entry>
+          <string>rotation</string>
+          <rotation rotation="2"/>
+        </entry>
+        <entry>
+          <string>NetName</string>
+          <string>MEM/OUT/XDATA</string>
+        </entry>
+      </elementAttributes>
+      <pos x="-1120" y="1600"/>
+    </visualElement>
+    <visualElement>
+      <elementName>Tunnel</elementName>
+      <elementAttributes>
+        <entry>
+          <string>rotation</string>
+          <rotation rotation="2"/>
+        </entry>
+        <entry>
+          <string>NetName</string>
+          <string>MEM/OUT/XDATA</string>
+        </entry>
+      </elementAttributes>
+      <pos x="-1120" y="1400"/>
+    </visualElement>
+    <visualElement>
+      <elementName>Tunnel</elementName>
+      <elementAttributes>
+        <entry>
+          <string>rotation</string>
+          <rotation rotation="2"/>
+        </entry>
+        <entry>
+          <string>NetName</string>
+          <string>MEM/OUT/XDATA</string>
+        </entry>
+      </elementAttributes>
+      <pos x="-1120" y="1080"/>
+    </visualElement>
+    <visualElement>
+      <elementName>Tunnel</elementName>
+      <elementAttributes>
+        <entry>
+          <string>rotation</string>
+          <rotation rotation="2"/>
+        </entry>
+        <entry>
+          <string>NetName</string>
+          <string>MEM/OUT/XDATA</string>
+        </entry>
+      </elementAttributes>
+      <pos x="-1120" y="880"/>
+    </visualElement>
+    <visualElement>
+      <elementName>Tunnel</elementName>
+      <elementAttributes>
+        <entry>
+          <string>rotation</string>
+          <rotation rotation="2"/>
+        </entry>
+        <entry>
+          <string>NetName</string>
+          <string>MEM/LD/XDATA</string>
+        </entry>
+      </elementAttributes>
+      <pos x="-1120" y="1280"/>
+    </visualElement>
+    <visualElement>
+      <elementName>Tunnel</elementName>
+      <elementAttributes>
+        <entry>
+          <string>rotation</string>
+          <rotation rotation="2"/>
+        </entry>
+        <entry>
+          <string>NetName</string>
+          <string>MEM/LD/XDATA</string>
+        </entry>
+      </elementAttributes>
+      <pos x="-1120" y="700"/>
+    </visualElement>
   </visualElements>
   <wires>
     <wire>
@@ -9373,12 +9487,12 @@ In/out CDATA out CADDR</string>
       <p2 x="600" y="1280"/>
     </wire>
     <wire>
-      <p1 x="-1120" y="1280"/>
-      <p2 x="-1100" y="1280"/>
-    </wire>
-    <wire>
       <p1 x="-1000" y="1280"/>
       <p2 x="-940" y="1280"/>
+    </wire>
+    <wire>
+      <p1 x="-1120" y="1280"/>
+      <p2 x="-1100" y="1280"/>
     </wire>
     <wire>
       <p1 x="-140" y="0"/>
@@ -9737,6 +9851,10 @@ In/out CDATA out CADDR</string>
       <p2 x="-980" y="1060"/>
     </wire>
     <wire>
+      <p1 x="-1120" y="1060"/>
+      <p2 x="-1100" y="1060"/>
+    </wire>
+    <wire>
       <p1 x="580" y="-1320"/>
       <p2 x="600" y="-1320"/>
     </wire>
@@ -9843,6 +9961,10 @@ In/out CDATA out CADDR</string>
     <wire>
       <p1 x="-1040" y="1580"/>
       <p2 x="-980" y="1580"/>
+    </wire>
+    <wire>
+      <p1 x="-1120" y="1580"/>
+      <p2 x="-1100" y="1580"/>
     </wire>
     <wire>
       <p1 x="1780" y="-560"/>
@@ -10105,12 +10227,12 @@ In/out CDATA out CADDR</string>
       <p2 x="1320" y="840"/>
     </wire>
     <wire>
-      <p1 x="-920" y="840"/>
-      <p2 x="-840" y="840"/>
+      <p1 x="-900" y="840"/>
+      <p2 x="-820" y="840"/>
     </wire>
     <wire>
-      <p1 x="-1000" y="840"/>
-      <p2 x="-980" y="840"/>
+      <p1 x="-980" y="840"/>
+      <p2 x="-960" y="840"/>
     </wire>
     <wire>
       <p1 x="-1260" y="840"/>
@@ -10118,15 +10240,15 @@ In/out CDATA out CADDR</string>
     </wire>
     <wire>
       <p1 x="-1180" y="840"/>
-      <p2 x="-1120" y="840"/>
+      <p2 x="-1100" y="840"/>
     </wire>
     <wire>
-      <p1 x="-740" y="840"/>
-      <p2 x="-720" y="840"/>
+      <p1 x="-720" y="840"/>
+      <p2 x="-700" y="840"/>
     </wire>
     <wire>
-      <p1 x="-820" y="840"/>
-      <p2 x="-780" y="840"/>
+      <p1 x="-800" y="840"/>
+      <p2 x="-760" y="840"/>
     </wire>
     <wire>
       <p1 x="-1180" y="-1100"/>
@@ -10321,16 +10443,20 @@ In/out CDATA out CADDR</string>
       <p2 x="1060" y="860"/>
     </wire>
     <wire>
-      <p1 x="-920" y="860"/>
-      <p2 x="-900" y="860"/>
+      <p1 x="-900" y="860"/>
+      <p2 x="-880" y="860"/>
     </wire>
     <wire>
-      <p1 x="-1060" y="860"/>
-      <p2 x="-1020" y="860"/>
+      <p1 x="-1040" y="860"/>
+      <p2 x="-1000" y="860"/>
     </wire>
     <wire>
-      <p1 x="-1020" y="860"/>
-      <p2 x="-980" y="860"/>
+      <p1 x="-1120" y="860"/>
+      <p2 x="-1100" y="860"/>
+    </wire>
+    <wire>
+      <p1 x="-1000" y="860"/>
+      <p2 x="-960" y="860"/>
     </wire>
     <wire>
       <p1 x="-1100" y="-1120"/>
@@ -10407,6 +10533,10 @@ In/out CDATA out CADDR</string>
     <wire>
       <p1 x="-1040" y="1380"/>
       <p2 x="-1000" y="1380"/>
+    </wire>
+    <wire>
+      <p1 x="-1120" y="1380"/>
+      <p2 x="-1100" y="1380"/>
     </wire>
     <wire>
       <p1 x="-1000" y="1380"/>
@@ -10517,8 +10647,8 @@ In/out CDATA out CADDR</string>
       <p2 x="1320" y="880"/>
     </wire>
     <wire>
-      <p1 x="-1140" y="880"/>
-      <p2 x="-1120" y="880"/>
+      <p1 x="-1120" y="880"/>
+      <p2 x="-1100" y="880"/>
     </wire>
     <wire>
       <p1 x="580" y="1140"/>
@@ -10697,8 +10827,8 @@ In/out CDATA out CADDR</string>
       <p2 x="1060" y="900"/>
     </wire>
     <wire>
-      <p1 x="-1020" y="900"/>
-      <p2 x="-760" y="900"/>
+      <p1 x="-1000" y="900"/>
+      <p2 x="-740" y="900"/>
     </wire>
     <wire>
       <p1 x="580" y="1160"/>
@@ -11039,6 +11169,10 @@ In/out CDATA out CADDR</string>
     <wire>
       <p1 x="-1040" y="680"/>
       <p2 x="-940" y="680"/>
+    </wire>
+    <wire>
+      <p1 x="-1120" y="680"/>
+      <p2 x="-1100" y="680"/>
     </wire>
     <wire>
       <p1 x="1520" y="-940"/>
@@ -11515,6 +11649,10 @@ In/out CDATA out CADDR</string>
     <wire>
       <p1 x="-820" y="-1260"/>
       <p2 x="-800" y="-1260"/>
+    </wire>
+    <wire>
+      <p1 x="-1120" y="1260"/>
+      <p2 x="-1100" y="1260"/>
     </wire>
     <wire>
       <p1 x="-1040" y="1260"/>
@@ -13161,6 +13299,10 @@ In/out CDATA out CADDR</string>
       <p2 x="-740" y="-800"/>
     </wire>
     <wire>
+      <p1 x="-740" y="860"/>
+      <p2 x="-740" y="900"/>
+    </wire>
+    <wire>
       <p1 x="740" y="-600"/>
       <p2 x="740" y="-580"/>
     </wire>
@@ -13183,6 +13325,10 @@ In/out CDATA out CADDR</string>
     <wire>
       <p1 x="-1000" y="-800"/>
       <p2 x="-1000" y="-780"/>
+    </wire>
+    <wire>
+      <p1 x="-1000" y="860"/>
+      <p2 x="-1000" y="900"/>
     </wire>
     <wire>
       <p1 x="1000" y="880"/>
@@ -13257,20 +13403,12 @@ In/out CDATA out CADDR</string>
       <p2 x="500" y="-1280"/>
     </wire>
     <wire>
-      <p1 x="-760" y="860"/>
-      <p2 x="-760" y="900"/>
-    </wire>
-    <wire>
       <p1 x="760" y="-1360"/>
       <p2 x="760" y="-1340"/>
     </wire>
     <wire>
       <p1 x="760" y="-1280"/>
       <p2 x="760" y="-1260"/>
-    </wire>
-    <wire>
-      <p1 x="-1020" y="860"/>
-      <p2 x="-1020" y="900"/>
     </wire>
     <wire>
       <p1 x="-1020" y="-520"/>
