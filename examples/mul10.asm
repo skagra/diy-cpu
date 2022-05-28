@@ -1,11 +1,9 @@
 
         PROCESSOR 6502
 
-; I/O Addresses
-TERMINAL        = $4000
-POSTL           = $4001
-POSTH           = $4002
-
+        INCDIR "../asminclude"
+        INCLUDE "io.h"
+        
 ; Skip zero page
         SEG skip-zero-page
         ORG $0

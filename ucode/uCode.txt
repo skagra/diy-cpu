@@ -5,10 +5,11 @@
 .label RESET
 ZERO
 uP0-INIT p0                                                          // Load the location  of p0 code into the control unit
+uIRQINIT IRQ                                                         // Load the location of IRQ code TODO: BRK for now!
 CDATA/LD/FF | S/LD/CDATA                                             // Set the stack pointer 
                                                                      // Zero registers
 CDATA/LD/0 | A/LD/CDATA | X/LD/CDATA | Y/LD/CDATA | STASHH/LD/CDATA | STASHL/LD/CDATA | ALUA/LD/CDATA | ALUB/LD/CDATA | ALUC<-0
-PZ/LD | PN/LD | PC/LD | PV/LD | P/SRC-0                              // Zero P   
+PZ/LD | PN/LD | PC/LD | PV/LD | PI/LD | P/SRC-0                      // Zero P   
 PC/RESET                                                             // Load the reset vector location in the PC
 MAR<-PC | MBR<-MEM                                                   // Load the LSB of the reset vector
 STASHL<-MBR | PC-INC                                                 // Store it in STASHL, and increase the PC
@@ -361,8 +362,11 @@ P/SRC-0 | PC/LD | uP0                                                // Reset ca
 .opcode SEC
 P/SRC-1 | PC/LD | uP0                                                // Set Carry
 
-// .opcode CLI
-// .opcode SEI
+.opcode CLI
+P/SRC-0 | PI/LD | uP0                                                // Reset interrupt disable
+
+.opcode SEI
+P/SRC-1 | PI/LD | uP0                                                // Set interrupt disable
 
 .opcode CLV
 P/SRC-0 | PV/LD | uP0                                                // Reset overflow
@@ -488,9 +492,9 @@ MAR<-S | P/OUT/CDATA | MBR/LD/CDATA                                  // Copy sta
 MEM<-MBR | S/DEC | uP0                                               // Push P onto the stack decrementing the stack pointer
 
 .opcode PLP
-S/INC                                                                // Increment the stack pointer
-MAR<-S | MBR<-MEM                                                    // Read the value from the top of the stack
-MBR/OUT/CDATA | P/SRC-CDATA | PN/LD | PV/LD | PZ/LD PC/LD | uP0      // Set P from the value read from the stack
+S/INC                                                                       // Increment the stack pointer
+MAR<-S | MBR<-MEM                                                           // Read the value from the top of the stack
+MBR/OUT/CDATA | P/SRC-CDATA | PN/LD | PV/LD | PI/LD | PZ/LD | PC/LD | uP0   // Set P from the value read from the stack
 
 
 // -----------------------------------------------------------------------------
@@ -501,7 +505,12 @@ MBR/OUT/CDATA | P/SRC-CDATA | PN/LD | PV/LD | PZ/LD PC/LD | uP0      // Set P fr
 uP0
 
 // TODO: Add B flag, and check whether BRK really is one byte or two!
+// TODO: Setting and clearing IRQ disable here - likely this is not correct!
+.label IRQ
 .opcode BRK
+
+P/SRC-1 | PI/LD                                                      // Interrupt disable
+
                                                                      // Push P onto the stack
 MAR<-S | P/OUT/CDATA | MBR/LD/CDATA                                  // Copy stack pointer into MAR and P to MBR
 MEM<-MBR | S/DEC                                                     // Push P onto the stack decrementing the stack pointer
@@ -529,6 +538,9 @@ MAR<-S | MBR<-MEM                                                    // Move the
 PCH<-MBR                                                             // Move the MSB of the return address into PCH
 S/INC                                                                // Increment the stack pointer
 MAR<-S | MBR<-MEM                                                    // Read the value from the top of the stack
-MBR/OUT/CDATA | P/SRC-CDATA | PN/LD | PV/LD | PZ/LD PC/LD            // Set P from the value read from the stack
+MBR/OUT/CDATA | P/SRC-CDATA | PN/LD | PV/LD | PZ/LD | PC/LD          // Set P from the value read from the stack
+
+P/SRC-0 | PI/LD                                                      // Interrupt enable
+
 uP0                                                                   
 

@@ -1,18 +1,31 @@
     PROCESSOR 6502
 
-; I/O Addresses
-TERMINAL        = $4000
-POSTL           = $4001
-POSTH           = $4002
+    INCDIR "../asminclude"
+    INCLUDE "io.h"
 
-   ORG   $00, $00
+    ORG   $00, $00
 
-   LDA   #$FF
-   STA   POSTH 
-   STA   POSTL
-   RTI
+    PHA
+    STX   POSTH 
+    STY   POSTL
+    
+    LDA   TELNETRDY
+    BEQ   NOTELNET
+    LDA   TELNETIN
+    STA   TERMINAL
+    JMP   DONE
 
-   ORG $3FFC 
+NOTELNET
+    LDA   KEYBOARDRDY
+    BEQ   DONE
+    LDA   KEYBOARD
+    STA   TELNETOUT
+
+DONE
+    PLA
+    RTI
+
+    ORG $3FFC 
 
 RESET DC.W $0200
 IRQ   DC.W $C000

@@ -1,9 +1,7 @@
             PROCESSOR 6502
 
-; I/O Addresses
-TERMINAL = $4000
-POSTL = $4001
-POSTH = $4002
+            INCDIR "../asminclude"
+            INCLUDE "io.h"
 
 ; Skip zero page
             SEG skip-zero-page
@@ -44,11 +42,11 @@ main:       LDA #$50
 
 halt:       LDA #$DD
             LDY #$FF
-            BRK
+;            BRK
             LDA #$00
             STA POSTL
             STA POSTH
-here:       JMP here
+here:       JMP .inc
 
 l1:         LDA #01
             JSR l2
@@ -63,6 +61,7 @@ sayhello:   LDX #0
 .next:      LDA hello,X
             BEQ .done
             STA TERMINAL
+            STA TELNETOUT
             INX 
             JMP .next
 .done:      RTS
