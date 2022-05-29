@@ -1,12 +1,16 @@
+# Control Unit
+
+![Control Unit](Control Unit.png)
+
 # Microinstruction Format
 
-Microinstructions are 72 bits in length with the following format:
+Microinstructions are 80 bits in length with the following format:
 
 ```
 0xSSSSSSSSAA
 ```
 
-Where `S` bytes are control signals, and `A` bytes are the target address for a microcode `uJMP`, `uZJMP`, `uNJMP`, `uVJMP`, `uCJMP` or `uJSR` operation.
+Where `S` bytes are control signals, and `A` bytes are an parameter for a microcode operation, most commonly the microcode target address for `uJMP`, `uZJMP`, `uNJMP`, `uVJMP`, `uCJMP` and `uJSR`.
 
 Microinstructions are converted to little-endian order when written to the output ROM file by `microasm`.
 
