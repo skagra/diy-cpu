@@ -680,16 +680,16 @@
       <elementName>Out</elementName>
       <elementAttributes>
         <entry>
+          <string>rotation</string>
+          <rotation rotation="2"/>
+        </entry>
+        <entry>
           <string>Label</string>
           <string>OUT</string>
         </entry>
         <entry>
           <string>Bits</string>
           <int>8</int>
-        </entry>
-        <entry>
-          <string>rotation</string>
-          <rotation rotation="2"/>
         </entry>
       </elementAttributes>
       <pos x="200" y="240"/>
@@ -870,15 +870,36 @@
       <elementName>Out</elementName>
       <elementAttributes>
         <entry>
-          <string>Label</string>
-          <string>IRQ</string>
-        </entry>
-        <entry>
           <string>rotation</string>
           <rotation rotation="2"/>
         </entry>
+        <entry>
+          <string>Label</string>
+          <string>IRQ</string>
+        </entry>
       </elementAttributes>
       <pos x="180" y="600"/>
+    </visualElement>
+    <visualElement>
+      <elementName>Text</elementName>
+      <elementAttributes>
+        <entry>
+          <string>textFontSize</string>
+          <int>17</int>
+        </entry>
+        <entry>
+          <string>Description</string>
+          <string>ADDR
+
+0x4002 Write to terminal
+0x4003 Read From keyboard
+0x4004 Keyboard has input waiting 
+0x4005 Read from telnet
+0x4006 Write to telnet
+0x4007 Telnet has input waiting</string>
+        </entry>
+      </elementAttributes>
+      <pos x="-240" y="100"/>
     </visualElement>
   </visualElements>
   <wires>

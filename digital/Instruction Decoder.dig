@@ -134,7 +134,7 @@
         </entry>
         <entry>
           <string>NetName</string>
-          <string>DECODEDMODE</string>
+          <string>MODEADDR</string>
         </entry>
       </elementAttributes>
       <pos x="800" y="120"/>
@@ -148,7 +148,7 @@
         </entry>
         <entry>
           <string>NetName</string>
-          <string>DECODEDOPCODE</string>
+          <string>OPCODEADDR</string>
         </entry>
       </elementAttributes>
       <pos x="800" y="280"/>
@@ -186,7 +186,7 @@
         </entry>
         <entry>
           <string>Label</string>
-          <string>DEMODE</string>
+          <string>MODEADDR</string>
         </entry>
         <entry>
           <string>Bits</string>
@@ -200,7 +200,7 @@
       <elementAttributes>
         <entry>
           <string>NetName</string>
-          <string>DECODEDMODE</string>
+          <string>MODEADDR</string>
         </entry>
       </elementAttributes>
       <pos x="380" y="180"/>
@@ -214,7 +214,7 @@
         </entry>
         <entry>
           <string>Label</string>
-          <string>DECOPCODE</string>
+          <string>OPCODEADDR</string>
         </entry>
         <entry>
           <string>Bits</string>
@@ -228,7 +228,7 @@
       <elementAttributes>
         <entry>
           <string>NetName</string>
-          <string>DECODEDOPCODE</string>
+          <string>OPCODEADDR</string>
         </entry>
       </elementAttributes>
       <pos x="380" y="240"/>

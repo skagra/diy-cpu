@@ -83,7 +83,7 @@ SBC NUM
 
 Only effecting `NZC`
 
-`SBC` uses 1 complement!  So to get a proper substraction
+`SBC` uses 1 complement!  So to get a proper subtraction
 
 ```
 SEC

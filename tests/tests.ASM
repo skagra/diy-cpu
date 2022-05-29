@@ -16,7 +16,11 @@ A0450	= $1B50
 A04AA	= $1BAA
 
 ;**  LED DISPLAY ON 1541 BOARD
-POSTCODE	= $4001
+   	INCDIR "../asminclude"
+    INCLUDE "io.h"
+
+POSTCODE = POSTL
+
     ORG $0
     DS $200 
 	ORG $200

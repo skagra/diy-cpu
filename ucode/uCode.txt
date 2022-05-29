@@ -10,7 +10,7 @@ CDATA/LD/FF | S/LD/CDATA                                             // Set the 
                                                                      // Zero registers
 CDATA/LD/0 | A/LD/CDATA | X/LD/CDATA | Y/LD/CDATA | STASHH/LD/CDATA | STASHL/LD/CDATA | ALUA/LD/CDATA | ALUB/LD/CDATA | ALUC<-0
 PZ/LD | PN/LD | PC/LD | PV/LD | PI/LD | P/SRC-0                      // Zero P   
-PC/RESET                                                             // Load the reset vector location in the PC
+CPU/RESET                                                             // Load the reset vector location in the PC
 MAR<-PC | MBR<-MEM                                                   // Load the LSB of the reset vector
 STASHL<-MBR | PC-INC                                                 // Store it in STASHL, and increase the PC
 MAR<-PC | MBR<-MEM                                                   // Load the MSB of the reset vector
@@ -520,7 +520,7 @@ MEM<-MBR | S/DEC
 MAR<-S |  MBR<-PCL                                                   // Push the LSB of the PC onto the stack 
 MEM<-MBR | S/DEC
 
-PC/IRQ                                                               // Set PC to the IRQ vector
+CPU/IRQ                                                               // Set PC to the IRQ vector
 
 MAR<-PC | MBR<-MEM | PC-INC                                          // Read the LSB of the vector
 STASHL<-MBR                                                          // Store the LSB in STASHL

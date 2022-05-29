@@ -113,40 +113,7 @@
           <string>COUT</string>
         </entry>
       </elementAttributes>
-      <pos x="-10640" y="-2760"/>
-    </visualElement>
-    <visualElement>
-      <elementName>LED</elementName>
-      <elementAttributes>
-        <entry>
-          <string>Color</string>
-          <awt-color>
-            <red>51</red>
-            <green>102</green>
-            <blue>255</blue>
-            <alpha>255</alpha>
-          </awt-color>
-        </entry>
-        <entry>
-          <string>Label</string>
-          <string>N</string>
-        </entry>
-      </elementAttributes>
-      <pos x="-10620" y="-2840"/>
-    </visualElement>
-    <visualElement>
-      <elementName>Tunnel</elementName>
-      <elementAttributes>
-        <entry>
-          <string>rotation</string>
-          <rotation rotation="2"/>
-        </entry>
-        <entry>
-          <string>NetName</string>
-          <string>NOUT</string>
-        </entry>
-      </elementAttributes>
-      <pos x="-10640" y="-2840"/>
+      <pos x="-10660" y="-2840"/>
     </visualElement>
     <visualElement>
       <elementName>LED</elementName>
@@ -165,40 +132,7 @@
           <string>V</string>
         </entry>
       </elementAttributes>
-      <pos x="-10620" y="-2720"/>
-    </visualElement>
-    <visualElement>
-      <elementName>Tunnel</elementName>
-      <elementAttributes>
-        <entry>
-          <string>rotation</string>
-          <rotation rotation="2"/>
-        </entry>
-        <entry>
-          <string>NetName</string>
-          <string>ZOUT</string>
-        </entry>
-      </elementAttributes>
       <pos x="-10640" y="-2800"/>
-    </visualElement>
-    <visualElement>
-      <elementName>LED</elementName>
-      <elementAttributes>
-        <entry>
-          <string>Color</string>
-          <awt-color>
-            <red>51</red>
-            <green>102</green>
-            <blue>255</blue>
-            <alpha>255</alpha>
-          </awt-color>
-        </entry>
-        <entry>
-          <string>Label</string>
-          <string>Z</string>
-        </entry>
-      </elementAttributes>
-      <pos x="-10620" y="-2800"/>
     </visualElement>
     <visualElement>
       <elementName>Tunnel</elementName>
@@ -212,7 +146,7 @@
           <string>VOUT</string>
         </entry>
       </elementAttributes>
-      <pos x="-10640" y="-2720"/>
+      <pos x="-10660" y="-2800"/>
     </visualElement>
     <visualElement>
       <elementName>Seven-Seg-Hex</elementName>
@@ -260,21 +194,7 @@
           <string>C</string>
         </entry>
       </elementAttributes>
-      <pos x="-10620" y="-2760"/>
-    </visualElement>
-    <visualElement>
-      <elementName>Out</elementName>
-      <elementAttributes>
-        <entry>
-          <string>rotation</string>
-          <rotation rotation="2"/>
-        </entry>
-        <entry>
-          <string>Label</string>
-          <string>NOUT</string>
-        </entry>
-      </elementAttributes>
-      <pos x="-11320" y="-3160"/>
+      <pos x="-10640" y="-2840"/>
     </visualElement>
     <visualElement>
       <elementName>Out</elementName>
@@ -288,21 +208,7 @@
           <string>VOUT</string>
         </entry>
       </elementAttributes>
-      <pos x="-11320" y="-2980"/>
-    </visualElement>
-    <visualElement>
-      <elementName>Out</elementName>
-      <elementAttributes>
-        <entry>
-          <string>rotation</string>
-          <rotation rotation="2"/>
-        </entry>
-        <entry>
-          <string>Label</string>
-          <string>ZOUT</string>
-        </entry>
-      </elementAttributes>
-      <pos x="-11320" y="-3100"/>
+      <pos x="-11320" y="-3080"/>
     </visualElement>
     <visualElement>
       <elementName>Out</elementName>
@@ -316,7 +222,7 @@
           <string>COUT</string>
         </entry>
       </elementAttributes>
-      <pos x="-11320" y="-3040"/>
+      <pos x="-11320" y="-3140"/>
     </visualElement>
     <visualElement>
       <elementName>Tunnel</elementName>
@@ -326,27 +232,7 @@
           <string>COUT</string>
         </entry>
       </elementAttributes>
-      <pos x="-11280" y="-3040"/>
-    </visualElement>
-    <visualElement>
-      <elementName>Tunnel</elementName>
-      <elementAttributes>
-        <entry>
-          <string>NetName</string>
-          <string>NOUT</string>
-        </entry>
-      </elementAttributes>
-      <pos x="-11280" y="-3160"/>
-    </visualElement>
-    <visualElement>
-      <elementName>Tunnel</elementName>
-      <elementAttributes>
-        <entry>
-          <string>NetName</string>
-          <string>ZOUT</string>
-        </entry>
-      </elementAttributes>
-      <pos x="-11280" y="-3100"/>
+      <pos x="-11280" y="-3140"/>
     </visualElement>
     <visualElement>
       <elementName>Tunnel</elementName>
@@ -356,7 +242,7 @@
           <string>VOUT</string>
         </entry>
       </elementAttributes>
-      <pos x="-11280" y="-2980"/>
+      <pos x="-11280" y="-3080"/>
     </visualElement>
     <visualElement>
       <elementName>Text</elementName>
@@ -1261,46 +1147,6 @@
       <pos x="-9420" y="-3120"/>
     </visualElement>
     <visualElement>
-      <elementName>Tunnel</elementName>
-      <elementAttributes>
-        <entry>
-          <string>NetName</string>
-          <string>NOUT</string>
-        </entry>
-      </elementAttributes>
-      <pos x="-10100" y="-2360"/>
-    </visualElement>
-    <visualElement>
-      <elementName>Tunnel</elementName>
-      <elementAttributes>
-        <entry>
-          <string>NetName</string>
-          <string>ZOUT</string>
-        </entry>
-      </elementAttributes>
-      <pos x="-10100" y="-2420"/>
-    </visualElement>
-    <visualElement>
-      <elementName>Const</elementName>
-      <elementAttributes>
-        <entry>
-          <string>Value</string>
-          <long>0</long>
-        </entry>
-      </elementAttributes>
-      <pos x="-10120" y="-2420"/>
-    </visualElement>
-    <visualElement>
-      <elementName>Const</elementName>
-      <elementAttributes>
-        <entry>
-          <string>Value</string>
-          <long>0</long>
-        </entry>
-      </elementAttributes>
-      <pos x="-10120" y="-2360"/>
-    </visualElement>
-    <visualElement>
       <elementName>Multiplexer</elementName>
       <elementAttributes>
         <entry>
@@ -2117,6 +1963,10 @@ ANet AND BNeg AND NOT OutNeg</string>
       <p2 x="-9540" y="-3080"/>
     </wire>
     <wire>
+      <p1 x="-11320" y="-3080"/>
+      <p2 x="-11280" y="-3080"/>
+    </wire>
+    <wire>
       <p1 x="-10840" y="-2440"/>
       <p2 x="-10800" y="-2440"/>
     </wire>
@@ -2209,16 +2059,12 @@ ANet AND BNeg AND NOT OutNeg</string>
       <p2 x="-10060" y="-2840"/>
     </wire>
     <wire>
-      <p1 x="-10640" y="-2840"/>
-      <p2 x="-10620" y="-2840"/>
-    </wire>
-    <wire>
       <p1 x="-9880" y="-2840"/>
       <p2 x="-9860" y="-2840"/>
     </wire>
     <wire>
-      <p1 x="-11320" y="-3100"/>
-      <p2 x="-11280" y="-3100"/>
+      <p1 x="-10660" y="-2840"/>
+      <p2 x="-10640" y="-2840"/>
     </wire>
     <wire>
       <p1 x="-10800" y="-2460"/>
@@ -2241,16 +2087,8 @@ ANet AND BNeg AND NOT OutNeg</string>
       <p2 x="-9740" y="-2080"/>
     </wire>
     <wire>
-      <p1 x="-10640" y="-2720"/>
-      <p2 x="-10620" y="-2720"/>
-    </wire>
-    <wire>
       <p1 x="-11180" y="-2720"/>
       <p2 x="-11160" y="-2720"/>
-    </wire>
-    <wire>
-      <p1 x="-11320" y="-2980"/>
-      <p2 x="-11280" y="-2980"/>
     </wire>
     <wire>
       <p1 x="-10680" y="-2980"/>
@@ -2329,10 +2167,6 @@ ANet AND BNeg AND NOT OutNeg</string>
       <p2 x="-10160" y="-3000"/>
     </wire>
     <wire>
-      <p1 x="-10120" y="-2360"/>
-      <p2 x="-10100" y="-2360"/>
-    </wire>
-    <wire>
       <p1 x="-9800" y="-1980"/>
       <p2 x="-9780" y="-1980"/>
     </wire>
@@ -2397,16 +2231,16 @@ ANet AND BNeg AND NOT OutNeg</string>
       <p2 x="-9260" y="-2500"/>
     </wire>
     <wire>
+      <p1 x="-11320" y="-3140"/>
+      <p2 x="-11280" y="-3140"/>
+    </wire>
+    <wire>
       <p1 x="-9820" y="-2120"/>
       <p2 x="-9800" y="-2120"/>
     </wire>
     <wire>
       <p1 x="-9760" y="-2120"/>
       <p2 x="-9740" y="-2120"/>
-    </wire>
-    <wire>
-      <p1 x="-10640" y="-2760"/>
-      <p2 x="-10620" y="-2760"/>
     </wire>
     <wire>
       <p1 x="-11180" y="-2760"/>
@@ -2513,10 +2347,6 @@ ANet AND BNeg AND NOT OutNeg</string>
       <p2 x="-9680" y="-2520"/>
     </wire>
     <wire>
-      <p1 x="-11320" y="-3160"/>
-      <p2 x="-11280" y="-3160"/>
-    </wire>
-    <wire>
       <p1 x="-9520" y="-3160"/>
       <p2 x="-9460" y="-3160"/>
     </wire>
@@ -2539,10 +2369,6 @@ ANet AND BNeg AND NOT OutNeg</string>
     <wire>
       <p1 x="-10180" y="-3040"/>
       <p2 x="-10160" y="-3040"/>
-    </wire>
-    <wire>
-      <p1 x="-11320" y="-3040"/>
-      <p2 x="-11280" y="-3040"/>
     </wire>
     <wire>
       <p1 x="-10840" y="-3040"/>
@@ -2609,6 +2435,18 @@ ANet AND BNeg AND NOT OutNeg</string>
       <p2 x="-9460" y="-3180"/>
     </wire>
     <wire>
+      <p1 x="-10660" y="-2800"/>
+      <p2 x="-10640" y="-2800"/>
+    </wire>
+    <wire>
+      <p1 x="-10100" y="-2800"/>
+      <p2 x="-10080" y="-2800"/>
+    </wire>
+    <wire>
+      <p1 x="-11180" y="-2800"/>
+      <p2 x="-11160" y="-2800"/>
+    </wire>
+    <wire>
       <p1 x="-9840" y="-2160"/>
       <p2 x="-9820" y="-2160"/>
     </wire>
@@ -2617,24 +2455,8 @@ ANet AND BNeg AND NOT OutNeg</string>
       <p2 x="-9320" y="-2160"/>
     </wire>
     <wire>
-      <p1 x="-10100" y="-2800"/>
-      <p2 x="-10080" y="-2800"/>
-    </wire>
-    <wire>
-      <p1 x="-10640" y="-2800"/>
-      <p2 x="-10620" y="-2800"/>
-    </wire>
-    <wire>
-      <p1 x="-11180" y="-2800"/>
-      <p2 x="-11160" y="-2800"/>
-    </wire>
-    <wire>
       <p1 x="-10000" y="-3440"/>
       <p2 x="-9980" y="-3440"/>
-    </wire>
-    <wire>
-      <p1 x="-10120" y="-2420"/>
-      <p2 x="-10100" y="-2420"/>
     </wire>
     <wire>
       <p1 x="-10680" y="-2420"/>
