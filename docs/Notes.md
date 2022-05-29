@@ -1,6 +1,6 @@
 # Control Unit
 
-![Control Unit](Control Unit.png)
+![Control Unit](./Control%20Unit.svg)
 
 # Microinstruction Format
 
