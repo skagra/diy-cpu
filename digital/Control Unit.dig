@@ -103,6 +103,10 @@
       <elementName>Add</elementName>
       <elementAttributes>
         <entry>
+          <string>Label</string>
+          <string>CAR Adder</string>
+        </entry>
+        <entry>
           <string>Bits</string>
           <int>16</int>
         </entry>
@@ -3038,6 +3042,10 @@
     <visualElement>
       <elementName>Comparator</elementName>
       <elementAttributes>
+        <entry>
+          <string>Label</string>
+          <string>Error Detection</string>
+        </entry>
         <entry>
           <string>Bits</string>
           <int>16</int>

@@ -15,12 +15,8 @@ The following is still to do:
 * BCD mode and D flag
 * B Flag 
 
-# Building
+# Docs
 
-The following tools are needed to build/run DIY CPU:
+Design documentation is a work in progress [here](docs/Notes.md).
 
-* Digital Circuit Emulation: [Digital](https://github.com/hneemann/Digital)
-* 6502 Assembler: [DASM](https://dasm-assembler.github.io/)
-* Microasm: [DotNet](https://dotnet.microsoft.com/en-us/download)
-
-While not required, the [Visual Studio Code](https://code.visualstudio.com/) is used for the project so all build targets etc. should work out of the box.
+Build/execution document is a work in progress [here](docs/building.md).

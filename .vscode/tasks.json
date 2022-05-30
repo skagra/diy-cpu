@@ -4,6 +4,27 @@
    "version": "2.0.0",
    "tasks": [
       {
+         "label": "all",
+         "dependsOn": [
+            "assemble-examples",
+            "assemble-os",
+            "assemble-tests",
+            "build"
+         ],
+         "presentation": {
+            "echo": true,
+            "reveal": "always",
+            "focus": false,
+            "panel": "shared",
+            "showReuseMessage": false,
+            "clear": true
+         },
+         "group": {
+            "kind": "build",
+            "isDefault": true
+         }
+      },
+      {
          "label": "build",
          "command": "dotnet",
          "type": "process",
@@ -98,7 +119,6 @@
             "-obin/dow.bin",
             "-lbin/dow.txt"
          ],
-         "problemMatcher": [],
          "dependsOn": [
             "mkdir-examples-bin"
          ]

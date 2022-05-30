@@ -4,7 +4,7 @@
 
 .label RESET
 ZERO
-uP0-INIT p0                                                          // Load the location  of p0 code into the control unit
+uP0INIT p0                                                          // Load the location  of p0 code into the control unit
 uIRQINIT IRQ                                                         // Load the location of IRQ code TODO: BRK for now!
 CDATA/LD/FF | S/LD/CDATA                                             // Set the stack pointer 
                                                                      // Zero registers
