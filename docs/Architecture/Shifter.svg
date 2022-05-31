@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!-- Created with Digital by H.Neemann -->
-<!-- created: Fri May 27 09:54:37 BST 2022 -->
+<!-- created: Tue May 31 10:29:05 BST 2022 -->
 
 <svg
    xmlns:svg="http://www.w3.org/2000/svg"
@@ -9,6 +9,22 @@
    height="112.8mm"
    viewBox="-192 20 1644 752">
 <g stroke-linecap="square">
+<path d="M 20,140 L 20,150 L 20,160" stroke="#000000" stroke-width="4.0" fill="none"/>
+<path d="M 0,160 L 0,150" stroke="#000000" stroke-width="4.0" fill="none"/>
+<path d="M -20,160 L -20,150" stroke="#000000" stroke-width="4.0" fill="none"/>
+<path d="M -40,160 L -40,150" stroke="#000000" stroke-width="4.0" fill="none"/>
+<path d="M -60,160 L -60,150" stroke="#000000" stroke-width="4.0" fill="none"/>
+<path d="M -80,160 L -80,150" stroke="#000000" stroke-width="4.0" fill="none"/>
+<path d="M -100,160 L -100,150" stroke="#000000" stroke-width="4.0" fill="none"/>
+<path d="M -120,160 L -120,150" stroke="#000000" stroke-width="4.0" fill="none"/>
+<path d="M 520,160 L 520,150 L 520,140" stroke="#000000" stroke-width="4.0" fill="none"/>
+<path d="M 500,160 L 500,150" stroke="#000000" stroke-width="4.0" fill="none"/>
+<path d="M 480,160 L 480,150" stroke="#000000" stroke-width="4.0" fill="none"/>
+<path d="M 460,160 L 460,150" stroke="#000000" stroke-width="4.0" fill="none"/>
+<path d="M 440,160 L 440,150" stroke="#000000" stroke-width="4.0" fill="none"/>
+<path d="M 420,160 L 420,150" stroke="#000000" stroke-width="4.0" fill="none"/>
+<path d="M 400,160 L 400,150" stroke="#000000" stroke-width="4.0" fill="none"/>
+<path d="M 380,160 L 380,150" stroke="#000000" stroke-width="4.0" fill="none"/>
 <path d="M 920,580 L 920,600 L 940,600 L 940,620 L 940,624" stroke="#0000b2" stroke-width="4.0" fill="none"/>
 <path d="M 980,624 L 980,620 L 980,600 L 1000,600 L 1000,580" stroke="#0000b2" stroke-width="4.0" fill="none"/>
 <path d="M 740,580 L 740,600 L 760,600 L 760,620 L 760,624" stroke="#0000b2" stroke-width="4.0" fill="none"/>
@@ -118,22 +134,6 @@
 <path d="M 120,500 L 120,520" stroke="#0000b2" stroke-width="4.0" fill="none"/>
 <path d="M 380,160 L 380,180" stroke="#0000b2" stroke-width="4.0" fill="none"/>
 <path d="M 1020,500 L 1020,520" stroke="#0000b2" stroke-width="4.0" fill="none"/>
-<path d="M 20,140 L 20,150 L 20,160" stroke="#000000" stroke-width="4.0" fill="none"/>
-<path d="M 0,160 L 0,150" stroke="#000000" stroke-width="4.0" fill="none"/>
-<path d="M -20,160 L -20,150" stroke="#000000" stroke-width="4.0" fill="none"/>
-<path d="M -40,160 L -40,150" stroke="#000000" stroke-width="4.0" fill="none"/>
-<path d="M -60,160 L -60,150" stroke="#000000" stroke-width="4.0" fill="none"/>
-<path d="M -80,160 L -80,150" stroke="#000000" stroke-width="4.0" fill="none"/>
-<path d="M -100,160 L -100,150" stroke="#000000" stroke-width="4.0" fill="none"/>
-<path d="M -120,160 L -120,150" stroke="#000000" stroke-width="4.0" fill="none"/>
-<path d="M 520,160 L 520,150 L 520,140" stroke="#000000" stroke-width="4.0" fill="none"/>
-<path d="M 500,160 L 500,150" stroke="#000000" stroke-width="4.0" fill="none"/>
-<path d="M 480,160 L 480,150" stroke="#000000" stroke-width="4.0" fill="none"/>
-<path d="M 460,160 L 460,150" stroke="#000000" stroke-width="4.0" fill="none"/>
-<path d="M 440,160 L 440,150" stroke="#000000" stroke-width="4.0" fill="none"/>
-<path d="M 420,160 L 420,150" stroke="#000000" stroke-width="4.0" fill="none"/>
-<path d="M 400,160 L 400,150" stroke="#000000" stroke-width="4.0" fill="none"/>
-<path d="M 380,160 L 380,150" stroke="#000000" stroke-width="4.0" fill="none"/>
 <g>
 <circle cx="260.0" cy="140.0" r="4.0" stroke="#0000b2" stroke-width="4.0" fill="#0000b2" />
 </g>
@@ -466,7 +466,7 @@
 <g>
 <path d="M 90,99 L 90,119 L 70,119 L 70,99 Z" stroke="#000000" stroke-width="4.0" fill="none"/>
 <circle cx="80.0" cy="109.0" r="4.0" stroke="#000000" stroke-width="2.0" fill="none" />
-<text text-anchor="start" x="80.0" y="99.0" fill="#000000" style="font-size:24px" transform="rotate(-90,80.0,90.0)" ><tspan style="font-style:italic;">Cin</tspan></text>
+<text text-anchor="start" x="80.0" y="99.0" fill="#000000" style="font-size:24px" transform="rotate(-90,80.0,90.0)" ><tspan style="font-style:italic;">CIN</tspan></text>
 <circle cx="80.0" cy="120.0" r="2.0" stroke="#b20000" stroke-width="4.0" fill="#b20000" />
 </g>
 <g>
