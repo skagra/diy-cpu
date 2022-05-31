@@ -1,5 +1,6 @@
 # TO DO
 
+* Add S register to overview diagram
 * Revisit size of uCode ROM
 * ALU
   * Consider design of ALU flag handling, can this be simplified?
