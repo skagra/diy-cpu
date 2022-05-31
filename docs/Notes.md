@@ -1,6 +1,32 @@
+<!-- TOC -->
+
+- [Control Unit](#control-unit)
+   - [1. Microinstruction Format](#1-microinstruction-format)
+   - [2. Microinstructions & Control Lines](#2-microinstructions--control-lines)
+      - [2.1. Control Unit Operations](#21-control-unit-operations)
+      - [2.2. Constant Values](#22-constant-values)
+      - [2.3. Paths Between Busses](#23-paths-between-busses)
+      - [2.4. External Data Bus/Memory](#24-external-data-busmemory)
+      - [2.5. MBR and the Internal Data Bus](#25-mbr-and-the-internal-data-bus)
+      - [2.6. MARL and the Internal Address Bus](#26-marl-and-the-internal-address-bus)
+      - [2.7. Program Counter](#27-program-counter)
+      - [2.8. General Purpose Registers](#28-general-purpose-registers)
+   - [3. Status P Flags](#3-status-p-flags)
+      - [3.1. ALU](#31-alu)
+      - [3.2. Stack Pointer](#32-stack-pointer)
+      - [3.3. Control Unit](#33-control-unit)
+      - [3.4. State](#34-state)
+   - [4. Inputs](#4-inputs)
+   - [5. Outputs](#5-outputs)
+- [Memory Map](#memory-map)
+- [Addressing Modes](#addressing-modes)
+- [SBC and CMP                                     |](#sbc-and-cmp-------------------------------------)
+- [References](#references)
+
+<!-- /TOC -->
 # Control Unit
 
-The control unit governs the operation of the CPU via an array of control lines.   These control lines are driven from µcode (microcode) contained in a set of ROMs (`uCode0->uCode5`).  µcode instructions are decoded by these ROMs to give high/low values for each control line.  The act of reading a µcode is effectively its execution.
+The control unit governs the operation of the CPU via an array of control lines.   These control lines are driven from *µcode* (microcode) stored in a set of ROMs (`uCode0->uCode5`).  µcode instructions are decoded by these ROMs to give high/low values for each control line.  The act of reading a µcode instruction is effectively its execution.
 
 ![Control Unit](Control%20Unit.svg)
 
@@ -57,9 +83,9 @@ This section describes all implemented the µcode instructions.
 |-------------|---------|
 | `uP0INIT`   | Initialize the `p0 Fetch` register from the `A` parameter bytes of the µcode instruction.            
 | `uIRQINIT`  | Initialize the `IRQ uCode` register from the `A` parameter bytes of the µcode instruction. 
-| `uP0`       | Jump to `p0` microcode.        
-| `uP1`       | Jump to `p1` microcode corresponding to the addressing mode of the current machine code instruction.    
-| `uP2`       | Jump to `p2` microcode corresponding to the the current machine code instruction.     
+| `uP0`       | Jump to `p0` µcode.        
+| `uP1`       | Jump to `p1` µcode corresponding to the addressing mode of the current machine code instruction.    
+| `uP2`       | Jump to `p2` µcode corresponding to the the current machine code instruction.     
 | `uJMP`      | Jump to the µcode at `A`.      
 | `uNJMP`     | Jump to the µcode at `A` if `N` is set.          
 | `uVJMP`     | Jump to the µcode at `A` if `V` is set.         
@@ -249,6 +275,33 @@ Where:
 | `CPU/HALT`  | Halt the CPU           
 | `CPU/IRQ`   | Flag a `IRQ/BRK` to the CPU - `PC` will be set to the `IRQ/BRK` vector.        
 
+## Inputs
+
+| Name        | Function |
+|-------------|----------|
+| `CLOCK`     | System clock.
+| `N`         | `N` flag.
+| `V`         | `V` flag.
+| `I`         | `I` flag.
+| `Z`         | `Z` flag.
+| `C`         | `C` flag.
+| `MODEADDR`  | Address of the µcode that implements the addressing mode of the current machine code instruction.
+| `OPCODEADDR`| Address of the µcode that implements the current machine code instruction.
+| `RESET`     | A request to reset the CPU.
+| `IRQ`       | An interrupt request. 
+
+## Outputs
+
+In addition to an output for each control line bit corresponding to a µcode instruction, the control unit has the following outputs.
+
+| Name        | Function |
+|-------------|----------|
+| `CPU\ERR`      | A error condition has been detected.
+| `<CAR>`        | Debugging output giving the value of `CAR`
+| `<UPARAM>`     | Debugging output giving the value the `A` bytes parameter of the current µcode instruction.  
+| `<CARNEXT>`    | Debugging output giving the address of the next µcode instruction.
+| `<CARNEXTSRC>` | Debugging output giving the source of the address of the next µcode instruction. 
+  
 # Memory Map
 
 ```
@@ -295,7 +348,7 @@ Where:
 | Relative     | `BPL $50`     | The operand is an 8 bit signed offset from the PC.                                                                                                                                                                                                                                                                             |
 | Zero page    | `ADC $44`     | The argument is the zero-page address of the operand                                                                                                                                                                                                                                                                           |
 | Zero page, X | `ADC $44,X`   | The zero page argument is added to X to give the zero page address of the operand.  Addition wraps to zero page.                                                                                                                                                                                                               |
-| Zero page, Y | `STA $00,Y`   | The zero page argument is added to Y to give the zero page address of the operand.  Addition wraps to zero page.                                                                                                                                                                                                               |
+| Zero page, Y | `STA $00,Y`   | The zero page argument is added to Y to give the zero page address of the operand.  Addition wraps to zero page.                                                                
 
 # SBC and CMP                                     |
 

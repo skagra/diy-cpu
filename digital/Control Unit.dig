@@ -741,7 +741,7 @@
           <string>Z</string>
         </entry>
       </elementAttributes>
-      <pos x="-1460" y="-320"/>
+      <pos x="-1460" y="-280"/>
     </visualElement>
     <visualElement>
       <elementName>In</elementName>
@@ -761,7 +761,7 @@
           <string>C</string>
         </entry>
       </elementAttributes>
-      <pos x="-1460" y="-280"/>
+      <pos x="-1460" y="-240"/>
     </visualElement>
     <visualElement>
       <elementName>In</elementName>
@@ -771,7 +771,7 @@
           <string>I</string>
         </entry>
       </elementAttributes>
-      <pos x="-1480" y="-240"/>
+      <pos x="-1480" y="-320"/>
     </visualElement>
     <visualElement>
       <elementName>Tunnel</elementName>
@@ -805,7 +805,7 @@
           <string>Z</string>
         </entry>
       </elementAttributes>
-      <pos x="-1480" y="-320"/>
+      <pos x="-1480" y="-280"/>
     </visualElement>
     <visualElement>
       <elementName>XOr</elementName>
@@ -1223,7 +1223,7 @@
           <string>C</string>
         </entry>
       </elementAttributes>
-      <pos x="-1480" y="-280"/>
+      <pos x="-1480" y="-240"/>
     </visualElement>
     <visualElement>
       <elementName>Tunnel</elementName>
@@ -3505,7 +3505,7 @@
           <string>I</string>
         </entry>
       </elementAttributes>
-      <pos x="-1460" y="-240"/>
+      <pos x="-1460" y="-320"/>
     </visualElement>
     <visualElement>
       <elementName>Clock</elementName>
@@ -5365,16 +5365,16 @@
       <p2 x="-1000" y="700"/>
     </wire>
     <wire>
-      <p1 x="-1480" y="-320"/>
-      <p2 x="-1460" y="-320"/>
-    </wire>
-    <wire>
       <p1 x="-1020" y="-320"/>
       <p2 x="-1000" y="-320"/>
     </wire>
     <wire>
       <p1 x="560" y="-320"/>
       <p2 x="580" y="-320"/>
+    </wire>
+    <wire>
+      <p1 x="-1480" y="-320"/>
+      <p2 x="-1460" y="-320"/>
     </wire>
     <wire>
       <p1 x="420" y="320"/>
