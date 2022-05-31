@@ -17,6 +17,6 @@ The following is still to do:
 
 # Docs
 
-Design documentation is a work in progress [here](docs/Notes.md).
+Design documentation is a work in progress [here](docs/architecture/index.md).
 
-Build/execution document is a work in progress [here](docs/building.md).
+Build/execution document is a work in progress [here](docs/build-and-run.md).
