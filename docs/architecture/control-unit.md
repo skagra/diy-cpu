@@ -270,7 +270,7 @@ In addition to an output for each control line bit corresponding to a µcode inst
 
 | Name        | Function |
 |-------------|----------|
-| `CPU\ERR`      | A error condition has been detected.
+| `CPU/ERR`      | A error condition has been detected.
 | `<CAR>`        | Debugging output giving the value of `CAR`
 | `<UPARAM>`     | Debugging output giving the value the `A` bytes parameter of the current µcode instruction.  
 | `<CARNEXT>`    | Debugging output giving the address of the next µcode instruction.
