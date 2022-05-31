@@ -1,3 +1,5 @@
+![Overview](overview.png)
+
 * [CPU](cpu.md)
 * [ALU](alu.md)
 * [Control Unit](control-unit.md)
