@@ -1,30 +1,31 @@
 <!-- TOC -->
 
-- [Control Unit](#control-unit)
-   - [1. Microinstruction Format](#1-microinstruction-format)
-   - [2. Microinstructions & Control Lines](#2-microinstructions--control-lines)
-      - [2.1. Control Unit Operations](#21-control-unit-operations)
-      - [2.2. Constant Values](#22-constant-values)
-      - [2.3. Paths Between Busses](#23-paths-between-busses)
-      - [2.4. External Data Bus/Memory](#24-external-data-busmemory)
-      - [2.5. MBR and the Internal Data Bus](#25-mbr-and-the-internal-data-bus)
-      - [2.6. MARL and the Internal Address Bus](#26-marl-and-the-internal-address-bus)
-      - [2.7. Program Counter](#27-program-counter)
-      - [2.8. General Purpose Registers](#28-general-purpose-registers)
-   - [3. Status P Flags](#3-status-p-flags)
-      - [3.1. ALU](#31-alu)
-      - [3.2. Stack Pointer](#32-stack-pointer)
-      - [3.3. Control Unit](#33-control-unit)
-      - [3.4. State](#34-state)
-   - [4. Inputs](#4-inputs)
-   - [5. Outputs](#5-outputs)
-- [Memory Map](#memory-map)
-- [Addressing Modes](#addressing-modes)
-- [SBC and CMP                                     |](#sbc-and-cmp-------------------------------------)
-- [References](#references)
+- [1. Control Unit](#1-control-unit)
+   - [1.1. Microinstruction Format](#11-microinstruction-format)
+   - [1.2. Microinstructions & Control Lines](#12-microinstructions--control-lines)
+      - [1.2.1. Control Unit Operations](#121-control-unit-operations)
+      - [1.2.2. Constant Values](#122-constant-values)
+      - [1.2.3. Paths Between Busses](#123-paths-between-busses)
+      - [1.2.4. External Data Bus/Memory](#124-external-data-busmemory)
+      - [1.2.5. MBR and the Internal Data Bus](#125-mbr-and-the-internal-data-bus)
+      - [1.2.6. MARL and the Internal Address Bus](#126-marl-and-the-internal-address-bus)
+      - [1.2.7. Program Counter](#127-program-counter)
+      - [1.2.8. General Purpose Registers](#128-general-purpose-registers)
+   - [1.2. Status (P) Flags](#12-status-p-flags)
+      - [1.2.1. ALU](#121-alu)
+      - [1.2.2. Stack Pointer](#122-stack-pointer)
+      - [1.2.3. Control Unit](#123-control-unit)
+      - [1.2.4. State](#124-state)
+   - [1.2. Inputs](#12-inputs)
+   - [1.3. Outputs](#13-outputs)
+- [2. Memory Map](#2-memory-map)
+- [3. Addressing Modes](#3-addressing-modes)
+- [4. SBC and CMP                                     |](#4-sbc-and-cmp-------------------------------------)
+- [5. References](#5-references)
 
 <!-- /TOC -->
-# Control Unit
+
+# 1. Control Unit
 
 The control unit governs the operation of the CPU via an array of control lines.   These control lines are driven from *µcode* (microcode) stored in a set of ROMs (`uCode0->uCode5`).  µcode instructions are decoded by these ROMs to give high/low values for each control line.  The act of reading a µcode instruction is effectively its execution.
 
@@ -54,7 +55,9 @@ The control unit has the following components:
 * `CAR` Adder - Used to calculate the address of the subsequent µcode instruction (`CAR`+1).
 * Error detection - Unknown addressing modes and machine opcodes decode to `0xFFFF` which causes the control unit to flag an error.
 
-## Microinstruction Format
+<a id="markdown-11-microinstruction-format" name="11-microinstruction-format"></a>
+
+## 1.1. Microinstruction Format
 
 µcode instructions are 80 bits in length with the following format:
 
@@ -73,11 +76,15 @@ The control unit has the following components:
 
 Each `S` bit corresponds either to a control line to set or to an internal control condition.  A complete µcode instruction is the `or` of these bits together with option the `A` parameter bytes.
 
-## Microinstructions & Control Lines
+<a id="markdown-12-microinstructions--control-lines" name="12-microinstructions--control-lines"></a>
+
+## 1.2. Microinstructions & Control Lines
 
 This section describes all implemented the µcode instructions. 
 
-### Control Unit Operations
+<a id="markdown-121-control-unit-operations" name="121-control-unit-operations"></a>
+
+### 1.2.1. Control Unit Operations
 
 | Instruction | Meaning |
 |-------------|---------|
@@ -93,7 +100,9 @@ This section describes all implemented the µcode instructions.
 | `uCJMP`     | Jump to the µcode at `A` if `C` is set.     
 | `uJMP/INV`  | Invert the logic a`u*JMP`. instructions.    
 
-### Constant Values
+<a id="markdown-122-constant-values" name="122-constant-values"></a>
+
+### 1.2.2. Constant Values
 
 These constant values used during initialize/reset.
 
@@ -102,14 +111,18 @@ These constant values used during initialize/reset.
 | `CDATA/LD/0`  | Set the `CDATA` bus to `0x00`.    
 | `CDATA/LD/FF` | Set the `CDATA` bus to `0xFF`.
 
-### Paths Between Busses
+<a id="markdown-123-paths-between-busses" name="123-paths-between-busses"></a>
+
+### 1.2.3. Paths Between Busses
 
 | Instruction       | Meaning |
 |-------------------|---------|
 | `CDATA/TO/CADDRL` | Open a path from the `CDATA` bus to the `CADDRL` bus. 
 | `CDATA/TO/CADDRH` | Open a path from the `CDATA` bus to the `CADDRH` bus.
 
-### External Data Bus/Memory
+<a id="markdown-124-external-data-busmemory" name="124-external-data-busmemory"></a>
+
+### 1.2.4. External Data Bus/Memory
 
 | Instruction       | Meaning |
 |-------------------|---------|
@@ -119,21 +132,27 @@ These constant values used during initialize/reset.
 | `MBR/LD/XDATA`    | Load `MBR` from the `XDATA` bus.
 | `MBR/OUT/XDATA`   | Write `MBR` onto the `XDATA` bus.
 
-### MBR and the Internal Data Bus
+<a id="markdown-125-mbr-and-the-internal-data-bus" name="125-mbr-and-the-internal-data-bus"></a>
+
+### 1.2.5. MBR and the Internal Data Bus
 
 | Instruction       | Meaning |
 |-------------------|---------|
 | `MBR/LD/CDATA`    | Load `MBR` from the `CDATA` bus.   
 | `MBR/OUT/CDATA`   | Wite `MBR` onto the `CDATA` bus.
 
-### MARL and the Internal Address Bus
+<a id="markdown-126-marl-and-the-internal-address-bus" name="126-marl-and-the-internal-address-bus"></a>
+
+### 1.2.6. MARL and the Internal Address Bus
 
 | Instruction       | Meaning |
 |-------------------|---------|
 | `MARL/LD/CADDRL`  | Load `MARL` from the `CADDRL` bus. 
 | `MARH/LD/CADDRH`  | Load `MARH` from the `CADDRH` bus.
 
-### Program Counter
+<a id="markdown-127-program-counter" name="127-program-counter"></a>
+
+### 1.2.7. Program Counter
 
 | Instruction       | Meaning |
 |-------------------|---------|
@@ -145,7 +164,9 @@ These constant values used during initialize/reset.
 | `PCH/OUT/CDATA`   | Write `PCH` to the `CDATA` bus.
 | `PC/OUT/CADDR`    | Write `PC` to the `CADDR` bus.
 
-### General Purpose Registers
+<a id="markdown-128-general-purpose-registers" name="128-general-purpose-registers"></a>
+
+### 1.2.8. General Purpose Registers
 
 | Instruction        | Meaning |
 |--------------------|---------|
@@ -160,7 +181,9 @@ These constant values used during initialize/reset.
 | `Y/LD/CDATA`       | Load `Y` from the `CDATA` bus.      
 | `Y/OUT/CDATA`      | Write `Y` to the `CDATA` bus.     
 
-## Status (P) Flags
+<a id="markdown-12-status-p-flags" name="12-status-p-flags"></a>
+
+## 1.2. Status (P) Flags
 
 | Instruction        | Meaning |
 |--------------------|---------|
@@ -194,7 +217,9 @@ As follows:
 |--------------------|---------|
 | `P/OUT/CDATA` | Write `P` to the `CDATA` bus.      
 
-### ALU
+<a id="markdown-121-alu" name="121-alu"></a>
+
+### 1.2.1. ALU
 
 | Instruction        | Meaning |
 |--------------------|---------|
@@ -244,7 +269,9 @@ As follows:
 | `1010` | ROT-R
 | `1011` | ROT-L
         
-### Stack Pointer
+<a id="markdown-122-stack-pointer" name="122-stack-pointer"></a>
+
+### 1.2.2. Stack Pointer
 
 | Instruction   | Meaning |
 |---------------|---------|
@@ -254,7 +281,9 @@ As follows:
 | `S/OUT/CDATA` | Write `S` to the `CDATA` bus.
 | `S/OUT/CADDR` | Write `S` to the `CADDR` bus (high byte is always `0x01`).
 
-### Control Unit
+<a id="markdown-123-control-unit" name="123-control-unit"></a>
+
+### 1.2.3. Control Unit
 
 | Instruction        | Meaning |
 |--------------------|---------|
@@ -267,7 +296,9 @@ Where:
 | `0` | Read flags from `P`.
 | `1` | Read flags from the `ALU` output. 
 
-### State
+<a id="markdown-124-state" name="124-state"></a>
+
+### 1.2.4. State
 
 | Instruction | Meaning |
 |-------------|---------|
@@ -275,7 +306,9 @@ Where:
 | `CPU/HALT`  | Halt the CPU           
 | `CPU/IRQ`   | Flag a `IRQ/BRK` to the CPU - `PC` will be set to the `IRQ/BRK` vector.        
 
-## Inputs
+<a id="markdown-12-inputs" name="12-inputs"></a>
+
+## 1.2. Inputs
 
 | Name        | Function |
 |-------------|----------|
@@ -290,7 +323,9 @@ Where:
 | `RESET`     | A request to reset the CPU.
 | `IRQ`       | An interrupt request. 
 
-## Outputs
+<a id="markdown-13-outputs" name="13-outputs"></a>
+
+## 1.3. Outputs
 
 In addition to an output for each control line bit corresponding to a µcode instruction, the control unit has the following outputs.
 
@@ -302,7 +337,7 @@ In addition to an output for each control line bit corresponding to a µcode inst
 | `<CARNEXT>`    | Debugging output giving the address of the next µcode instruction.
 | `<CARNEXTSRC>` | Debugging output giving the source of the address of the next µcode instruction. 
   
-# Memory Map
+# 2. Memory Map
 
 ```
   +===========+ 
@@ -332,7 +367,7 @@ In addition to an output for each control line bit corresponding to a µcode inst
   +===========+     
 ```
 
-# Addressing Modes
+# 3. Addressing Modes
 
 | Mode         | Example       | Description                                                                                                                                                                                                                                                                                                                    |
 | ------------ | ------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
@@ -350,7 +385,7 @@ In addition to an output for each control line bit corresponding to a µcode inst
 | Zero page, X | `ADC $44,X`   | The zero page argument is added to X to give the zero page address of the operand.  Addition wraps to zero page.                                                                                                                                                                                                               |
 | Zero page, Y | `STA $00,Y`   | The zero page argument is added to Y to give the zero page address of the operand.  Addition wraps to zero page.                                                                
 
-# SBC and CMP                                     |
+# 4. SBC and CMP                                     |
 
 http://www.6502.org/tutorials/compare_beyond.html
 https://www.righto.com/2013/01/a-small-part-of-6502-chip-explained.html
@@ -377,7 +412,7 @@ SEC
 SBC
 ```
 
-# References
+# 5. References
 
 * 6502 Instruction set - good analysis of bit patterns for addressing modes: https://link.springer.com/content/pdf/bbm%3A978-1-349-07360-3%2F1.pdf
 * Nice indexed list of opcodes: http://www.6502.org/tutorials/6502opcodes.html
