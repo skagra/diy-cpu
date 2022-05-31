@@ -1,1 +1,3 @@
 # Register
+
+![Register](register.svg)

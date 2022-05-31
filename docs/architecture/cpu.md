@@ -1,1 +1,3 @@
 # CPU
+
+![CPU](cpu.svg)
