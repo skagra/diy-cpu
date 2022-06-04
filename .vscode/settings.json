@@ -20,6 +20,7 @@
       "CADDR",
       "CADDRH",
       "CADDRL",
+      "combinational",
       "FLGCDATA",
       "IRQINIT",
       "JMPIND",
