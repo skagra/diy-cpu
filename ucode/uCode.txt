@@ -492,9 +492,9 @@ MAR<-S | P/OUT/CDATA | MBR/LD/CDATA                                  // Copy sta
 MEM<-MBR | S/DEC | uP0                                               // Push P onto the stack decrementing the stack pointer
 
 .opcode PLP
-S/INC                                                                       // Increment the stack pointer
-MAR<-S | MBR<-MEM                                                           // Read the value from the top of the stack
-MBR/OUT/CDATA | P/SRC-CDATA | PN/LD | PV/LD | PI/LD | PZ/LD | PC/LD | uP0   // Set P from the value read from the stack
+S/INC                                                                               // Increment the stack pointer
+MAR<-S | MBR<-MEM                                                                   // Read the value from the top of the stack
+MBR/OUT/CDATA | P/SRC-CDATA | PN/LD | PV/LD | PB/LD | PI/LD | PZ/LD | PC/LD | uP0   // Set P from the value read from the stack
 
 
 // -----------------------------------------------------------------------------
@@ -520,7 +520,7 @@ MEM<-MBR | S/DEC
 MAR<-S |  MBR<-PCL                                                   // Push the LSB of the PC onto the stack 
 MEM<-MBR | S/DEC
 
-CPU/IRQ                                                               // Set PC to the IRQ vector
+CPU/IRQ                                                              // Set PC to the IRQ vector
 
 MAR<-PC | MBR<-MEM | PC-INC                                          // Read the LSB of the vector
 STASHL<-MBR                                                          // Store the LSB in STASHL

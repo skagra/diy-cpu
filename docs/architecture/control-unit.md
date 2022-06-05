@@ -140,6 +140,7 @@ These constant values used during initialize/reset.
 | ----------- | ------------------ |
 | `PN/LD`     | Load the `N` flag. |
 | `PV/LD`     | Load the `V` flag. |
+| `PV/LD`     | Load the `B` flag. |
 | `PI/LD`     | Load the `I` flag. |
 | `PZ/LD`     | Load the `Z` flag. |
 | `PC/LD`     | Load the `C` flag. |
@@ -179,10 +180,11 @@ As follows:
 
 The source of the value loaded into `ALUC` is controlled by:
 
-   ```
-   ALUC/SRC/0       
-   ALUC/SRC/1       
-   ```
+```
+ALUC/SRC/0       
+ALUC/SRC/1       
+```
+
 As follows:
 
 | ALUC/SRC/* | Meaning         |

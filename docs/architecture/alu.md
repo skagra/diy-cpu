@@ -14,7 +14,7 @@ The ALU fronts the *ALU-proper* and the *Shifter* with three registers.
 
 ![Latched ALU](latched-alu.svg)
 
-The `A` and `B` hold the main 8 bit operands and `C` holds an input carry bit.
+The `A` and `B` registers hold the main 8 bit ALU operands and `C` holds an input carry bit.
 
 ## Inputs
 
