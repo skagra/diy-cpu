@@ -137,7 +137,7 @@
           <string>MODEADDR</string>
         </entry>
       </elementAttributes>
-      <pos x="800" y="120"/>
+      <pos x="820" y="120"/>
     </visualElement>
     <visualElement>
       <elementName>Tunnel</elementName>
@@ -151,11 +151,15 @@
           <string>OPCODEADDR</string>
         </entry>
       </elementAttributes>
-      <pos x="800" y="280"/>
+      <pos x="820" y="280"/>
     </visualElement>
     <visualElement>
       <elementName>In</elementName>
       <elementAttributes>
+        <entry>
+          <string>small</string>
+          <boolean>true</boolean>
+        </entry>
         <entry>
           <string>Label</string>
           <string>OPCODE</string>
@@ -165,7 +169,7 @@
           <int>8</int>
         </entry>
       </elementAttributes>
-      <pos x="360" y="120"/>
+      <pos x="500" y="120"/>
     </visualElement>
     <visualElement>
       <elementName>Tunnel</elementName>
@@ -175,11 +179,15 @@
           <string>OPCODE</string>
         </entry>
       </elementAttributes>
-      <pos x="380" y="120"/>
+      <pos x="520" y="120"/>
     </visualElement>
     <visualElement>
       <elementName>Out</elementName>
       <elementAttributes>
+        <entry>
+          <string>small</string>
+          <boolean>true</boolean>
+        </entry>
         <entry>
           <string>rotation</string>
           <rotation rotation="2"/>
@@ -193,7 +201,7 @@
           <int>16</int>
         </entry>
       </elementAttributes>
-      <pos x="360" y="180"/>
+      <pos x="500" y="180"/>
     </visualElement>
     <visualElement>
       <elementName>Tunnel</elementName>
@@ -203,11 +211,15 @@
           <string>MODEADDR</string>
         </entry>
       </elementAttributes>
-      <pos x="380" y="180"/>
+      <pos x="520" y="180"/>
     </visualElement>
     <visualElement>
       <elementName>Out</elementName>
       <elementAttributes>
+        <entry>
+          <string>small</string>
+          <boolean>true</boolean>
+        </entry>
         <entry>
           <string>rotation</string>
           <rotation rotation="2"/>
@@ -221,7 +233,7 @@
           <int>16</int>
         </entry>
       </elementAttributes>
-      <pos x="360" y="240"/>
+      <pos x="500" y="200"/>
     </visualElement>
     <visualElement>
       <elementName>Tunnel</elementName>
@@ -231,7 +243,7 @@
           <string>OPCODEADDR</string>
         </entry>
       </elementAttributes>
-      <pos x="380" y="240"/>
+      <pos x="520" y="200"/>
     </visualElement>
   </visualElements>
   <wires>
@@ -240,23 +252,23 @@
       <p2 x="920" y="160"/>
     </wire>
     <wire>
-      <p1 x="360" y="240"/>
-      <p2 x="380" y="240"/>
-    </wire>
-    <wire>
       <p1 x="900" y="260"/>
       <p2 x="920" y="260"/>
     </wire>
     <wire>
-      <p1 x="360" y="180"/>
-      <p2 x="380" y="180"/>
+      <p1 x="500" y="180"/>
+      <p2 x="520" y="180"/>
     </wire>
     <wire>
-      <p1 x="360" y="120"/>
-      <p2 x="380" y="120"/>
+      <p1 x="500" y="200"/>
+      <p2 x="520" y="200"/>
     </wire>
     <wire>
-      <p1 x="800" y="120"/>
+      <p1 x="500" y="120"/>
+      <p2 x="520" y="120"/>
+    </wire>
+    <wire>
+      <p1 x="820" y="120"/>
       <p2 x="840" y="120"/>
     </wire>
     <wire>
@@ -264,7 +276,7 @@
       <p2 x="920" y="120"/>
     </wire>
     <wire>
-      <p1 x="800" y="280"/>
+      <p1 x="820" y="280"/>
       <p2 x="840" y="280"/>
     </wire>
     <wire>
