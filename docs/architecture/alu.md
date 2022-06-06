@@ -12,7 +12,7 @@ The ALU is divided into three modules:
 
 The ALU fronts the *ALU-proper* and the *Shifter* with three registers.
 
-![Latched ALU](latched-alu.svg)
+![Latched ALU](latched-alu.png)
 
 The `A` and `B` registers hold the main 8 bit ALU operands and `C` holds an input carry bit.
 
@@ -93,7 +93,7 @@ The *ALU-Proper* implements arithmetic and logical operations for the CPU.  It i
 
 The *Shifter* implements shift and rotation operations.
 
-![Shifter](shifter.svg) 
+![Shifter](shifter.png) 
 
 ## Inputs
 

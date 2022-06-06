@@ -2,7 +2,7 @@
 
 The register stores a single 8 bit value and has a tri-state output.
 
-![Register](register.svg)
+![Register](register.png)
 
 # Inputs
 

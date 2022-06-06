@@ -2,7 +2,7 @@
 
 The instruction decoder processes machine instructions to locate their associated µcode implementations.
 
-![Instruction Decoder](instruction-decoder.svg)
+![Instruction Decoder](instruction-decoder.png)
 
 A machine code instruction is presented as the address to two ROMs, the referenced data is the address of the relevant µcode in the [Control Unit](control-unit.md).  The two ROMs are as follows:
 

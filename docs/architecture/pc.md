@@ -2,7 +2,7 @@
 
 The *Program Counter* (`PC`) holds the 16 bit address of the current/next machine code instruction.
 
-![Program Counter](pc.svg)
+![Program Counter](pc.png)
 
 The circuit allows the PC to be incremented, adjusted by a two's complement 8 bit value (to implement relative branches), to load a supplied value (e.g. for absolute jumps) and to load constant values for the interrupt vector (`0xFFFE`) and the reset vector (`0xFFFC`).
 

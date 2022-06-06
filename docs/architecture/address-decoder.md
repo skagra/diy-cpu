@@ -2,7 +2,7 @@
 
 The *Address Decoder* allows one of four memory banks to be enabled based on the incoming address.
 
-![Address Decoder](address-decoder.svg)
+![Address Decoder](address-decoder.png)
 
 | Range             | Bank |
 | ----------------- | ---- |
