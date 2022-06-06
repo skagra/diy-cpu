@@ -1,14 +1,26 @@
+# Overview
+
+The project has the following structure:
+
+* `asminclude` - 
+* `digital` - 
+* `docs` -
+* `examples` -
+* `microasm` -
+* `os` - 
+* `tests` -
+* `ucode` -
+
 # Tooling
 
 The following tools are needed to build/run `diy-cpu`:
 
-* Digital Circuit Emulation - [Digital](https://github.com/hneemann/Digital)
-* 6502 Assembler - [DASM](https://dasm-assembler.github.io/)
-* Microasm - [DotNet](https://dotnet.microsoft.com/en-us/download)
+* [Digital](https://github.com/hneemann/Digital) for digital circuit emulation.
+* [DASM](https://dasm-assembler.github.io/) to assemble 6502 machine code.
+*  [DotNet](https://dotnet.microsoft.com/en-us/download) to build the `diy-cpu`'s microcode assembler (`microsasm`).
+* [Visual Studio Code](https://code.visualstudio.com/) is used in the development of the project.  While not strictly necessary using the vscode build targets will significantly oil the wheels!
 
-While not required, the [Visual Studio Code](https://code.visualstudio.com/) is used for the project so all build targets etc. should work out of the box.
-
-# Build
+# Build and Run
 
 1. Run the `all` task in Visual Studio Code.  This will:
    * Compile the microcode assembler (`microasm`).
@@ -63,6 +75,6 @@ While not required, the [Visual Studio Code](https://code.visualstudio.com/) is 
        * Click `OK` to close the dialog.
 
 1. And finally run the machine code program.
-   * Select from the *Simulation* menu the *Start of Simulation* option.
+   * Select *Start of Simulation* from the *Simulation* menu.
    * The simulation will start with the CPU halted.  Click the `RUN` button (top left hand corner of the circuit) the start the CPU.
 
