@@ -1,4 +1,4 @@
-# Control Unit
+﻿# Control Unit
 
 The control unit governs the operation of the CPU via an array of control lines.   These control lines are driven from *µcode* (microcode) stored in a set of ROMs (`uCode0->uCode5`).  Each µcode instruction are gives the high/low values for each control line.  The act of reading a µcode instruction is effectively its execution.
 
