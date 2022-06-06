@@ -63,7 +63,7 @@ The latched ALU has the following outputs:
 
 The *ALU-Proper* implements arithmetic and logical operations for the CPU.  It is purely combinational logic.
 
-![ALU](alu.svg)
+![ALU](alu.png)
 
 ## Inputs
 
@@ -71,7 +71,6 @@ The *ALU-Proper* implements arithmetic and logical operations for the CPU.  It i
 * `B` - `B` operand
 * `C` - `C` Carry input
 * `OP` - Selects the ALU operation as follows:
-
     | Value | Operation   |
     | ----- | ----------- |
     | `000` | And         |
@@ -82,7 +81,6 @@ The *ALU-Proper* implements arithmetic and logical operations for the CPU.  It i
     | `101` | Subtract    |
     | `110` | Increment A |
     | `111` | Decrement A |
-
     The `OP` is selects the appropriate output signal. 
 
 ## Outputs
