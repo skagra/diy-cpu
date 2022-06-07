@@ -6,8 +6,6 @@ This project is a learning exercise in digital electronics, with goals to:
 * Implement and validate the design in a digital circuit simulator.
 * Implement the design physically, primarily using the `74` family of ICs.
 
-# Documentation
-
 ![Overview](docs/architecture/overview.png)
 
 * The design is documented [here](docs/architecture/index.md).
