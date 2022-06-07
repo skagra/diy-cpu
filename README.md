@@ -8,14 +8,14 @@ This project is a learning exercise in digital electronics, with goals to:
 
 # Documentation
 
+![Overview](docs/architecture/overview.png)
+
 * The design is documented [here](docs/architecture/index.md).
 * Build/execution instructions are available [here](docs/build-and-run.md).
 
 # Status
 
 The CPU is approaching feature completeness in the digital circuit simulator.  
-
-![Overview](docs/architecture/overview.png)
 
 The following is still to do:
 
