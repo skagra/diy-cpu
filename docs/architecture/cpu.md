@@ -1,3 +1,0 @@
-# CPU
-
-![CPU](cpu.png)

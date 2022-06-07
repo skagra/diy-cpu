@@ -20,9 +20,14 @@ The following diagram shows a high level block view of the CPU together with som
 * *Instruction Decoder* - The [instruction decoder](instruction-decoder.md) maps machine code instructions onto µcode routines in the [control unit](control-unit.md).
 * *Control Unit* - The [control unit](control-unit.md) orchestrates to operation of the CPU via a set of control lines.
 
-The design is described in detail in the following:
+The following shows a more detailed architecture:
 
-* [CPU](cpu.md) - Top level view of the CPU.
+![CPU](cpu.png)
+
+Essentially this diagram is the same as high level block diagram.   The major additions are the inclusion of the control lines driven from the control unit, tri-state buffers to govern bus access and some logic to deal with status flags.
+
+Each sub-modules is described in detail here:
+
 * [ALU](alu.md) - The *Arithmetic/Logic Unit*.
 * [Control Unit](control-unit.md) - The *Control Unit*.
 * [Address Decoder](address-decoder.md) - The *Address Decoder*.
