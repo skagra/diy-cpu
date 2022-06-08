@@ -10,12 +10,4 @@ This project is a learning exercise in digital electronics, with goals to:
 
 * The design is documented [here](docs/architecture/index.md).
 * Build/execution instructions are available [here](docs/build-and-run.md).
-
-# Status
-
-The CPU is approaching feature completeness in the digital circuit simulator.  It is able to execute most 6502 machine code programs.
-
-The following are still to do:
-
-* BCD mode and `D` flag.
-* `B` Flag 
+* Current status is described [here](docs/status.md).
