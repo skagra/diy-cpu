@@ -4,7 +4,7 @@ This project is a learning exercise in digital electronics, with goals to:
 
 * Design a CPU from the ground up that is op-code compatible with the 6502.
 * Implement and validate the design in a digital circuit simulator.
-* Implement the design physically, primarily using the `74` family of ICs.
+* Implement the design physically, primarily using the [7400](https://en.wikipedia.org/wiki/7400-series_integrated_circuits) series of ICs.
 
 ![Overview](docs/architecture/overview.png)
 
