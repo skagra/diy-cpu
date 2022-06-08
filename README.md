@@ -2,7 +2,7 @@
 
 This project is a learning exercise in digital electronics, with goals to:
 
-* Design a CPU from the ground up that is op-code compatible with the 6502.
+* Design a CPU from the ground up that is op-code compatible with the [6502](https://archive.org/details/mos_microcomputers_programming_manual).
 * Implement and validate the design in a digital circuit simulator.
 * Implement the design physically, primarily using the [7400](https://en.wikipedia.org/wiki/7400-series_integrated_circuits) series of ICs.
 
