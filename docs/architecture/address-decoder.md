@@ -1,6 +1,6 @@
 # Address Decoder
 
-The *Address Decoder* allows one of four memory banks to be enabled based on the incoming address.
+The *Address Decoder* allows one of four memory banks to be enabled based on a target memory address.
 
 ![Address Decoder](address-decoder.png)
 
@@ -11,11 +11,12 @@ The *Address Decoder* allows one of four memory banks to be enabled based on the
 | `0x4000...0x7FFF` | 1    |
 | `0x0000...0x3FFF` | 0    |
 
-The bank is selected based on the 2 most significant bits of the address.
+Bank selection is based on the 2 most significant bits of the address.
 
 # Inputs
 
 * `A` - Address.
+* `CS` - Chip select, set high to enable.
 
 # Outputs
 

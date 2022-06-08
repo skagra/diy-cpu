@@ -1,10 +1,10 @@
 # ALU
 
-The *Aritmetic Logic Unit* (ALU) provides logical operations, logical operations and shift operations to the CPU.
+The *Arithmetic Logic Unit* (ALU) provides arithmetic operations, logical operations and shift operations to the CPU.
 
 The ALU is divided into three modules:
 
-* *Registers* - Registers that latch the input for the other two modules.
+* *Registers* - Registers that latch input values for the other two modules.
 * *ALU-proper* - Arithmetic and logic operations.
 * *Shifter* - Shift and rotate operations.
 
@@ -44,16 +44,16 @@ The latched ALU has the following inputs:
     | `1010` | Rotate right A |
     | `1011` | Rotate left A  |
 
-    The `OP` is both processed and passed onto the ALU-proper and to the Shifter as well as being use to select the appropriate output signal. 
+    The `OP` is processed and passed on to the *ALU-proper* and the *Shifter*, as well as being use to select the appropriate output signal. 
 
 ## Outputs
 
 The latched ALU has the following outputs:
 
 * `R` - The result.
-* `N` - Set to flag a negative output (bit 7 set).
-* `V` - Set to flag an arithmetic overflow.
-* `Z` - Set to flag a zero result.
+* `N` - Set to indicate a negative output (bit 7 set).
+* `V` - Set to indicate an arithmetic overflow.
+* `Z` - Set to indicate a zero result.
 * `C` - Carry out.
 * `<A>` - Debugging output giving the value in `A`.
 * `<B>` - Debugging output giving the value in `B`. 
@@ -71,27 +71,27 @@ The *ALU-Proper* implements arithmetic and logical operations for the CPU.  It i
 * `B` - `B` operand
 * `C` - `C` Carry input
 * `OP` - Selects the ALU operation as follows:
-    | Value | Operation   |
-    | ----- | ----------- |
-    | `000` | And         |
-    | `001` | Or          |
-    | `010` | Not         |
-    | `011` | Xor         |
-    | `100` | Add         |
-    | `101` | Subtract    |
-    | `110` | Increment A |
-    | `111` | Decrement A |
-    The `OP` is selects the appropriate output signal. 
+
+    | Value | Operation     |
+    | ----- | --------------|
+    | `000` | And           |
+    | `001` | Or            |
+    | `010` | Not `A`       |
+    | `011` | Xor           |
+    | `100` | Add           |
+    | `101` | Subtract      |
+    | `110` | Increment `A` |
+    | `111` | Decrement `A` |
 
 ## Outputs
 
 * `OUT` - The result.
 * `COUT` - Carry out.
-* `VOUT` - Set to flag an arithmetic overflow.
+* `VOUT` - Set to indicate an arithmetic overflow.
 
 # Shifter
 
-The *Shifter* implements shift and rotation operations.
+The *Shifter* implements shift and rotation operations for the CPU.  It is purely combinational logic.
 
 ![Shifter](shifter.png) 
 

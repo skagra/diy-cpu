@@ -1,51 +1,59 @@
 ﻿# Control Unit
 
-The control unit governs the operation of the CPU via an array of control lines.   These control lines are driven from *µcode* (microcode) stored in a set of ROMs (`uCode0->uCode5`).  Each µcode instruction are gives the high/low values for each control line.  The act of reading a µcode instruction is effectively its execution.
+The control unit governs the operation of the CPU via an array of control lines.   These control lines are driven from *µcode* (microcode) stored in a set of ROMs (`uCode0->uCode5`).  Each µcode instruction gives the high/low value for each control line.  The act of reading a µcode instruction is effectively its execution.
 
 ![Control Unit](control-unit.png)
 
 Execution of a machine code instruction is divided into the following µcode phases:
 
 * *p0 Fetch* - The opcode at the address given by the `PC` is fetched from memory into the `MBR`.
-* *p1 Addressing Mode* - According to the opcode's addressing mode (e.g. immediate), µcode is executed to read any arguments from memory concluding with the resolved address of the actual operand in the `MAR`.
+* *p1 Addressing Mode* - According to the opcode's [addressing mode](addressing-modes.md) (e.g. immediate), µcode is executed to read any arguments from memory concluding with the resolved address of the actual operand in the `MAR`.
 * *p2 OpCode* - According to the opcode (e.g. `LDA`), µcode is executed to carry out the appropriate action (e.g. to load a value into `A`). 
 
 The control unit has the following components:
 
 * `CAR` - The *Control Address Register* (`CAR`) contains the address of the current µcode instruction.
-* Sequence logic - The sequence logic calculates the address of the next µcode instruction.  
+* Sequence logic - The sequence logic calculates the address of the next µcode instruction. 
+
   It consists of a multiplexer which selects from:
-  * `CAR` + 1 - The address of the subsequent µcode instruction.
-  * `p0 (Fetch)` Register - Contains the address of `p0` µcode.
-  * `MODEADDR` - The address of the µcode routine associated with the addressing mode of current machine opcode.
-  * `OPCDOEADDR` - The address of the µcode routine associated with the current machine opcode.
-  * `UPARAM` - A sixteen bit operand that forms part of each µcode instruction.  Typically it is used to hold the target address µcode jumps (`uJMP`, `uNJMP`, `uVJMP`, `uZJMP`, `uCJMP`).
+
+  * `CAR + 1` - The address of the subsequent µcode instruction.
+  * `p0 (Fetch)` Register - The address of `p0` µcode.
+  * `MODEADDR` - The address of the µcode routine associated with the addressing mode of current machine code instruction.
+  * `OPCDOEADDR` - The address of the µcode routine associated with the current machine code instruction.
+  * `UPARAM` - A sixteen bit operand that forms part of each µcode instruction.  Typically it is used to hold the target address of µcode jumps (`uJMP`, `uNJMP`, `uVJMP`, `uZJMP`, `uCJMP`).
   * `IRQ uCode` Register - Contains the address of µcode triggered via an `IRQ`.
-  Selection logic to to pick from the above according to the values of the following bits in the current µcode instruction `IRQ`, `uP0`, `uP1`, `uP2`, `uJMP`, `uNJMP`, `uVJMP`, `uZJMP`, `uCJMP`, `uJMPINV`, `N`, `V`, `I`, `Z`  and `C`.  These are described below.
-* `p0 (Fetch)` Register - Contains the address of `p0` µcode.   Its value is populated via µcode during initialization.
-* `IRQ uCode` Register - Contains the address of µcode to run when an interrupt is signalled.  Its value is populated via µcode during initialization.
-* µcode ROMs `uCode0` -> `uCode1`.  The word defining each µcode instruction is divided across the µcode ROMs.  The address of the current µcode instruction is presented to these ROMs to read a µcode instruction.  The act of reading a µcode sets the control lines it defines.  See below for further details.
-* `CAR` Adder - Used to calculate the address of the subsequent µcode instruction (`CAR`+1).
-* Error detection - Unknown addressing modes and machine opcodes decode to `0xFFFF` which causes the control unit to flag an error.
+
+  Selection logic picks from the above according to the values of the following bits in the current µcode instruction `IRQ`, `uP0`, `uP1`, `uP2`, `uJMP`, `uNJMP`, `uVJMP`, `uZJMP`, `uCJMP`, `uJMPINV`, `N`, `V`, `I`, `Z`  and `C`.  These are all described below.
+
+* `p0 (Fetch)` Register - Contains the address of `p0` µcode.   Its value is populated via µcode during CPU initialization.
+
+* `IRQ uCode` Register - Contains the address of µcode to run when an interrupt is signalled.  Its value is populated via µcode during CPU initialization.
+
+* µcode ROMs `uCode0` -> `uCode1`.  The word defining each µcode instruction is divided across the µcode ROMs.  The address of the current µcode instruction is presented to these ROMs to read a µcode instruction.  The act of reading a µcode word sets the control lines it defines.  See below for further details.
+
+* `CAR` Adder - Used to calculate the address of the subsequent µcode instruction (`CAR+1`).
+
+* Error detection - Unknown addressing modes and unknown machine code instructions decode to `0xFFFF`, this causes the control unit to flag an error.
 
 ## Microinstruction Format
 
 µcode instructions are 80 bits in length with the following format:
 
 ```
-   0xSSSSSSSSAA
+0xSSSSSSSSAA
 ```
 
-`S` bytes are control signals.  `A` bytes are a parameter for a µcode operation, most commonly the µcode target address for `uJMP`, `uZJMP`, `uNJMP`, `uVJMP`, `uCJMP` and `uJSR`.
+The `S` bytes are the values of control signals.  The `A` bytes are a parameter for a µcode operation, most commonly the µcode target address for `uJMP`, `uZJMP`, `uNJMP`, `uVJMP`, `uCJMP` and `uJSR` operations.
 
-µcode instructions are stored in little-endian order when written to the ROM files by the microcode assembler `microasm`.
+µcode instructions are stored in little-endian order when written to the ROM files by the microcode assembler (`microasm`).
 
 ```
-   Natural order                    uROM (little Endian) order
-   S9 S8 S7 S6 S5 S4 S3 S2 A1 A0 => AO A1 S2 S3 S4 S5 S6 S7 S8 S9 
+Natural order                    uROM (little Endian) order
+S9 S8 S7 S6 S5 S4 S3 S2 A1 A0 => AO A1 S2 S3 S4 S5 S6 S7 S8 S9 
 ```
 
-Each `S` bit corresponds either to a control line to set or to an internal control condition.  A complete µcode instruction is the `or` of these bits together with option the `A` parameter bytes.
+Each `S` bit corresponds either to a control line to set or to an internal control condition.  A complete µcode instruction is the `or` of these bits together with the optional the `A` parameter bytes.
 
 ## Microinstructions & Control Lines
 
@@ -65,11 +73,11 @@ This section describes all implemented the µcode instructions.
 | `uVJMP`     | Jump to the µcode at `A` if `V` is set.                                                          |
 | `uZJMP`     | Jump to the µcode at `A` if `Z` is set.                                                          |
 | `uCJMP`     | Jump to the µcode at `A` if `C` is set.                                                          |
-| `uJMP/INV`  | Invert the logic a`u*JMP`. instructions.                                                         |
+| `uJMP/INV`  | Invert the logic a `u*JMP` instructions.                                                         |
 
 ### Constant Values
 
-These constant values used during initialize/reset.
+These constant values used during CPU initialization and reset.
 
 | Instruction   | Meaning                        |
 | ------------- | ------------------------------ |
@@ -87,8 +95,8 @@ These constant values used during initialize/reset.
 
 | Instruction     | Meaning                                                                   |
 | --------------- | ------------------------------------------------------------------------- |
-| `MEM/LD/XDATA`  | Load memory on the `XDATA` bus into memory at the address given by `MAR`. |
-| `MEM/OUT/XDATA` | Write the value of memory at address given by `MAR` onto the `XDATA` bus. |
+| `MEM/LD/XDATA`  | Load the value on the `XDATA` bus into memory at the address given on the `XADDR` bus. |
+| `MEM/OUT/XDATA` | Write the value in memory at the address on the `XADDR` bus onto the `XDATA` bus. |
 | `IR/LD/XDATA`   | Load `IR` from the `XDATA` bus.                                           |
 | `MBR/LD/XDATA`  | Load `MBR` from the `XDATA` bus.                                          |
 | `MBR/OUT/XDATA` | Write `MBR` onto the `XDATA` bus.                                         |
@@ -205,20 +213,20 @@ ALUOP/3
 
 As follows:
 
-| ALU/OP/* | Meaning |
-| -------- | ------- |
-| `0000`   | AND     |
-| `0001`   | OR      |
-| `0010`   | NOT     |
-| `0011`   | XOR     |
-| `0100`   | ADD     |
-| `0101`   | SUB     |
-| `0110`   | INC     |
-| `0111`   | DEC     |
-| `1000`   | SHIFT-R |
-| `1001`   | SHIFT-L |
-| `1010`   | ROT-R   |
-| `1011`   | ROT-L   |
+| ALU/OP/* | Meaning      |
+| -------- | ------------ |
+| `0000`   | And          |
+| `0001`   | Or           |
+| `0010`   | Not          |
+| `0011`   | Xor          |
+| `0100`   | Add          |
+| `0101`   | Sub          |
+| `0110`   | Inc          |
+| `0111`   | Dec          |
+| `1000`   | Shift right  |
+| `1001`   | Shift left   |
+| `1010`   | Rotate right |
+| `1011`   | Rotate left  |
         
 ### Stack Pointer
 
@@ -227,7 +235,7 @@ As follows:
 | `S/INC`       | Increment `S`.                                             |
 | `S/DEC`       | Decrement `S`.                                             |
 | `S/LD/CDATA`  | Load `S` from the `CDATA` bus.                             |
-| `S/OUT/CDATA` | Write `S` to the `CDATA` bus.                              |
+| `S/OUT/CDATA` | Write `S` (LSB) to the `CDATA` bus.                              |
 | `S/OUT/CADDR` | Write `S` to the `CADDR` bus (high byte is always `0x01`). |
 
 ### Control Unit
@@ -249,7 +257,7 @@ Where:
 | ----------- | ----------------------------------------------------------------------- |
 | `CPU/RESET` | Reset to the CPU. `PC` will be set to the reset vector.                 |
 | `CPU/HALT`  | Halt the CPU                                                            |
-| `CPU/IRQ`   | Flag a `IRQ/BRK` to the CPU - `PC` will be set to the `IRQ/BRK` vector. |
+| `CPU/IRQ`   | Flag a `IRQ` to the CPU - `PC` will be set to the `IRQ/BRK` vector. |
 
 ## Inputs
 

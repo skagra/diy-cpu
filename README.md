@@ -13,9 +13,9 @@ This project is a learning exercise in digital electronics, with goals to:
 
 # Status
 
-The CPU is approaching feature completeness in the digital circuit simulator.  
+The CPU is approaching feature completeness in the digital circuit simulator.  It is able to execute most 6502 machine code programs.
 
-The following is still to do:
+The following are still to do:
 
-* BCD mode and `D` flag
+* BCD mode and `D` flag.
 * `B` Flag 
