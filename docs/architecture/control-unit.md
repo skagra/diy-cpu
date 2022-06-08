@@ -6,9 +6,9 @@ The control unit governs the operation of the CPU via an array of control lines.
 
 Execution of a machine code instruction is divided into the following µcode phases:
 
-* *p0 Fetch* - The opcode at the address given by the `PC` is fetched from memory into the `MBR`.
-* *p1 Addressing Mode* - According to the opcode's [addressing mode](addressing-modes.md) (e.g. immediate), µcode is executed to read any arguments from memory concluding with the resolved address of the actual operand in the `MAR`.
-* *p2 OpCode* - According to the opcode (e.g. `LDA`), µcode is executed to carry out the appropriate action (e.g. to load a value into `A`). 
+* *p0 Fetch* - The machine code instruction at the address given by the `PC` is fetched from memory into the `IR`.
+* *p1 Addressing Mode* - According to the machine code instruction's [addressing mode](addressing-modes.md) (e.g. immediate), µcode is executed to read any arguments from memory concluding with the resolved address of the actual operand in the `MAR`.
+* *p2 OpCode* - According to the machine code instruction (e.g. `LDA`), µcode is executed to carry out the appropriate action (e.g. to load a value into `A`). 
 
 The control unit has the following components:
 
@@ -21,16 +21,16 @@ The control unit has the following components:
   * `p0 (Fetch)` Register - The address of `p0` µcode.
   * `MODEADDR` - The address of the µcode routine associated with the addressing mode of current machine code instruction.
   * `OPCDOEADDR` - The address of the µcode routine associated with the current machine code instruction.
-  * `UPARAM` - A sixteen bit operand that forms part of each µcode instruction.  Typically it is used to hold the target address of µcode jumps (`uJMP`, `uNJMP`, `uVJMP`, `uZJMP`, `uCJMP`).
+  * `UPARAM` - A optional sixteen bit operand that forms part of each µcode instruction.  Typically it is used to hold the target address of µcode jumps (`uJMP`, `uNJMP`, `uVJMP`, `uZJMP`, `uCJMP`).
   * `IRQ uCode` Register - Contains the address of µcode triggered via an `IRQ`.
 
-  Selection logic picks from the above according to the values of the following bits in the current µcode instruction `IRQ`, `uP0`, `uP1`, `uP2`, `uJMP`, `uNJMP`, `uVJMP`, `uZJMP`, `uCJMP`, `uJMPINV`, `N`, `V`, `I`, `Z`  and `C`.  These are all described below.
+  Selection logic picks from the above according to the values of the following bits in the current µcode instruction `IRQ`, `uP0`, `uP1`, `uP2`, `uJMP`, `uNJMP`, `uVJMP`, `uZJMP`, `uCJMP`, `uJMPINV` and the values of the `N`, `V`, `I`, `Z`  and `C` inputs.  These are all described below.
 
 * `p0 (Fetch)` Register - Contains the address of `p0` µcode.   Its value is populated via µcode during CPU initialization.
 
 * `IRQ uCode` Register - Contains the address of µcode to run when an interrupt is signalled.  Its value is populated via µcode during CPU initialization.
 
-* µcode ROMs `uCode0` -> `uCode1`.  The word defining each µcode instruction is divided across the µcode ROMs.  The address of the current µcode instruction is presented to these ROMs to read a µcode instruction.  The act of reading a µcode word sets the control lines it defines.  See below for further details.
+* µcode ROMs `uCode0` -> `uCode5`.  The word defining each µcode instruction is divided across the µcode ROMs.  The address of the current µcode instruction is presented to these ROMs to read a µcode instruction.  The act of reading a µcode word sets the control lines it defines.  See below for further details.
 
 * `CAR` Adder - Used to calculate the address of the subsequent µcode instruction (`CAR+1`).
 
@@ -53,7 +53,7 @@ Natural order                    uROM (little Endian) order
 S9 S8 S7 S6 S5 S4 S3 S2 A1 A0 => AO A1 S2 S3 S4 S5 S6 S7 S8 S9 
 ```
 
-Each `S` bit corresponds either to a control line to set or to an internal control condition.  A complete µcode instruction is the `or` of these bits together with the optional the `A` parameter bytes.
+Each `S` bit corresponds either to a control line or to an internal control condition.  A complete µcode instruction is the `or` of these bits together with the optional the `A` parameter bytes.
 
 ## Microinstructions & Control Lines
 

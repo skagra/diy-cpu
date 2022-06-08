@@ -4,7 +4,7 @@ The instruction decoder processes machine code instructions to locate their asso
 
 ![Instruction Decoder](instruction-decoder.png)
 
-Each machine code instruction is presented as a memory address to a decoder ROM.  The decoder ROM is programmed such that the data at this memory location contains the address of the associated µcode routine in the [Control Unit](control-unit.md).  
+A machine code instruction is presented as a memory address to a decoder ROM.  The decoder ROM is programmed such that the data at this memory location contains the address of the associated µcode routine in the [Control Unit](control-unit.md).  
 
 There are two decoder ROMs:
 

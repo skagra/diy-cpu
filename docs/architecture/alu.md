@@ -1,6 +1,6 @@
 # ALU
 
-The *Arithmetic Logic Unit* (ALU) provides arithmetic operations, logical operations and shift operations to the CPU.
+The *Arithmetic Logic Unit* (ALU) provides arithmetic operations, logical operations,  shift and rotate operations to the CPU.
 
 The ALU is divided into three modules:
 
@@ -91,7 +91,7 @@ The *ALU-Proper* implements arithmetic and logical operations for the CPU.  It i
 
 # Shifter
 
-The *Shifter* implements shift and rotation operations for the CPU.  It is purely combinational logic.
+The *Shifter* implements shift and rotate operations for the CPU.  It is purely combinational logic.
 
 ![Shifter](shifter.png) 
 
