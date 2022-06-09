@@ -6516,7 +6516,7 @@ must be set for correct substraction</string>
       <elementAttributes>
         <entry>
           <string>Label</string>
-          <string>Add</string>
+          <string>ADD</string>
         </entry>
         <entry>
           <string>Testdata</string>
@@ -6556,7 +6556,7 @@ must be set for correct substraction</string>
           </testData>
         </entry>
       </elementAttributes>
-      <pos x="-11480" y="-2860"/>
+      <pos x="-11480" y="-2880"/>
     </visualElement>
     <visualElement>
       <elementName>Testcase</elementName>
@@ -6577,7 +6577,7 @@ must be set for correct substraction</string>
           </testData>
         </entry>
       </elementAttributes>
-      <pos x="-11360" y="-2860"/>
+      <pos x="-11340" y="-2880"/>
     </visualElement>
     <visualElement>
       <elementName>Tunnel</elementName>
@@ -6607,7 +6607,92 @@ must be set for correct substraction</string>
           </testData>
         </entry>
       </elementAttributes>
-      <pos x="-11480" y="-3140"/>
+      <pos x="-11480" y="-3120"/>
+    </visualElement>
+    <visualElement>
+      <elementName>Testcase</elementName>
+      <elementAttributes>
+        <entry>
+          <string>Label</string>
+          <string>OR</string>
+        </entry>
+        <entry>
+          <string>Testdata</string>
+          <testData>
+            <dataString>A    B    OP   CIN OUT  COUT VOUT
+0x00 0x00 0x01 0   0    X    X
+0x00 0x00 0x01 1   0    X    X
+0x2E 0xAC 0x01 0   0xAE X    X
+0x2E 0xAC 0x01 1   0xAE X    X</dataString>
+          </testData>
+        </entry>
+      </elementAttributes>
+      <pos x="-11340" y="-3120"/>
+    </visualElement>
+    <visualElement>
+      <elementName>Testcase</elementName>
+      <elementAttributes>
+        <entry>
+          <string>Label</string>
+          <string>NOT</string>
+        </entry>
+        <entry>
+          <string>Testdata</string>
+          <testData>
+            <dataString>A    B    OP  CIN OUT  COUT VOUT
+0x00 0x00 0x2 0   0xFF X    X
+0x00 0x00 0x2 1   0xFF X    X
+0xBE 0xC5 0x2 0   0x41 X    X
+0xBE 0xAC 0x2 1   0x41 X    X</dataString>
+          </testData>
+        </entry>
+      </elementAttributes>
+      <pos x="-11480" y="-3040"/>
+    </visualElement>
+    <visualElement>
+      <elementName>Testcase</elementName>
+      <elementAttributes>
+        <entry>
+          <string>Label</string>
+          <string>XOR</string>
+        </entry>
+        <entry>
+          <string>Testdata</string>
+          <testData>
+            <dataString>A    B    OP  CIN OUT  COUT VOUT
+0x00 0x00 0x3 0   0    X    X
+0x00 0x00 0x3 1   0    X    X
+0xBE 0xAC 0x3 0   0x12 X    X
+0xBE 0xAC 0x3 1   0x12 X    X</dataString>
+          </testData>
+        </entry>
+      </elementAttributes>
+      <pos x="-11340" y="-3040"/>
+    </visualElement>
+    <visualElement>
+      <elementName>Testcase</elementName>
+      <elementAttributes>
+        <entry>
+          <string>Label</string>
+          <string>SUB TODO</string>
+        </entry>
+        <entry>
+          <string>Testdata</string>
+          <testData>
+            <dataString>A    B    OP  CIN OUT  COUT VOUT
+0x01 0x02 0x4 0   0x03 0    0
+0xA0 0x12 0x4 0   0xB2 0    0
+0xCC 0xDE 0x4 0   0xAA 1    0
+0xCC 0xBB 0x4 0   0x87 1    0
+# Two positives creating a negative
+0x50 0x55 0x4 0   0xA5 0    1
+# Two negatives create a positive
+0xF0 0x80 0x4 0   0x70 1    1
+</dataString>
+          </testData>
+        </entry>
+      </elementAttributes>
+      <pos x="-11340" y="-2960"/>
     </visualElement>
   </visualElements>
   <wires>
