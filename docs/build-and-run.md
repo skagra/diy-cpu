@@ -3,7 +3,7 @@
 The project has the following structure:
 
 * `asminclude` - Machine code include files.
-* `digital` - The CPU as models for the `Digital` circuit simulator.
+* `digital/generic` - The CPU as models for the `Digital` circuit simulator.
 * `docs` - Documentation.
 * `examples` - Example machine code used to exercise the CPU.
 * `microasm` - The µcode assembler.
@@ -56,7 +56,7 @@ The build process requires:
 
 1. Configure the `digital` circuit simulator to use the built µcode and decoder ROMs.
 
-   * Run `digital` and open `digital\CPU.dig`.
+   * Run `digital` and open `digital/generic/CPU.dig`.
 
    * Configure the decoder ROMs
       * Right click on the *Instruction Decoder* and select *Open Circuit*.
