@@ -8,4 +8,4 @@ The following are still to do:
 * BCD mode and `D` flag.
 * `B` Flag 
 
-Work has started converting the generic design to 74xx ICs.  So far just the ALU has been completed.
+Work has started converting the generic design to 74xx ICs.  So far the ALU and Register have been completed.
