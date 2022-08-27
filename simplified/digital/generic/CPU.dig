@@ -3,10 +3,6 @@
   <version>1</version>
   <attributes>
     <entry>
-      <string>preloadProgram</string>
-      <boolean>true</boolean>
-    </entry>
-    <entry>
       <string>preloadProgramFile</string>
       <file>E:\Development\diy-cpu\examples\bin\RAM.bin</file>
     </entry>
@@ -2351,7 +2347,7 @@
         </entry>
         <entry>
           <string>lastDataFile</string>
-          <file>E:\Development\diy-cpu\os\bin\os.bin</file>
+          <file>E:\Development\diy-cpu\simplified\examples\bin\simple.bin</file>
         </entry>
         <entry>
           <string>autoReload</string>
@@ -3266,7 +3262,7 @@
         </entry>
         <entry>
           <string>NetName</string>
-          <string>CS1</string>
+          <string>CS0</string>
         </entry>
       </elementAttributes>
       <pos x="120" y="-100"/>
@@ -3289,11 +3285,6 @@
         </entry>
       </elementAttributes>
       <pos x="120" y="-60"/>
-    </visualElement>
-    <visualElement>
-      <elementName>Not</elementName>
-      <elementAttributes/>
-      <pos x="140" y="-60"/>
     </visualElement>
     <visualElement>
       <elementName>Tunnel</elementName>
@@ -3572,7 +3563,7 @@
       <elementAttributes>
         <entry>
           <string>rotation</string>
-          <rotation reference="../../../../visualElement[293]/elementAttributes/entry/rotation"/>
+          <rotation reference="../../../../visualElement[292]/elementAttributes/entry/rotation"/>
         </entry>
         <entry>
           <string>NetName</string>
@@ -3645,7 +3636,7 @@
         </entry>
         <entry>
           <string>Color</string>
-          <awt-color reference="../../../../visualElement[297]/elementAttributes/entry[2]/awt-color"/>
+          <awt-color reference="../../../../visualElement[296]/elementAttributes/entry[2]/awt-color"/>
         </entry>
         <entry>
           <string>Label</string>
@@ -3663,7 +3654,7 @@
         </entry>
         <entry>
           <string>Color</string>
-          <awt-color reference="../../../../visualElement[297]/elementAttributes/entry[2]/awt-color"/>
+          <awt-color reference="../../../../visualElement[296]/elementAttributes/entry[2]/awt-color"/>
         </entry>
         <entry>
           <string>Label</string>
@@ -3681,7 +3672,7 @@
         </entry>
         <entry>
           <string>Color</string>
-          <awt-color reference="../../../../visualElement[297]/elementAttributes/entry[2]/awt-color"/>
+          <awt-color reference="../../../../visualElement[296]/elementAttributes/entry[2]/awt-color"/>
         </entry>
         <entry>
           <string>Label</string>
@@ -4083,7 +4074,7 @@
         </entry>
         <entry>
           <string>Color</string>
-          <awt-color reference="../../../../visualElement[332]/elementAttributes/entry[2]/awt-color"/>
+          <awt-color reference="../../../../visualElement[331]/elementAttributes/entry[2]/awt-color"/>
         </entry>
         <entry>
           <string>Label</string>
@@ -4101,7 +4092,7 @@
         </entry>
         <entry>
           <string>Color</string>
-          <awt-color reference="../../../../visualElement[332]/elementAttributes/entry[2]/awt-color"/>
+          <awt-color reference="../../../../visualElement[331]/elementAttributes/entry[2]/awt-color"/>
         </entry>
         <entry>
           <string>Label</string>
@@ -4129,7 +4120,7 @@
         </entry>
         <entry>
           <string>Color</string>
-          <awt-color reference="../../../../visualElement[332]/elementAttributes/entry[2]/awt-color"/>
+          <awt-color reference="../../../../visualElement[331]/elementAttributes/entry[2]/awt-color"/>
         </entry>
         <entry>
           <string>Label</string>
@@ -4147,7 +4138,7 @@
         </entry>
         <entry>
           <string>Color</string>
-          <awt-color reference="../../../../visualElement[332]/elementAttributes/entry[2]/awt-color"/>
+          <awt-color reference="../../../../visualElement[331]/elementAttributes/entry[2]/awt-color"/>
         </entry>
         <entry>
           <string>Label</string>
@@ -4274,7 +4265,7 @@
       <elementAttributes>
         <entry>
           <string>rotation</string>
-          <rotation reference="../../../../visualElement[346]/elementAttributes/entry/rotation"/>
+          <rotation reference="../../../../visualElement[345]/elementAttributes/entry/rotation"/>
         </entry>
         <entry>
           <string>NetName</string>
@@ -4804,12 +4795,8 @@
       <p2 x="-220" y="-60"/>
     </wire>
     <wire>
-      <p1 x="180" y="-60"/>
-      <p2 x="200" y="-60"/>
-    </wire>
-    <wire>
       <p1 x="120" y="-60"/>
-      <p2 x="140" y="-60"/>
+      <p2 x="200" y="-60"/>
     </wire>
     <wire>
       <p1 x="-1100" y="-60"/>

@@ -17,21 +17,35 @@
             Console.WriteLine("--------");
             Console.WriteLine();
 
-            if (args.Length != 2)
+            if (args.Length != 6)
             {
-                Console.WriteLine("Usage: microasm <source-directory> <output-directory>");
+                Console.WriteLine("Usage: microasm <flags-bytes> <ucode-addr-bytes> <ucode-rom-word-size-bytes> <ucode-rom-addr-width-bytes> <source-directory> <output-directory>");
                 return;
             }
 
-            var inputDir = args[0];
-            var outputDir = args[1];
+            var flagsBytesString = args[0];
+            var uCodeAddrBytesString = args[1];
+            var uCodeROMWordSizeBytesString = args[2];
+            var uCodeROMAddrWidthBytesString = args[3];
+            var inputDir = args[4];
+            var outputDir = args[5];
 
+            Console.WriteLine($"uCode control lines: '{flagsBytesString}' bytes");
+            Console.WriteLine($"uCode address width: '{uCodeAddrBytesString}' bytes");
+            Console.WriteLine($"uCode ROMs data width: '{uCodeROMWordSizeBytesString}' bytes");
+            Console.WriteLine($"uCode ROMs address width: '{uCodeROMAddrWidthBytesString}' bytes");
             Console.WriteLine($"Input dir: '{Path.GetFullPath(inputDir)}'");
             Console.WriteLine($"Output dir: '{Path.GetFullPath(outputDir)}'");
             Console.WriteLine();
 
             try
             {
+
+                var flagsBytes = int.Parse(flagsBytesString);
+                var uCodeAddrBytes = int.Parse(uCodeAddrBytesString);
+                var uCodeROMWordSizeBytes = int.Parse(uCodeROMWordSizeBytesString);
+                var uCodeROMAddrWidthBytes = int.Parse(uCodeROMWordSizeBytesString);
+
                 if (!Directory.Exists(outputDir))
                 {
                     Directory.CreateDirectory(outputDir);
@@ -40,10 +54,13 @@
                 var mCodeOpDecoderDefinition = new DecoderRom(Path.Join(inputDir, MCODE_OP_DECODER_DEFINITION));
                 var mCodeModeDecoderDefinition = new DecoderRom(Path.Join(inputDir, MCODE_MODE_DECODER_DEFINITION));
 
-                var uCtrlDefinition = new MicroCtrl(Path.Join(inputDir, UCTRL_DEFINITION));
-                var uOpsDefinition = new MicroOps(uCtrlDefinition, Path.Join(inputDir, UOPS_DEFINITION));
+                var uCtrlDefinition = new MicroCtrl(Path.Join(inputDir, UCTRL_DEFINITION), flagsBytes, uCodeAddrBytes);
+                var uOpsDefinition = new MicroOps(uCtrlDefinition, Path.Join(inputDir, UOPS_DEFINITION), flagsBytes + uCodeAddrBytes);
 
-                var microAsm = new MicroCode(mCodeOpDecoderDefinition, mCodeModeDecoderDefinition, uCtrlDefinition, uOpsDefinition, Path.Join(inputDir, UCODE_DEFINITION));
+                var microAsm = new MicroCode(mCodeOpDecoderDefinition, mCodeModeDecoderDefinition,
+                    uCtrlDefinition, uOpsDefinition,
+                    Path.Join(inputDir, UCODE_DEFINITION),
+                    flagsBytes, uCodeAddrBytes, uCodeROMWordSizeBytes, uCodeROMAddrWidthBytes);
 
                 Console.WriteLine("mCode Decoder");
                 Console.WriteLine("-------------");
@@ -105,7 +122,8 @@
             }
             catch (Exception e)
             {
-                Console.WriteLine(e.Message);
+                //Console.WriteLine(e.Message);
+                throw;
             }
         }
     }

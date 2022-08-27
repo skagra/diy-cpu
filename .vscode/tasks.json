@@ -208,6 +208,22 @@
          "problemMatcher": []
       },
       {
+         "label": "assemble-simple",
+         "command": "dasm",
+         "type": "process",
+         "options": {
+            "cwd": "${workspaceFolder}/simplified/examples"
+         },
+         "args": [
+            "simple.asm",
+            "-f3",
+            "-obin/simple.bin",
+            "-lbin/simple.txt"
+         ],
+         "dependsOn": [],
+         "problemMatcher": []
+      },
+      {
          "label": "publish",
          "command": "dotnet",
          "type": "process",

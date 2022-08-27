@@ -1,0 +1,9 @@
+// Definition of microcode operations in terms of control flags
+
+// Send data to RAM
+MBR<-MEM        MEM/OUT/XDATA | MBR/LD/XDATA
+MAR<-PC         PC/OUT/CADDR | MAR/LD/CADDR
+PC-INC          PC/INC                                                             
+IR<-MEM         MEM/OUT/XDATA | IR/LD/XDATA
+A<-MBR          MBR/OUT/CDATA | A/LD/CDATA
+

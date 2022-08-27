@@ -1,21 +1,11 @@
 ﻿namespace MicroAsm
 {
-    using static MicroAsmConstants;
     using static MicroAsmFormatting;
 
     public class MicroCode
     {
         // Size of the output ROM in words
-        private const int WORD_COUNT = 0x10000;
-
-        // Size of the output ROM in bytes
-        private const int TOTAL_ROM_SIZE_BYTES = WORD_SIZE_IN_BYTES * WORD_COUNT;
-
-        // Width in bytes of data in each output ROM file
-        private const int ROM_DATA_WIDTH_BYTES = 2;
-
-        // Size of each ROM
-        private const int ROM_SIZE_BYTES = ROM_DATA_WIDTH_BYTES * 65536;
+        private const int WORD_COUNT = 0x10000; // 64K
 
         // Identifies uCode implementing a machine code op
         private const string OPCODE = ".opcode";
@@ -47,17 +37,42 @@
 
         private readonly List<string> _outputLog = new();
 
-        private readonly byte[] _ROM = new byte[TOTAL_ROM_SIZE_BYTES];
+        private readonly byte[] _ROM;
 
         private int _romAddress = 0;
 
         private readonly string _sourceFile;
 
+        // Bytes in each uCode instruction
+        private readonly int _uCodeFlagsBytes;
+
+        // Bytes in address in uCode ROM
+        private readonly int _uCodeAddrBytes;
+
+        // Total width of a word across the uCode ROMs (_flagsBytes+_uCodeAddrBytes)
+        private readonly int _uCodeWordSizeBytes;
+
+        // Size of the output ROM in bytes (this will be split across multiple ROM files)
+        // (_wordSizeBytes * WORD_COUNT)
+        private readonly int _compositeROMSizeBytes;
+
+        // Width in address in each output ROM file
+        private readonly int _uCodeROMWordSizeBytes;
+
+        // Size of each ROM
+        private readonly int _individualROMSizeBytes;
+
+        private readonly int _uCodeROMAddrWidthBytes;
+
         public MicroCode(DecoderRom opCodeMappingROM,
             DecoderRom modeMappingROM,
             MicroCtrl microCtrl,
             MicroOps microOps,
-            string sourceFile)
+            string sourceFile,
+            int uCodeFlagsBytes, // bytes in flags (control lines)
+            int uCodeAddrBytes, // bytes in uCodeAddresses
+            int uCodeROMWordSizeBytes,
+            int uCodeROMAddrWidthBytes) // Width of word in each ROM - slicing up the output
         {
 
             _opCodeMappingROM = opCodeMappingROM;
@@ -65,6 +80,17 @@
             _sourceFile = sourceFile;
             _microCtrl = microCtrl;
             _microOps = microOps;
+            _uCodeROMWordSizeBytes = uCodeROMWordSizeBytes;
+            _uCodeROMAddrWidthBytes = uCodeROMAddrWidthBytes;
+
+            _uCodeFlagsBytes = uCodeFlagsBytes;
+            _uCodeAddrBytes = uCodeAddrBytes;
+            _uCodeWordSizeBytes = uCodeFlagsBytes + uCodeAddrBytes;
+
+            _compositeROMSizeBytes = 1280; // _uCodeWordSizeBytes * WORD_COUNT;  // TODO
+            _ROM = new byte[_compositeROMSizeBytes];
+
+            _individualROMSizeBytes = (int)(Math.Pow(2, uCodeROMAddrWidthBytes * 8)) * uCodeROMWordSizeBytes; // TODO: Double conversion is this safe!
 
             Parse();
         }
@@ -95,8 +121,7 @@
 
             if (!(_microCtrl.TryGetValue(symbol, out result) ||
                   _microOps.TryGetValue(symbol, out result) ||
-                  _labelSymbols.TryGetValue(symbol, out result))) // ||
-                                                                  //  _codeSymbols.TryGetValue(symbol, out result)))
+                  _labelSymbols.TryGetValue(symbol, out result)))
             {
                 throw new MicroAsmException($"Symbol not found '{symbol}'", line, lineNumber, _sourceFile);
             }
@@ -146,7 +171,6 @@
             }
         }
 
-        // TODO: Assumes a 16 bit address space
         private void ParseCodeLinePass0(string line, int lineNumber)
         {
             if (line.StartsWith(LABEL))
@@ -157,10 +181,12 @@
                 var symbol = labelParts[1];
                 try
                 {
-                    var addressWord = new byte[WORD_SIZE_IN_BYTES];
-                    addressWord[0] = (byte)(_romAddress & 0xFF); // Low byte
-                    addressWord[1] = (byte)((_romAddress >> 8) & 0xFF); // High
-                    for (var offset = 2; offset < WORD_SIZE_IN_BYTES; offset++)
+                    var addressWord = new byte[_uCodeWordSizeBytes];
+                    for (int addrB = 0; addrB < _uCodeAddrBytes; addrB++)
+                    {
+                        addressWord[addrB] = (byte)((_romAddress >> (8 * addrB)) & 0xFF);
+                    }
+                    for (var offset = _uCodeAddrBytes; offset < _uCodeWordSizeBytes; offset++)
                     {
                         addressWord[offset] = 0;
                     }
@@ -197,7 +223,7 @@
             {
                 logLine += $"\n{' ',38}";
             }
-            logLine += $"{CreateByteArrayString(_ROM[byteRomAddress..(byteRomAddress + WORD_SIZE_IN_BYTES)])}";
+            logLine += $"{CreateByteArrayString(_ROM[byteRomAddress..(byteRomAddress + _uCodeWordSizeBytes)])}";
             return logLine;
         }
 
@@ -217,15 +243,15 @@
                 {
                     var codeParts = line.Split(CODE_SPLIT_CHARS, StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
 
-                    var value = new byte[WORD_SIZE_IN_BYTES];
+                    var value = new byte[_uCodeWordSizeBytes];
                     foreach (var codePart in codeParts)
                     {
                         Or(ResolveSymbol(codePart, line, lineNumber), value);
                     }
 
-                    int byteRomAddress = _romAddress * WORD_SIZE_IN_BYTES;
-                    var outputLogByteArray = new byte[WORD_SIZE_IN_BYTES];
-                    for (var offset = 0; offset < WORD_SIZE_IN_BYTES; offset++)
+                    int byteRomAddress = _romAddress * _uCodeWordSizeBytes;
+                    var outputLogByteArray = new byte[_uCodeWordSizeBytes];
+                    for (var offset = 0; offset < _uCodeWordSizeBytes; offset++)
                     {
                         _ROM[byteRomAddress + offset] = value[offset];
                         outputLogByteArray[offset] = value[offset];
@@ -270,7 +296,7 @@
         // TODO: Does not allow for number of bytes per word being smaller than width of ROM
         public void WriteUCodeRom(string romFile)
         {
-            int numROMFiles = (TOTAL_ROM_SIZE_BYTES + ROM_SIZE_BYTES - 1) / ROM_SIZE_BYTES;
+            int numROMFiles = (_compositeROMSizeBytes + _individualROMSizeBytes - 1) / _individualROMSizeBytes;
             var writers = new BinaryWriter[numROMFiles];
             for (var romIndex = 0; romIndex < numROMFiles; romIndex++)
             {
@@ -278,11 +304,11 @@
             }
 
             int byteIndex = 0;
-            while (byteIndex < TOTAL_ROM_SIZE_BYTES)
+            while (byteIndex < _compositeROMSizeBytes)
             {
-                for (var romIndex = 0; romIndex < numROMFiles && byteIndex < TOTAL_ROM_SIZE_BYTES; romIndex++)
+                for (var romIndex = 0; romIndex < numROMFiles && byteIndex < _compositeROMSizeBytes; romIndex++)
                 {
-                    for (int byteInRom = 0; byteInRom < ROM_DATA_WIDTH_BYTES; byteInRom++)
+                    for (int byteInRom = 0; byteInRom < _uCodeROMWordSizeBytes; byteInRom++)
                     {
                         writers[romIndex].Write(_ROM[byteIndex]);
                         byteIndex++;
@@ -319,13 +345,21 @@
                     if (symbol != null)
                     {
                         int addr = symbolAddresses[symbol];
-                        writer.Write((byte)(addr & 0xFF));
-                        writer.Write((byte)((addr >> 8) & 0xFF));
+                        for (var b = 0; b < _uCodeAddrBytes; b++)
+                        {
+                            if (b != 0)
+                            {
+                                addr >>= 8;
+                            }
+                            writer.Write((byte)(addr & 0xFF));
+                        }
                     }
                     else
                     {
-                        writer.Write((byte)0xFF); // Flags an error condition
-                        writer.Write((byte)0xFF);
+                        for (var b = 0; b < _uCodeAddrBytes; b++)
+                        {
+                            writer.Write((byte)0xFF); // Flags an error condition
+                        }
                     }
                 }
                 catch (KeyNotFoundException)

@@ -42,7 +42,7 @@
         </entry>
         <entry>
           <string>lastDataFile</string>
-          <file>E:\Development\diy-cpu\uCode\bin\uROM-0.bin</file>
+          <file>E:\Development\diy-cpu\simplified\uCode\bin\uROM-0.bin</file>
         </entry>
         <entry>
           <string>autoReload</string>
@@ -628,7 +628,7 @@
         </entry>
         <entry>
           <string>lastDataFile</string>
-          <file>E:\Development\diy-cpu\uCode\bin\uROM-1.bin</file>
+          <file>E:\Development\diy-cpu\simplified\uCode\bin\uROM-1.bin</file>
         </entry>
         <entry>
           <string>autoReload</string>
@@ -662,7 +662,7 @@
         </entry>
         <entry>
           <string>lastDataFile</string>
-          <file>E:\Development\diy-cpu\uCode\bin\uROM-2.bin</file>
+          <file>E:\Development\diy-cpu\simplified\uCode\bin\uROM-2.bin</file>
         </entry>
         <entry>
           <string>autoReload</string>
@@ -696,7 +696,7 @@
         </entry>
         <entry>
           <string>lastDataFile</string>
-          <file>E:\Development\diy-cpu\uCode\bin\uROM-3.bin</file>
+          <file>E:\Development\diy-cpu\simplified\uCode\bin\uROM-3.bin</file>
         </entry>
         <entry>
           <string>autoReload</string>
@@ -774,7 +774,7 @@
         </entry>
         <entry>
           <string>lastDataFile</string>
-          <file>E:\Development\diy-cpu\uCode\bin\uROM-4.bin</file>
+          <file>E:\Development\diy-cpu\simplified\uCode\bin\uROM-4.bin</file>
         </entry>
         <entry>
           <string>autoReload</string>
@@ -1002,44 +1002,6 @@
         </entry>
       </elementAttributes>
       <pos x="-860" y="240"/>
-    </visualElement>
-    <visualElement>
-      <elementName>Register</elementName>
-      <elementAttributes>
-        <entry>
-          <string>rotation</string>
-          <rotation rotation="2"/>
-        </entry>
-        <entry>
-          <string>Label</string>
-          <string>p0 (Fetch)</string>
-        </entry>
-        <entry>
-          <string>Bits</string>
-          <int>8</int>
-        </entry>
-      </elementAttributes>
-      <pos x="980" y="-120"/>
-    </visualElement>
-    <visualElement>
-      <elementName>Tunnel</elementName>
-      <elementAttributes>
-        <entry>
-          <string>NetName</string>
-          <string>CLOCK</string>
-        </entry>
-      </elementAttributes>
-      <pos x="1000" y="-140"/>
-    </visualElement>
-    <visualElement>
-      <elementName>Tunnel</elementName>
-      <elementAttributes>
-        <entry>
-          <string>NetName</string>
-          <string>UPARAM</string>
-        </entry>
-      </elementAttributes>
-      <pos x="1000" y="-120"/>
     </visualElement>
     <visualElement>
       <elementName>Tunnel</elementName>
@@ -1714,16 +1676,6 @@
       <pos x="-740" y="120"/>
     </visualElement>
     <visualElement>
-      <elementName>Tunnel</elementName>
-      <elementAttributes>
-        <entry>
-          <string>NetName</string>
-          <string>uP0INIT</string>
-        </entry>
-      </elementAttributes>
-      <pos x="1000" y="-160"/>
-    </visualElement>
-    <visualElement>
       <elementName>Splitter</elementName>
       <elementAttributes>
         <entry>
@@ -2039,7 +1991,7 @@
         </entry>
         <entry>
           <string>Color</string>
-          <awt-color reference="../../../../visualElement[142]/elementAttributes/entry[2]/awt-color"/>
+          <awt-color reference="../../../../visualElement[138]/elementAttributes/entry[2]/awt-color"/>
         </entry>
         <entry>
           <string>Label</string>
@@ -2067,7 +2019,7 @@
         </entry>
         <entry>
           <string>Color</string>
-          <awt-color reference="../../../../visualElement[142]/elementAttributes/entry[2]/awt-color"/>
+          <awt-color reference="../../../../visualElement[138]/elementAttributes/entry[2]/awt-color"/>
         </entry>
         <entry>
           <string>Label</string>
@@ -2085,7 +2037,7 @@
         </entry>
         <entry>
           <string>Color</string>
-          <awt-color reference="../../../../visualElement[142]/elementAttributes/entry[2]/awt-color"/>
+          <awt-color reference="../../../../visualElement[138]/elementAttributes/entry[2]/awt-color"/>
         </entry>
         <entry>
           <string>Label</string>
@@ -2113,7 +2065,7 @@
         </entry>
         <entry>
           <string>Color</string>
-          <awt-color reference="../../../../visualElement[142]/elementAttributes/entry[2]/awt-color"/>
+          <awt-color reference="../../../../visualElement[138]/elementAttributes/entry[2]/awt-color"/>
         </entry>
         <entry>
           <string>Label</string>
@@ -2671,7 +2623,7 @@
       <elementAttributes>
         <entry>
           <string>rotation</string>
-          <rotation reference="../../../../visualElement[187]/elementAttributes/entry/rotation"/>
+          <rotation reference="../../../../visualElement[183]/elementAttributes/entry/rotation"/>
         </entry>
         <entry>
           <string>NetName</string>
@@ -2699,7 +2651,7 @@
       <elementAttributes>
         <entry>
           <string>rotation</string>
-          <rotation reference="../../../../visualElement[189]/elementAttributes/entry/rotation"/>
+          <rotation reference="../../../../visualElement[185]/elementAttributes/entry/rotation"/>
         </entry>
         <entry>
           <string>NetName</string>
@@ -2713,7 +2665,7 @@
       <elementAttributes>
         <entry>
           <string>rotation</string>
-          <rotation reference="../../../../visualElement[189]/elementAttributes/entry/rotation"/>
+          <rotation reference="../../../../visualElement[185]/elementAttributes/entry/rotation"/>
         </entry>
         <entry>
           <string>NetName</string>
@@ -2764,6 +2716,20 @@
       </elementAttributes>
       <pos x="-800" y="-680"/>
     </visualElement>
+    <visualElement>
+      <elementName>Const</elementName>
+      <elementAttributes>
+        <entry>
+          <string>Value</string>
+          <long>0</long>
+        </entry>
+        <entry>
+          <string>Bits</string>
+          <int>8</int>
+        </entry>
+      </elementAttributes>
+      <pos x="1100" y="-60"/>
+    </visualElement>
   </visualElements>
   <wires>
     <wire>
@@ -2801,14 +2767,6 @@
     <wire>
       <p1 x="560" y="-140"/>
       <p2 x="640" y="-140"/>
-    </wire>
-    <wire>
-      <p1 x="980" y="-140"/>
-      <p2 x="1000" y="-140"/>
-    </wire>
-    <wire>
-      <p1 x="880" y="-140"/>
-      <p2 x="920" y="-140"/>
     </wire>
     <wire>
       <p1 x="-760" y="-140"/>
@@ -2905,10 +2863,6 @@
     <wire>
       <p1 x="-180" y="-280"/>
       <p2 x="-160" y="-280"/>
-    </wire>
-    <wire>
-      <p1 x="980" y="-160"/>
-      <p2 x="1000" y="-160"/>
     </wire>
     <wire>
       <p1 x="80" y="-160"/>
@@ -3051,16 +3005,16 @@
       <p2 x="500" y="-440"/>
     </wire>
     <wire>
-      <p1 x="880" y="-60"/>
-      <p2 x="1120" y="-60"/>
-    </wire>
-    <wire>
       <p1 x="-760" y="-60"/>
       <p2 x="-740" y="-60"/>
     </wire>
     <wire>
       <p1 x="40" y="-60"/>
       <p2 x="60" y="-60"/>
+    </wire>
+    <wire>
+      <p1 x="1100" y="-60"/>
+      <p2 x="1120" y="-60"/>
     </wire>
     <wire>
       <p1 x="-1000" y="-700"/>
@@ -3229,10 +3183,6 @@
     <wire>
       <p1 x="-760" y="-120"/>
       <p2 x="-740" y="-120"/>
-    </wire>
-    <wire>
-      <p1 x="980" y="-120"/>
-      <p2 x="1000" y="-120"/>
     </wire>
     <wire>
       <p1 x="40" y="-120"/>
@@ -3417,10 +3367,6 @@
     <wire>
       <p1 x="-1200" y="-740"/>
       <p2 x="-1200" y="-720"/>
-    </wire>
-    <wire>
-      <p1 x="880" y="-140"/>
-      <p2 x="880" y="-60"/>
     </wire>
     <wire>
       <p1 x="880" y="320"/>

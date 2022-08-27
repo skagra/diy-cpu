@@ -1,0 +1,73 @@
+// =============================================================================
+// Init code
+// =============================================================================
+
+.label RESET
+
+// =============================================================================
+// Fetch (uP0)
+// =============================================================================
+
+.label p0
+MAR<-PC 
+PC-INC                                                      // Move the PC into MAR and increase the PC                        
+IR<-MEM                                                     // Load the current op code from memory into the IR
+uP1                                                         // Separate cycle as we don't have a handle on the op code for decoding until the previous cycle is completed
+
+// =============================================================================
+// Addressing modes (uP1) 
+// =============================================================================
+
+// Absolute 
+.mode ABS
+
+// Abs index by X 
+.mode ABSIDXX 
+
+// Abs index by Y 
+.mode ABSIDXY
+
+// Accumulator 
+.mode ACC 
+uP2 
+
+// Immediate 
+.mode IMM
+MAR<-PC | PC-INC | uP2                                               // Move the PC into MAR and jump to uP2
+
+// Implied 
+.mode IMP 
+uP2                                                                  // Jump directly to uP2
+
+// Relative 
+.mode REL
+
+                                                                                                      
+// X Indirect ADC ($44,X)
+.mode XIND
+
+// The zero page argument is added to Y to give the zero page address of the operand.  Addition wraps to zero page.  
+// Indirect Y ADC ($44),Y
+.mode INDY
+
+// Zero 
+.mode ZP
+
+// Zero index X
+.mode ZPIDXX
+
+// Zero index Y
+.mode ZPIDXY
+
+// =============================================================================
+// Op codes (uP2)
+// =============================================================================
+
+// -----------------------------------------------------------------------------
+// Register load and store
+// -----------------------------------------------------------------------------
+
+.opcode LDA
+MBR<-MEM                                                     // Read value at MAR 
+A<-MBR | PZ/LD | Z/SRC/CDATA | uP0                        // Move value into A, setting P flags as appropriate
+

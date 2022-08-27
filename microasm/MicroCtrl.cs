@@ -15,9 +15,19 @@ namespace MicroAsm
 
         private readonly string _sourceFile;
 
-        public MicroCtrl(string sourceFile)
+        private readonly int _flagsBytes;
+
+        private readonly int _uCodeAddrBytes;
+
+        private readonly int _wordSizeBytes;
+
+        public MicroCtrl(string sourceFile, int flagsBytes, int uCodeAddrBytes)
         {
             _sourceFile = sourceFile;
+            _flagsBytes = flagsBytes;
+            _uCodeAddrBytes = uCodeAddrBytes;
+            _wordSizeBytes = flagsBytes + uCodeAddrBytes;
+
             Parse();
         }
 
@@ -66,19 +76,19 @@ namespace MicroAsm
             var symbolString = flagsParts[0];
             var valueString = string.Join(' ', flagsParts[1..]).Replace(" ", "");
 
-            if (valueString.Length != FLAGS_SIZE_IN_BYTES * 8)
+            if (valueString.Length != _flagsBytes * 8)
             {
                 throw new MicroAsmException(
-                    $"Flag value must be '{FLAGS_SIZE_IN_BYTES * 8}' characters long",
+                    $"Flag value must be '{_flagsBytes * 8}' characters long",
                     line, lineNumber, _sourceFile);
             }
 
-            var value = new byte[WORD_SIZE_IN_BYTES];
-            for (var valByteIndex = 0; valByteIndex < FLAGS_SIZE_IN_BYTES; valByteIndex++)
+            var value = new byte[_wordSizeBytes];
+            for (var valByteIndex = 0; valByteIndex < _flagsBytes; valByteIndex++)
             {
                 try
                 {
-                    value[WORD_SIZE_IN_BYTES - valByteIndex - 1] = ParseBinaryByteString(
+                    value[_wordSizeBytes - valByteIndex - 1] = ParseBinaryByteString(
                        valueString.Substring(valByteIndex * 8, 8));
                 }
                 catch (Exception e)
