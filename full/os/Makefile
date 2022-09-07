@@ -3,7 +3,10 @@ include ../../build-conf/rules.mk
 
 TARGETS = bin/os.bin 
 
-all: all-asm
+all: bin all-asm
+
+bin: 
+	mkdir $(BIN)
 
 all-asm: $(TARGETS)
 	

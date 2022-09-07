@@ -5,4 +5,10 @@ TARGETS = bin/simple.bin
 
 all: all-asm
 
-all-asm: $(TARGETS)
+all-asm: bin $(TARGETS)
+
+bin: 
+	mkdir $(BIN)
+
+clean:
+	rmdir /S /Q $(BIN)
