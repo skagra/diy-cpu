@@ -3,6 +3,7 @@
 // =============================================================================
 
 .label RESET
+CDATA/LD/0 | PC/LD/CDATA
 
 // =============================================================================
 // Fetch (uP0)
@@ -58,6 +59,7 @@ uP2                                                                  // Jump dir
 
 // Zero index Y
 .mode ZPIDXY
+uP2    
 
 // =============================================================================
 // Op codes (uP2)
@@ -69,5 +71,7 @@ uP2                                                                  // Jump dir
 
 .opcode LDA
 MBR<-MEM                                                     // Read value at MAR 
-A<-MBR | PZ/LD | Z/SRC/CDATA | uP0                        // Move value into A, setting P flags as appropriate
+A<-MBR | PZ/LD | Z/SRC/CDATA | uP0                  // Move value into A, setting P flags as appropriate
 
+.opcode TAX
+A/OUT/CDATA | X/LD/CDATA | uP0

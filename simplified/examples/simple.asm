@@ -6,4 +6,8 @@
 
 ; Main routine
 main:       LDA #$50
+            TAX
+            LDA #00
+
+
          
