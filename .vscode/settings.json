@@ -38,5 +38,6 @@
       "ZPIDXX",
       "ZPIDXY",
       "µcode"
-   ]
+   ],
+   "C_Cpp.default.configurationProvider": "ms-vscode.makefile-tools"
 }

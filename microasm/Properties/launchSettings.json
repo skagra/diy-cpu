@@ -4,11 +4,6 @@
          "commandName": "Project",
          "commandLineArgs": "4 1 1 1 ..\\simplified\\ucode ..\\simplified\\ucode\\bin",
          "workingDirectory": "$(ProjectDir)"
-      },
-      "full": {
-         "commandName": "Project",
-         "commandLineArgs": "10 2 2 2 ..\\full\\ucode ..\\full\\ucode\\bin",
-         "workingDirectory": "$(ProjectDir)"
       }
    }
 }
