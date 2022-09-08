@@ -1,8 +1,12 @@
 // Mapping between op code symbols and machine code values
 
-LDA     A9 A5 B5 AD BD B9 A1 B1
+LDA     A9 B5 
 TAX	    AA
-
+LDX     A2
+BEQ     F0
+STA     85
+INX     E8
+JMP     4C
 
 
 
