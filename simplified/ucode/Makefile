@@ -3,10 +3,10 @@ include ../../build-conf/rules.mk
 
 all: bin ucode
 
-.PHONY: ucode
-
 bin: 
 	mkdir $(BIN)
 
-ucode: 
-	dotnet run --project ../../microasm/microasm.csproj 4 1 1 1 . bin
+ucode: $(BIN)/mModeDecoder.bin
+
+$(BIN)/mModeDecoder.bin: mModeDecoder.txt mOpDecoder.txt uCode.txt uCtrl.txt uOps.txt
+	dotnet run --project ../../microasm/microasm.csproj 4 1 1 1 . bin >$(BIN)/log.txt
