@@ -14,4 +14,4 @@ This project is a learning exercise in digital electronics, with goals to:
 
 ## Simplified Version
 
-I've created a simplified version of the design - adhering to the same design principles as the full version but scaling back to make building the circuit a more practical proposition.  This is design is documented [here](docs/simplifed/index.md).
+I've created a simplified version of the design - adhering to the same design principles as the full version but scaling back to make building the circuit a more practical proposition.  This is design is documented [here](docs/simplified/index.md).
