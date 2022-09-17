@@ -11,3 +11,7 @@ This project is a learning exercise in digital electronics, with goals to:
 * The design is documented [here](docs/architecture/index.md).
 * Build/execution instructions are available [here](docs/build-and-run.md).
 * Current status is described [here](docs/status.md).
+
+## Simplified Version
+
+I've created a simplified version of the design - adhering to the same design principles as the full version but scaling back to make building the circuit a more practical proposition.  This is design is documented [here](docs/simplifed/index.md).

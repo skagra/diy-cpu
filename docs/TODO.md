@@ -1,5 +1,13 @@
 # TO DO
 
+# For Current Version
+
+* The current reset mechanism relies on a clock pulse - consider instead using the the reset line on the CAR register (pulling low momentarily via a RC circuit).
+* Update build instructions to reflect inclusion of simplified version and use of `Makefiles`.   
+* Make microcode assembler work with different ROM sizes without code edits.
+
+# For Later Version
+
 * Revisit size of uCode ROM
 * ALU
   * Consider design of ALU flag handling, can this be simplified?
