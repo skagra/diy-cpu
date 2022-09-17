@@ -1402,7 +1402,7 @@
         </entry>
         <entry>
           <string>Description</string>
-          <string>Calculates to selector the 
+          <string>Calculates the selector for the 
 &quot;Next CAR&quot; multiplexer to
 choose between the possible 
 options for the address of the 
@@ -1415,8 +1415,8 @@ next uCode instruction,
 0 1 0 p1
 0 1 1 p2
 1 0 0 uJMPs
-1 0 1 N/A
-1 1 x N/A</string>
+1 x 1 Reset
+1 1 0 N/A</string>
         </entry>
       </elementAttributes>
       <pos x="2240" y="40"/>
@@ -6107,12 +6107,12 @@ next uCode instruction,
       <elementName>Rectangle</elementName>
       <elementAttributes>
         <entry>
-          <string>Label</string>
-          <string>Error</string>
-        </entry>
-        <entry>
           <string>RectHeight</string>
           <int>19</int>
+        </entry>
+        <entry>
+          <string>Label</string>
+          <string>Error</string>
         </entry>
         <entry>
           <string>RectWidth</string>
@@ -6197,12 +6197,12 @@ next uCode instruction,
       <elementName>DipSwitch</elementName>
       <elementAttributes>
         <entry>
-          <string>Label</string>
-          <string>uP0ADDR0</string>
-        </entry>
-        <entry>
           <string>dipDefault</string>
           <boolean>true</boolean>
+        </entry>
+        <entry>
+          <string>Label</string>
+          <string>uP0ADDR0</string>
         </entry>
       </elementAttributes>
       <pos x="1940" y="-800"/>
