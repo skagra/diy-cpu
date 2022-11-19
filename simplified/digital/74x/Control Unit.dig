@@ -6197,10 +6197,6 @@ next uCode instruction,
       <elementName>DipSwitch</elementName>
       <elementAttributes>
         <entry>
-          <string>dipDefault</string>
-          <boolean>true</boolean>
-        </entry>
-        <entry>
           <string>Label</string>
           <string>uP0ADDR0</string>
         </entry>
@@ -6220,6 +6216,10 @@ next uCode instruction,
     <visualElement>
       <elementName>DipSwitch</elementName>
       <elementAttributes>
+        <entry>
+          <string>dipDefault</string>
+          <boolean>true</boolean>
+        </entry>
         <entry>
           <string>Label</string>
           <string>uP0ADDR1</string>

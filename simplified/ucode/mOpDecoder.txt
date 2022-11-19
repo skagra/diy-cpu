@@ -7,10 +7,9 @@ BEQ     F0
 STA     85
 INX     E8
 JMP     4C
-
-
-
-
+ADC     69
+DEX	    CA
+BNE	    D0
 
 
 

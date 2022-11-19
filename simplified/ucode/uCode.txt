@@ -3,7 +3,8 @@
 // =============================================================================
 
 .label RESET
-CDATA/LD/0 | PC/LD/CDATA
+CDATA/LD/0 | CDATA/TO/CADDR | MBR/LD/CDATA | MAR/LD/CADDR | A/LD/CDATA | X/LD/CDATA | ALUA/LD/CDATA | ALUB/LD/CDATA 
+uP0
 
 // =============================================================================
 // Fetch (uP0)
@@ -95,6 +96,14 @@ uP0                                                                 // Jump to u
 .label BEQ_TRUE
 MBR/OUT/CDATA | PC/REL/CDATA | uP0                                  // Add the displacement to the PC 
 
+// Not zero
+.opcode BNE     
+MBR<-MEM                                                              // Read the offset from memory at MAR into MBR
+uJMP/INV | uZJMP BEQ_BNE                                              // If previous operation resulted in non-zero jump to BEQ_BNE
+uP0                                                                   // Jump to uP0
+.label BEQ_BNE
+MBR/OUT/CDATA | PC/REL/CDATA | uP0                                    // Add the displacement to the PC 
+
 .opcode JMP
 MAR<-PC 
 MBR<-MEM | PC-INC                                                   // Read the LSB address at PC, and increase PC
@@ -106,4 +115,14 @@ MEM<-MBR | uP0                                                       // Write MB
 
 .opcode INX
 ALUA<-X                                                              // Move X to ALUA 
-ALUOP-INC | X<-ALU | PZ/LD | uP0                 // Add one, store result in X and set P flags
+ALUOP-INC | X<-ALU | PZ/LD | uP0                                     // Add one, store result in X and set P flags
+
+.opcode DEX
+ALUA<-X                                                              // Move X to ALUA 
+ALUOP-DEC | X<-ALU | PZ/LD | uP0  
+
+.opcode ADC
+A/OUT/CDATA | ALUA/LD/CDATA
+MEM/OUT/XDATA | MBR/LD/XDATA
+MBR/OUT/CDATA | ALUB/LD/CDATA
+ZERO | ALUR/OUT/CDATA | A/LD/CDATA | uP0
