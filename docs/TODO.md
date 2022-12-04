@@ -1,5 +1,16 @@
 # TO DO
 
+# Next Steps
+
+1. Tidy circuit
+1. Upload and test new MC
+1. Make uCode jumps relative
+1. Build memory decoder
+1. Build memory mapped I/O
+1. Build PC
+1. Add RAM
+1. Build controller
+
 # For Current Version
 
 * The current reset mechanism relies on a clock pulse - consider instead using the the reset line on the CAR register (pulling low momentarily via a RC circuit).
