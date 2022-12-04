@@ -1,7 +1,7 @@
 include ../../build-conf/vars.mk
 include ../../build-conf/rules.mk
 
-TARGETS = bin/simple.bin bin/board.bin
+TARGETS = bin/simple.bin bin/board.bin bin/test.bin
 
 all: all-asm
 

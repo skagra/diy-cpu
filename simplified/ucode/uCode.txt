@@ -11,23 +11,14 @@ uP0
 // =============================================================================
 
 .label p0
-MAR<-PC 
-PC-INC                                                      // Move the PC into MAR and increase the PC                        
+MAR<-PC                                                     // PC points to opcode to execute - move the PC into MAR
+PC-INC                                                      // Increase the PC                        
 IR<-MEM                                                     // Load the current op code from memory into the IR
 uP1                                                         // Separate cycle as we don't have a handle on the op code for decoding until the previous cycle is completed
 
 // =============================================================================
 // Addressing modes (uP1) 
 // =============================================================================
-
-// Absolute 
-.mode ABS
-
-// Abs index by X 
-.mode ABSIDXX 
-
-// Abs index by Y 
-.mode ABSIDXY
 
 // Accumulator 
 .mode ACC 
@@ -41,18 +32,11 @@ MAR<-PC | PC-INC | uP2                                               // Move the
 .mode IMP 
 uP2                                                                  // Jump directly to uP2
 
-// Relative 
+// Relative (branch)
 .mode REL
 MAR<-PC | PC-INC | uP2                                               // Move the PC into MAR and jump to uP2
                                                                                                
-// X Indirect ADC ($44,X)
-.mode XIND
-
-// The zero page argument is added to Y to give the zero page address of the operand.  Addition wraps to zero page.  
-// Indirect Y ADC ($44),Y
-.mode INDY
-
-// Zero 
+// Zero page
 .mode ZP
 MAR<-PC 
 MBR<-MEM | PC-INC                                                   // Read the zero page address of the operand
@@ -66,13 +50,65 @@ ALUA<-MBR                                                           // Move inde
 ALUB<-X                                                             // Move X into ALUB and clear carry
 ALUOP-ADD | MAR<-ALU | uP2                                          // Add X and the index base and store in MARL
 
-// Zero index Y
-.mode ZPIDXY
-uP2    
-
 // =============================================================================
 // Op codes (uP2)
 // =============================================================================
+
+// -----------------------------------------------------------------------------
+// Arithmetic
+// -----------------------------------------------------------------------------
+
+.opcode ADC         
+MBR<-MEM                                                            // Read memory into MBR
+ALUB<-MBR                                                           // Move the value read into ALUB
+ALUA<-A                                                             // Move the accumulator into ALUA
+ALUOP-ADD | ALUR/OUT/CDATA | A/LD/CDATA | PZ/LD | Z/SRC/CDATA | uP0     // Add ALUA to ALB, store the result in the accumulator and set Z flag
+
+.opcode SBC
+MBR<-MEM                                                            // Read memory into MBR
+ALUB<-MBR                                                           // Move the value read into ALUB
+ALUA<-A                                                             // Move the accumulator into ALUA
+ALUOP-SUB | ALUR/OUT/CDATA | A/LD/CDATA | PZ/LD | Z/SRC/CDATA | uP0      // Subtract ALUB from ALUA, store the result in the accumulator and set Z flag
+
+// -----------------------------------------------------------------------------
+// Branch
+// -----------------------------------------------------------------------------
+
+.opcode BEQ                                                         
+MBR<-MEM                                                            // Read the offset from memory at MAR into MBR
+uZJMP BEQ_TRUE                                                      // Z flag is set jump to BEQ_TRUE
+uP0                                                                 // Jump to uP0 - no branch needed
+.label BEQ_TRUE
+MBR/OUT/CDATA | PC/REL/CDATA | uP0                                  // Add the displacement to the PC to branch
+
+// Not zero
+.opcode BNE     
+MBR<-MEM                                                            // Read the offset from memory at MAR into MBR
+uJMP/INV | uZJMP BEQ_BNE                                            // Z flag is not set jump to BNE_TRUE
+uP0                                                                 // Jump to uP0 - no branch needed
+.label BEQ_BNE
+MBR/OUT/CDATA | PC/REL/CDATA | uP0                                  // Add the displacement to the PC 
+
+// -----------------------------------------------------------------------------
+// Inc and Dec
+// -----------------------------------------------------------------------------
+
+.opcode INX
+ALUA<-X                                                              // Move X to ALUA 
+ALUOP-INC | X<-ALU | PZ/LD | Z/SRC/CDATA | uP0                       // Add one, store result in X and set Z flag
+
+.opcode DEX
+ALUA<-X                                                              // Move X to ALUA 
+ALUOP-DEC | X<-ALU | PZ/LD | Z/SRC/CDATA | uP0                       // Subtract one, store result in X and set Z flag
+
+// -----------------------------------------------------------------------------
+// Jump and subroutine
+// -----------------------------------------------------------------------------
+
+.opcode JMP
+MAR<-PC                                                 
+MBR<-MEM | PC-INC                                                   // Read the LSB address at PC, and increase PC (we are ingoring the MSB!)
+PC<-MBR | uP0                                                       // Jump to the target address by storing it in the PC
 
 // -----------------------------------------------------------------------------
 // Register load and store
@@ -80,49 +116,18 @@ uP2
 
 .opcode LDA
 MBR<-MEM                                                            // Read value at MAR 
-A<-MBR | PZ/LD | Z/SRC/CDATA | uP0                                  // Move value into A, setting P flags as appropriate
+A<-MBR | PZ/LD | Z/SRC/CDATA | uP0                                  // Move value into A, setting the Z 
 
 .opcode LDX
 MBR<-MEM                                                            // Read the value at MAR
-X<-MBR |  PZ/LD | Z/SRC/CDATA | uP0                                 // Move value into X                            
+X<-MBR |  PZ/LD | Z/SRC/CDATA | uP0                                 // Move value into X, setting the Z flag                            
+
+// -----------------------------------------------------------------------------
+// Register transfer
+// -----------------------------------------------------------------------------
 
 .opcode TAX
-A/OUT/CDATA | X/LD/CDATA | uP0
+A/OUT/CDATA | X/LD/CDATA | PZ/LD | Z/SRC/CDATA | uP0                // Move accumulator into X
 
-.opcode BEQ                                                         
-MBR<-MEM                                                            // Read the offset from memory at MAR into MBR
-uZJMP BEQ_TRUE                                                      // If previous operation resulted in zero jump to BEQ_TRUE
-uP0                                                                 // Jump to uP0
-.label BEQ_TRUE
-MBR/OUT/CDATA | PC/REL/CDATA | uP0                                  // Add the displacement to the PC 
-
-// Not zero
-.opcode BNE     
-MBR<-MEM                                                              // Read the offset from memory at MAR into MBR
-uJMP/INV | uZJMP BEQ_BNE                                              // If previous operation resulted in non-zero jump to BEQ_BNE
-uP0                                                                   // Jump to uP0
-.label BEQ_BNE
-MBR/OUT/CDATA | PC/REL/CDATA | uP0                                    // Add the displacement to the PC 
-
-.opcode JMP
-MAR<-PC 
-MBR<-MEM | PC-INC                                                   // Read the LSB address at PC, and increase PC
-PC<-MBR | uP0                                                       // Store the LSB in STASHL
-
-.opcode STA
-MBR<-A                                                               // Move A into MBR
-MEM<-MBR | uP0                                                       // Write MBR to memory at MAR
-
-.opcode INX
-ALUA<-X                                                              // Move X to ALUA 
-ALUOP-INC | X<-ALU | PZ/LD | uP0                                     // Add one, store result in X and set P flags
-
-.opcode DEX
-ALUA<-X                                                              // Move X to ALUA 
-ALUOP-DEC | X<-ALU | PZ/LD | uP0  
-
-.opcode ADC
-A/OUT/CDATA | ALUA/LD/CDATA
-MEM/OUT/XDATA | MBR/LD/XDATA
-MBR/OUT/CDATA | ALUB/LD/CDATA
-ZERO | ALUR/OUT/CDATA | A/LD/CDATA | uP0
+.opcode TXA
+X/OUT/CDATA | A/LD/CDATA | PZ/LD | Z/SRC/CDATA | uP0                // Move X into the accumulator
