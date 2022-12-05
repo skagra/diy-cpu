@@ -2288,8 +2288,17 @@ next uCode instruction,
           <int>0</int>
         </entry>
         <entry>
+          <string>Color</string>
+          <awt-color>
+            <red>102</red>
+            <green>255</green>
+            <blue>102</blue>
+            <alpha>255</alpha>
+          </awt-color>
+        </entry>
+        <entry>
           <string>Label</string>
-          <string>N/A</string>
+          <string>Reset</string>
         </entry>
       </elementAttributes>
       <pos x="-780" y="-820"/>

@@ -11,13 +11,13 @@ main:
             LDA #$50
             LDX #$22
             LDA #$00
-            LDY #$00
+            LDX #$00
 
 ; Register transfer
             LDA #$67
             TAX
             LDX #$56
-            TAX
+            TXA
 
 ; Arithmetic
             LDA #$27

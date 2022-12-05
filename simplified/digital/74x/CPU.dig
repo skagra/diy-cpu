@@ -1961,7 +1961,7 @@
         </entry>
         <entry>
           <string>lastDataFile</string>
-          <file>E:\Development\diy-cpu\simplified\examples\bin\board.bin</file>
+          <file>E:\Development\diy-cpu\simplified\examples\bin\test.bin</file>
         </entry>
         <entry>
           <string>autoReload</string>
@@ -2555,7 +2555,7 @@
         </entry>
         <entry>
           <string>InDefault</string>
-          <value v="65535" z="false"/>
+          <value v="16" z="false"/>
         </entry>
       </elementAttributes>
       <pos x="1740" y="-1420"/>
@@ -2850,7 +2850,7 @@
         </entry>
         <entry>
           <string>InDefault</string>
-          <value v="65535" z="false"/>
+          <value v="18" z="false"/>
         </entry>
       </elementAttributes>
       <pos x="1740" y="-1120"/>
@@ -3583,8 +3583,17 @@
           <int>0</int>
         </entry>
         <entry>
+          <string>Color</string>
+          <awt-color>
+            <red>153</red>
+            <green>255</green>
+            <blue>51</blue>
+            <alpha>255</alpha>
+          </awt-color>
+        </entry>
+        <entry>
           <string>Label</string>
-          <string>N/A</string>
+          <string>Reset</string>
         </entry>
       </elementAttributes>
       <pos x="740" y="-1320"/>
@@ -7067,62 +7076,6 @@
       <pos x="2700" y="440"/>
     </visualElement>
     <visualElement>
-      <elementName>Tunnel</elementName>
-      <elementAttributes>
-        <entry>
-          <string>rotation</string>
-          <rotation rotation="2"/>
-        </entry>
-        <entry>
-          <string>NetName</string>
-          <string>TOCADDR4</string>
-        </entry>
-      </elementAttributes>
-      <pos x="2540" y="360"/>
-    </visualElement>
-    <visualElement>
-      <elementName>Tunnel</elementName>
-      <elementAttributes>
-        <entry>
-          <string>rotation</string>
-          <rotation rotation="2"/>
-        </entry>
-        <entry>
-          <string>NetName</string>
-          <string>TOCADDR5</string>
-        </entry>
-      </elementAttributes>
-      <pos x="2540" y="280"/>
-    </visualElement>
-    <visualElement>
-      <elementName>Tunnel</elementName>
-      <elementAttributes>
-        <entry>
-          <string>rotation</string>
-          <rotation rotation="2"/>
-        </entry>
-        <entry>
-          <string>NetName</string>
-          <string>TOCADDR6</string>
-        </entry>
-      </elementAttributes>
-      <pos x="2540" y="200"/>
-    </visualElement>
-    <visualElement>
-      <elementName>Tunnel</elementName>
-      <elementAttributes>
-        <entry>
-          <string>rotation</string>
-          <rotation rotation="2"/>
-        </entry>
-        <entry>
-          <string>NetName</string>
-          <string>TOCADDR7</string>
-        </entry>
-      </elementAttributes>
-      <pos x="2540" y="440"/>
-    </visualElement>
-    <visualElement>
       <elementName>Ground</elementName>
       <elementAttributes>
         <entry>
@@ -7211,7 +7164,7 @@
       <elementAttributes>
         <entry>
           <string>rotation</string>
-          <rotation reference="../../../../visualElement[614]/elementAttributes/entry/rotation"/>
+          <rotation reference="../../../../visualElement[610]/elementAttributes/entry/rotation"/>
         </entry>
         <entry>
           <string>NetName</string>
@@ -7225,7 +7178,7 @@
       <elementAttributes>
         <entry>
           <string>rotation</string>
-          <rotation reference="../../../../visualElement[614]/elementAttributes/entry/rotation"/>
+          <rotation reference="../../../../visualElement[610]/elementAttributes/entry/rotation"/>
         </entry>
         <entry>
           <string>NetName</string>
@@ -7239,7 +7192,7 @@
       <elementAttributes>
         <entry>
           <string>rotation</string>
-          <rotation reference="../../../../visualElement[614]/elementAttributes/entry/rotation"/>
+          <rotation reference="../../../../visualElement[610]/elementAttributes/entry/rotation"/>
         </entry>
         <entry>
           <string>NetName</string>
@@ -7578,7 +7531,7 @@
       <elementAttributes>
         <entry>
           <string>rotation</string>
-          <rotation reference="../../../../visualElement[644]/elementAttributes/entry/rotation"/>
+          <rotation reference="../../../../visualElement[640]/elementAttributes/entry/rotation"/>
         </entry>
         <entry>
           <string>NetName</string>
@@ -7592,7 +7545,7 @@
       <elementAttributes>
         <entry>
           <string>rotation</string>
-          <rotation reference="../../../../visualElement[644]/elementAttributes/entry/rotation"/>
+          <rotation reference="../../../../visualElement[640]/elementAttributes/entry/rotation"/>
         </entry>
         <entry>
           <string>NetName</string>
@@ -7606,7 +7559,7 @@
       <elementAttributes>
         <entry>
           <string>rotation</string>
-          <rotation reference="../../../../visualElement[644]/elementAttributes/entry/rotation"/>
+          <rotation reference="../../../../visualElement[640]/elementAttributes/entry/rotation"/>
         </entry>
         <entry>
           <string>NetName</string>
@@ -7877,6 +7830,62 @@ and so can be dropped for now</string>
       </elementAttributes>
       <pos x="1020" y="1000"/>
     </visualElement>
+    <visualElement>
+      <elementName>Tunnel</elementName>
+      <elementAttributes>
+        <entry>
+          <string>rotation</string>
+          <rotation rotation="2"/>
+        </entry>
+        <entry>
+          <string>NetName</string>
+          <string>TOCADDR4</string>
+        </entry>
+      </elementAttributes>
+      <pos x="2540" y="440"/>
+    </visualElement>
+    <visualElement>
+      <elementName>Tunnel</elementName>
+      <elementAttributes>
+        <entry>
+          <string>rotation</string>
+          <rotation rotation="2"/>
+        </entry>
+        <entry>
+          <string>NetName</string>
+          <string>TOCADDR5</string>
+        </entry>
+      </elementAttributes>
+      <pos x="2540" y="360"/>
+    </visualElement>
+    <visualElement>
+      <elementName>Tunnel</elementName>
+      <elementAttributes>
+        <entry>
+          <string>rotation</string>
+          <rotation rotation="2"/>
+        </entry>
+        <entry>
+          <string>NetName</string>
+          <string>TOCADDR6</string>
+        </entry>
+      </elementAttributes>
+      <pos x="2540" y="280"/>
+    </visualElement>
+    <visualElement>
+      <elementName>Tunnel</elementName>
+      <elementAttributes>
+        <entry>
+          <string>rotation</string>
+          <rotation rotation="2"/>
+        </entry>
+        <entry>
+          <string>NetName</string>
+          <string>TOCADDR7</string>
+        </entry>
+      </elementAttributes>
+      <pos x="2540" y="200"/>
+    </visualElement>
   </visualElements>
   <wires>
     <wire>
@@ -8064,10 +8073,6 @@ and so can be dropped for now</string>
       <p2 x="-240" y="280"/>
     </wire>
     <wire>
-      <p1 x="2540" y="280"/>
-      <p2 x="2560" y="280"/>
-    </wire>
-    <wire>
       <p1 x="2680" y="280"/>
       <p2 x="2700" y="280"/>
     </wire>
@@ -8094,6 +8099,10 @@ and so can be dropped for now</string>
     <wire>
       <p1 x="-860" y="280"/>
       <p2 x="-820" y="280"/>
+    </wire>
+    <wire>
+      <p1 x="2540" y="280"/>
+      <p2 x="2560" y="280"/>
     </wire>
     <wire>
       <p1 x="-1140" y="-540"/>
@@ -8784,10 +8793,6 @@ and so can be dropped for now</string>
       <p2 x="2940" y="360"/>
     </wire>
     <wire>
-      <p1 x="2540" y="360"/>
-      <p2 x="2560" y="360"/>
-    </wire>
-    <wire>
       <p1 x="2680" y="360"/>
       <p2 x="2700" y="360"/>
     </wire>
@@ -8802,6 +8807,10 @@ and so can be dropped for now</string>
     <wire>
       <p1 x="-1120" y="360"/>
       <p2 x="-1040" y="360"/>
+    </wire>
+    <wire>
+      <p1 x="2540" y="360"/>
+      <p2 x="2560" y="360"/>
     </wire>
     <wire>
       <p1 x="2220" y="1640"/>
@@ -9572,10 +9581,6 @@ and so can be dropped for now</string>
       <p2 x="-1180" y="1720"/>
     </wire>
     <wire>
-      <p1 x="2540" y="440"/>
-      <p2 x="2560" y="440"/>
-    </wire>
-    <wire>
       <p1 x="2680" y="440"/>
       <p2 x="2700" y="440"/>
     </wire>
@@ -9586,6 +9591,10 @@ and so can be dropped for now</string>
     <wire>
       <p1 x="3500" y="440"/>
       <p2 x="3520" y="440"/>
+    </wire>
+    <wire>
+      <p1 x="2540" y="440"/>
+      <p2 x="2560" y="440"/>
     </wire>
     <wire>
       <p1 x="3200" y="1980"/>
@@ -9720,10 +9729,6 @@ and so can be dropped for now</string>
       <p2 x="560" y="200"/>
     </wire>
     <wire>
-      <p1 x="2540" y="200"/>
-      <p2 x="2560" y="200"/>
-    </wire>
-    <wire>
       <p1 x="2680" y="200"/>
       <p2 x="2700" y="200"/>
     </wire>
@@ -9746,6 +9751,10 @@ and so can be dropped for now</string>
     <wire>
       <p1 x="2260" y="200"/>
       <p2 x="2280" y="200"/>
+    </wire>
+    <wire>
+      <p1 x="2540" y="200"/>
+      <p2 x="2560" y="200"/>
     </wire>
     <wire>
       <p1 x="-160" y="-460"/>

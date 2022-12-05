@@ -3,7 +3,7 @@
 // =============================================================================
 
 .label RESET
-CDATA/LD/0 | CDATA/TO/CADDR | MBR/LD/CDATA | MAR/LD/CADDR | A/LD/CDATA | X/LD/CDATA | ALUA/LD/CDATA | ALUB/LD/CDATA 
+CDATA/LD/0 | CDATA/TO/CADDR | MBR/LD/CDATA | MAR/LD/CADDR | A/LD/CDATA | X/LD/CDATA | ALUA/LD/CDATA | ALUB/LD/CDATA | PC/LD/CDATA
 uP0
 
 // =============================================================================
