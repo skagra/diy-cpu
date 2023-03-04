@@ -7886,6 +7886,28 @@ and so can be dropped for now</string>
       </elementAttributes>
       <pos x="2540" y="200"/>
     </visualElement>
+    <visualElement>
+      <elementName>Text</elementName>
+      <elementAttributes>
+        <entry>
+          <string>textFontSize</string>
+          <int>14</int>
+        </entry>
+        <entry>
+          <string>Description</string>
+          <string>I think there is an error in the RAM write select.
+
+If the clock is still high after a cycle and mem/ld/xdata goes high
+And CS is high then the data will latch!
+
+Is the solution to actually have clock directly
+attached to WE (latch on rising edge only)
+
+Then have CS be CS1 AND (MEM/LD/XDATA or MEM/OUT/XDATA)</string>
+        </entry>
+      </elementAttributes>
+      <pos x="-120" y="-640"/>
+    </visualElement>
   </visualElements>
   <wires>
     <wire>

@@ -2,6 +2,7 @@
 
 # Next Steps
 
+1. Label
 1. Tidy circuit
 1. Upload and test new MC
 1. Make uCode jumps relative
