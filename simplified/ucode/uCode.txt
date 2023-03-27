@@ -107,7 +107,7 @@ ALUOP-DEC | X<-ALU | PZ/LD | Z/SRC/CDATA | uP0                       // Subtract
 
 .opcode JMP
 MAR<-PC                                                 
-MBR<-MEM | PC-INC                                                   // Read the LSB address at PC, and increase PC (we are ingoring the MSB!)
+MBR<-MEM | PC-INC                                                   // Read the LSB address at PC, and increase PC (we are ignoring the MSB!)
 PC<-MBR | uP0                                                       // Jump to the target address by storing it in the PC
 
 // -----------------------------------------------------------------------------
