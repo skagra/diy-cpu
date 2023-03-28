@@ -1,4 +1,4 @@
-SUBDIRS = simplified full
+SUBDIRS = examples os tests ucode
 
 all: subdirs
 
@@ -8,4 +8,4 @@ subdirs: $(SUBDIRS)
 
 $(SUBDIRS):
 	$(MAKE) -C $@
-
+	

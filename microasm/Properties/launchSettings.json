@@ -1,9 +1,0 @@
-{
-   "profiles": {
-      "simplified": {
-         "commandName": "Project",
-         "commandLineArgs": "4 1 1 1 ..\\simplified\\ucode ..\\simplified\\ucode\\bin",
-         "workingDirectory": "$(ProjectDir)"
-      }
-   }
-}
