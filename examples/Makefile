@@ -1,12 +1,15 @@
-include ../../build-conf/vars.mk
-include ../../build-conf/rules.mk
+include ../build-conf/vars.mk
+include ../build-conf/rules.mk
 
-TARGETS = bin/mul10.bin bin/multiply.bin bin/RAM.bin bin/square.bin bin/dow.bin
+TARGETS = $(BIN)/mul10.bin $(BIN)/multiply.bin $(BIN)/RAM.bin $(BIN)/square.bin $(BIN)/dow.bin
 
-all: bin all-asm
+all: $(BIN) all-asm
 
 bin: 
 	mkdir $(BIN)
 
 all-asm: $(TARGETS)
+	
+clean:
+	rmdir /S /Q $(BIN)
 	

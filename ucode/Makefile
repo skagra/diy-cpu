@@ -1,7 +1,7 @@
-include ../../build-conf/vars.mk
-include ../../build-conf/rules.mk
+include ../build-conf/vars.mk
+include ../build-conf/rules.mk
 
-all: bin ucode
+all: $(BIN) ucode
 
 .PHONY: ucode
 
@@ -11,3 +11,5 @@ bin:
 ucode: 
 #	dotnet run --project ../../microasm/microasm.csproj 10 2 2 2 . bin
 # TODO Need to fix hardcoding of overall ROM size
+
+clean:

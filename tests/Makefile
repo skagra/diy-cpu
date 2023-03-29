@@ -1,7 +1,7 @@
-include ../../build-conf/vars.mk
-include ../../build-conf/rules.mk
+include ../build-conf/vars.mk
+include ../build-conf/rules.mk
 
-TARGETS = bin bin/tests.bin 
+TARGETS = $(BIN) $(BIN)/tests.bin 
 
 all: all-asm
 
@@ -10,3 +10,5 @@ bin:
 
 all-asm: $(TARGETS)
 	
+clean:
+	rmdir /S /Q $(BIN)
