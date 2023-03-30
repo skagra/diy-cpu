@@ -6,26 +6,17 @@ The project has the following structure:
 * `digital/generic` - The CPU as models for the `Digital` circuit simulator.
 * `docs` - Documentation.
 * `examples` - Example machine code used to exercise the CPU.
-* `microasm` - The µcode assembler.
+* `microasm` - The Î¼code assembler.
 * `os` - Machine code for an interrupt handler and definition of `IRQ` and reset vectors.
-* `tests` - Machine code to test the µcode implementation of each machine code instruction.
-* `ucode` - The µcode used by the [control unit](architecture/control-unit.md) to orchestrate the operation of the CPU and the definition the decoder ROMs used in the [instruction decoder](architecture/address-decoder.md).
-
-# Tooling
-
-The following tools are needed to build/run the `diy-cpu`:
-
-* [Digital](https://github.com/hneemann/Digital) the digital circuit designer and simulator by [Helmut Neemann](https://github.com/hneemann).
-* [DASM](https://dasm-assembler.github.io/) a 6502 cross-assembler.
-* [DotNet](https://dotnet.microsoft.com/en-us/download) to build the `diy-cpu`'s microcode assembler (`microsasm`).
-* [Visual Studio Code](https://code.visualstudio.com/) is used in the development of the project.  While not strictly necessary using the vscode build targets will significantly oil the wheels!
+* `tests` - Machine code to test the Î¼code implementation of each machine code instruction.
+* `ucode` - The Î¼code used by the [control unit](architecture/control-unit.md) to orchestrate the operation of the CPU and the definition the decoder ROMs used in the [instruction decoder](architecture/address-decoder.md).
 
 # Build and Run
 
 The build process requires:
 
-* Compilation of the µcode assembler (`microasm`).
-* Use of `microasm` to assemble µcode and decoder ROMs.
+* Compilation of the Î¼code assembler (`microasm`).
+* Use of `microasm` to assemble Î¼code and decoder ROMs.
 * Assembly of some of system machine code.
 * Assemble of the *user* machine code program to execute.   
 * Configuration of the digital circuit simulator to use the the above. 
@@ -40,21 +31,21 @@ The build process requires:
       * `os` - The *operating system*.  Actually just an interrupt handler and settings for the `IRQ` vector and reset vector.
       * `tests` - Machine code tests to check all machine code instructions are correctly implemented.
       
-1. Run `microasm` to build the µcode ROM images and decoder ROM images:
+1. Run `microasm` to build the Î¼code ROM images and decoder ROM images:
 
-   * `uROM-[0-5].bin` - µcode routines executed by the *control unit* to orchestrate the operation of the CPU.
+   * `uROM-[0-5].bin` - Î¼code routines executed by the *control unit* to orchestrate the operation of the CPU.
    * `mModeDecoder.bin` - Addressing mode decoder ROM.
    * `mOpDecoder.bin` - Machine instruction decoder ROM.
    
    If you run via `Ctrl f5` in Visual Studio Code then the correct parameters will be supplied.  
    
-   Otherwise you need to supply the the directory containing the µcode definitions and an output directory.  
+   Otherwise you need to supply the the directory containing the Î¼code definitions and an output directory.  
    
    For example, from the root directory of the repo:
 
       `dotnet run --project microasm ucode <output-dir>`
 
-1. Configure the `digital` circuit simulator to use the built µcode and decoder ROMs.
+1. Configure the `digital` circuit simulator to use the built Î¼code and decoder ROMs.
 
    * Run `digital` and open `digital/generic/CPU.dig`.
 
